@@ -23,8 +23,8 @@
 
 /*!
  * \file main.cpp
- * \example solution_exercise2
- * \brief Feature tracker example. 
+ * \example exercise4
+ * \brief User kernel example.
  * Look for TODO keyword in comments to code snipets that you need write.
  * \author Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
  */
@@ -63,6 +63,147 @@
             exit(1); \
         } \
     }
+
+////////
+// User kernel should have a unique enumerations and name for user kernel:
+//   USER_LIBRARY_EXAMPLE      - library ID for user kernels in this example
+//   USER_KERNEL_PICK_FEATURES - enumeration for "app.userkernels.pick_features" kernel
+// TODO:********
+//   1. Define USER_LIBRARY_EXAMPLE
+//   2. Define USER_KERNEL_PICK_FEATURES using VX_KERNEL_BASE() macro
+
+
+////////
+// Constants used by the "pick_features" kernel:
+//   PICK_FEATURE_THRESHOLD    - keypoint refresh threshold (i.e., min trackable/total keypoints ratio)
+#define PICK_FEATURE_THRESHOLD   0.80f
+
+////////
+// The node creation interface for the "app.userkernels.pick_features" kernel.
+// This user kernel example expects parameters in the following order:
+//   parameter#0 -- input array of type VX_TYPE_KEYPOINT
+//   parameter#1 -- input image of format VX_DF_IMAGE_U8
+//   parameter#2 -- scalar strength_thresh of type VX_TYPE_FLOAT32 for Harris corners
+//   parameter#3 -- scalar min_distance of type VX_TYPE_FLOAT32 for Harris corners
+//   parameter#4 -- scalar k_sensitivity of type VX_TYPE_FLOAT32 for Harris corners
+//   parameter#5 -- scalar gradient_size of type VX_TYPE_INT32 for Harris corners
+//   parameter#6 -- scalar block_size of type VX_TYPE_INT32 for Harris corners
+//   parameter#7 -- output array of type VX_TYPE_KEYPOINT
+// TODO:********
+//   1. Use vxGetKernelByEnum API to get kernel object from USE_KERNEL_PICK_FEATURES.
+//      Note that you need to use vxGetContext API to get context from a graph object.
+//   2. Use vxCreateGenericNode API to create a node from kernel object.
+//   3. Create scalar objects for gradient_size and block_size parameters
+//   4. Use vxSetParameterByIndex API to set node arguments
+//   5. Release the kernel and scalar objects that are not needed anymore
+//   6. Make sure to ERROR_CHECK_OBJECT and ERROR_CHECK_STATUS macros for error detection.
+vx_node userPickFeaturesNode( vx_graph graph, vx_array input_arr, vx_image input_image,
+                              vx_scalar strength_thresh, vx_scalar min_distance,
+                              vx_scalar k_sensitivity, vx_int32 gradient_size, vx_int32 block_size,
+                              vx_array output_arr)
+{
+    return NULL;
+}
+
+////////
+// User kernel input validator callback should check to make sure that all the input
+// parameters have correct data types. This user kernel example expects the inputs
+// to be valid in the following order:
+//   parameter#0 -- input array of type VX_TYPE_KEYPOINT
+//   parameter#1 -- input image of format VX_DF_IMAGE_U8
+//   parameter#2 -- scalar strength_thresh of type VX_TYPE_FLOAT32
+//   parameter#3 -- scalar min_distance of type VX_TYPE_FLOAT32
+//   parameter#4 -- scalar k_sensitivity of type VX_TYPE_FLOAT32
+//   parameter#5 -- scalar gradient_size of type VX_TYPE_INT32
+//   parameter#6 -- scalar block_size of type VX_TYPE_INT32
+// TODO:********
+//   1. Use vxGetParameterByIndex API to get access to requested parameter
+//   2. Use vxQueryParameter API with VX_PARAMETER_ATTRIBUTE_REF to access the input object
+//   3. If the index is 0, check to make sure that array itemtype is VX_TYPE_KEYPOINT
+//   4. If the index is 1, check to make sure that image format is VX_DF_FORMAT_U8
+//   5. For index 2..4, check to make sure that the scalar type is VX_TYPE_FLOAT32
+//   6. For index 5..6, check to make sure that the scalar type is VX_TYPE_INT32
+vx_status VX_CALLBACK pick_features_input_validator( vx_node node, vx_uint32 index )
+{
+    return VX_ERROR_NOT_IMPLEMENTED;
+}
+
+////////
+// User kernel output validator callback should set the output parameter meta data
+// This user kernel example has only one output parameter with same dimensions as parameter#0.
+//   parameter#7 -- output array of type VX_TYPE_KEYPOINT
+// TODO:********
+//   1. Get the input array capacity from parameter#0
+//   2. Set the output array meta data: itemtype as VX_TYPE_KEYPOINT and capacity same as input array
+vx_status VX_CALLBACK pick_features_output_validator( vx_node node, vx_uint32 index, vx_meta_format meta )
+{
+    return VX_ERROR_NOT_IMPLEMENTED;
+}
+
+////////
+// User kernel initialization function gets called after all the parameters have been validated.
+// The pick_features kernel uses a graph to execute a graph with harris corners node. This
+// initializer creates and initializes the graph and saves it as node's local data ptr.
+// TODO:********
+//   1. Use vxReadScalarValue API to get gradient_size and block_size values from the
+//      corresponding scalar objects (i.e., refs[5] and refs[6]).
+//   2. Build a new graph to perform harris corner detection. Note that you need get
+//      access to context from the node object in order to create a graph object.
+//   3. Use vxVerifyGraph API to avoid initialization during the first time processing
+//      of harris graph.
+//   4. Store harris graph in the node as node local data ptr.
+vx_status VX_CALLBACK pick_features_initialize( vx_node node, const vx_reference * refs, vx_uint32 num )
+{
+    return VX_ERROR_NOT_IMPLEMENTED;
+}
+
+////////
+// User kernel deinitialization function gets called during node garbage collection.
+// The pick_features kernel uses a graph to execute a graph with harris corners node. This
+// deinitializer has to release the graph object saved in node's local data ptr.
+// TODO:********
+//   1. Get the harris graph from node local data ptr and release the graph.
+vx_status VX_CALLBACK pick_features_deinitialize( vx_node node, const vx_reference * refs, vx_uint32 num )
+{
+    return VX_ERROR_NOT_IMPLEMENTED;
+}
+
+////////
+// User kernel host side function gets called to execute the user kernel node.
+// The pick_features kernel needs to calculate ratio keypoints being tracked/total.
+// If this ratio is less than PICK_FEATURE_THRESHOLD, then just run the harris corners.
+// Otherwise, just copy the input keypoints to output array.
+// TODO:********
+//   1. Compute the number of tracked features in the input keypoint array
+//   2. Copy the input keypoints into output array, if number of keypoints in
+//      input array is greater than ZERO and ratio of tracked features to
+//      number of keypoints is greater than or equal to PICK_FEATURE_THRESHOLD.
+//   3. If not copied in above step 2, i.e., tracked feature ratio is less than
+//      PICK_FEATURE_THRESHOLD or number of keypoints in input array is ZERO,
+//      just run the harris graph to generate new keypoints. Note that the harris graph
+//      is stored as node local data ptr.
+vx_status VX_CALLBACK pick_features_host_side_function( vx_node node, const vx_reference * refs, vx_uint32 num )
+{
+    return VX_ERROR_NOT_IMPLEMENTED;
+}
+
+////////
+// User kernels needs to be registered with every OpenVX context before use in a graph.
+// TODO:********
+//   1. Use vxAddKernel API to register "app.userkernels.pick_features" with
+//      USER_KERNEL_PICK_FEATURES as kernel enumeration, numParams as 8, and
+//      all of the user kernel callback functions you implemented above.
+//   2. Use vxAddParameterToKernel API to specify direction, data_type, and
+//      state of all 8 parameters to the kernel. Look into the comments of
+//      userPickFeaturesNode function (above) to details about the order of
+//      kernel parameters and their types.
+//   3. Use vxFinalizeKernel API to make the kernel ready to use in a graph.
+//      Note that the kernel object is still valid after this call. So you
+//      need to call vxReleaseKernel before returning from this function.
+vx_status registerUserKernel( vx_context context )
+{
+    return VX_ERROR_NOT_IMPLEMENTED;
+}
 
 ////////
 // log_callback function should implements a mechanism to print log messages 
@@ -143,6 +284,12 @@ int main( int argc, char * argv[] )
     vxRegisterLogCallback( context, log_callback, vx_false_e );
 
     ////////
+    // Register user kernels with the context
+    // TODO:********
+    //   1. Register user kernel with context by calling your implementation of "registerUserKernel()"
+
+
+    ////////
     // Create OpenVX image object for input RGB image.
     vx_image input_rgb_image = vxCreateImage( context, width, height, VX_DF_IMAGE_RGB );
     ERROR_CHECK_OBJECT(input_rgb_image);
@@ -156,17 +303,6 @@ int main( int argc, char * argv[] )
     // Create OpenVX pyramid and array object exemplars and create OpenVX delay
     // objects for both to hold two of each. Note that exemplar objects are not
     // needed once the delay objects are created.
-    // TODO:********
-    //   1. Use vxCreatePyramid API for creation of an pyramid exemplar with
-    //      same dimensions as input image, VX_DF_IMAGE_U8 as image format,
-    //      lk_pyramid_levels as levels, and lk_pyramid_scale as scale.
-    //   2. Use vxCreateArray API for creation of an array exemplar with
-    //      keypoint data type with num_keypoint_count as capacity.
-    //   3. Use vxCreateDelay API for creating delay objects for pyramid and
-    //      keypoint array using the exemplars created using above two steps.
-    //      Use number of delay slots as 2 for both of the delay objects.
-    //   4. Release the pyramid and keypoint array exemplar objects.
-    //   5. Use ERROR_CHECK_OBJECT/STATUS macros for proper error checking.
     vx_pyramid pyramidExemplar = vxCreatePyramid( context, lk_pyramid_levels,
         lk_pyramid_scale, width, height, VX_DF_IMAGE_U8 );
     vx_array keypointsExemplar = vxCreateArray( context, VX_TYPE_KEYPOINT,
@@ -184,13 +320,6 @@ int main( int argc, char * argv[] )
     // An object from delay slot can be accessed using vxGetReferenceFromDelay
     // API. You need to use index=0 for current object and index=-1 for
     // previous object.
-    // TODO:********
-    //   1. Use vxGetReferenceFromDelay API to get current and previous
-    //      pyramid objects from pyramid delay object. Note that you need 
-    //      to typecast the vx_reference object to vx_pyramid. 
-    //   2. Similarly, get current and previous keypoint array objects from
-    //      keypoint delay object.
-    //   3. Use ERROR_CHECK_OBJECT for proper error checking.
     vx_pyramid currentPyramid = 
         (vx_pyramid) vxGetReferenceFromDelay( pyramidDelay, 0 );
     vx_pyramid previousPyramid = 
@@ -209,11 +338,6 @@ int main( int argc, char * argv[] )
     // The Harris graph needs to extract gray scale image out of input RGB,
     // compute initial set of keypoints, and compute initial pyramid for use
     // by the optical flow graph.
-    // TODO:********
-    //   1. Create two graph objects: one for Harris corner detector and
-    //      the other for feature tracking using optical flow using
-    //      vxCreateGraph API.
-    //   2. Use ERROR_CHECK_OBJECT to check proper creatio of objects.
     vx_graph graphHarris = vxCreateGraph( context );
     vx_graph graphTrack = vxCreateGraph( context );
     ERROR_CHECK_OBJECT( graphHarris );
@@ -228,13 +352,6 @@ int main( int argc, char * argv[] )
     // This requires two intermediate OpenVX image objects. Since you don't
     // need to access these objects from the application, they can be virtual
     // objects that can be created using the vxCreateVirtualImage API.
-    // TODO:********
-    //   1. Create a IYUV image and a U8 image (for Y channel) with same
-    //      dimensions as input RGB image. Note that image formats for
-    //      IYUV and U8 images are VX_DF_IMAGE_IYUV and VX_DF_IMAGE_U8.
-    //      Note that virtual objects are specific to a graph, so you
-    //      need to create two sets, one for each graph.
-    //   2. Use ERROR_CHECK_OBJECT to check proper creatio of objects.
     vx_image harris_yuv_image = vxCreateVirtualImage( graphHarris, 
         width, height, VX_DF_IMAGE_IYUV );
     vx_image harris_luma_image = vxCreateVirtualImage( graphHarris, 
@@ -254,16 +371,6 @@ int main( int argc, char * argv[] )
     // num_iterations, and use_initial_estimate parameters as scalar
     // data objects. So, you need to create scalar objects with corresponding
     // configuration parameters.
-    // TODO:********
-    //   1. Create scalar data objects of VX_TYPE_FLOAT32 for strength_thresh,
-    //      min_distance, sensitivity, and epsilon. And make sure to set their
-    //      initial values as harris_strength_thresh, harris_min_distance,
-    //      harris_k_sensitivity, and lk_epsilon, respectively.
-    //   2. Similarly, create scalar objects for num_iterations and
-    //      use_initial_estimate with initial values: lk_num_iterations and
-    //      lk_use_initial_estimate. Make sure to use proper data types for
-    //      these parameters. 
-    //   3. Use ERROR_CHECK_OBJECT to check proper creation of objects.
     vx_scalar strength_thresh = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_strength_thresh );
     vx_scalar min_distance = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_min_distance );
     vx_scalar sensitivity = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_k_sensitivity );
@@ -278,22 +385,21 @@ int main( int argc, char * argv[] )
     ERROR_CHECK_OBJECT( use_initial_estimate );
 
     ////////********
+    // The pick features user node requires an intermediate keypoint array
+    // which will then be passed to optical flow node. So, you need to create
+    // a keypoint array objects with capacity as keypointDelay exemplar.
+    // TODO:********
+    //   1. Create array data objects of VX_TYPE_KEYPOINT for feature points
+    //      coming out of "pick_features" user node. Make sure that the
+    //      array capacity is "max_keypoint_count".
+    vx_array featureKeypoints = vxCreateArray( context, VX_TYPE_KEYPOINT, max_keypoint_count );
+    ERROR_CHECK_OBJECT( featureKeypoints );
+
+    ////////********
     // Now all the objects have been created to be able to build the graphs.
     // First, build a graph that performs Harris corner detection and initial
     // pyramid computation. See "VX/vx_nodes.h" for APIs to add nodes into
     // a graph.
-    // TODO:********
-    //   1. Use vxColorConvertNode and vxChannelExtractNode APIs to get gray
-    //      scale image for use by Harris and Pyramid computation from input
-    //      RGB image. Make sure to add these nodes into Harris graph.
-    //   2. Use vxGaussianPyramidNode API to add pyramid computation node.
-    //      You need to use the current pyramid from pyramid delay object. 
-    //   3. Use vxHarrisCornersNode API to add Harris corners node.
-    //      You need to use the current keypoints from keypoints delay object. 
-    //   4. Use ERROR_CHECK_OBJECT to check proper creation of objects.
-    //   5. Release node and virtual objects immediately since graph has
-    //      cross-references.
-    //   6. Call vxVerifyGraph to check for any errors in the graph.
     vx_node nodesHarris[] = {
         vxColorConvertNode( graphHarris, input_rgb_image, harris_yuv_image ),
         vxChannelExtractNode( graphHarris, harris_yuv_image, VX_CHANNEL_Y, 
@@ -314,27 +420,23 @@ int main( int argc, char * argv[] )
 
     ////////********
     // Now, build a graph that performs pyramid computation and feature
-    // tracking using optical flow.
+    // tracking using optical flow and "pick_features" user node. Note
+    // that you need to use "featureKeypoint" array as the output from
+    // "pick_features" node and input to optical flow node. Also note
+    // that "pick_features" expects Level 0 of "previousPyramid" as input.
     // TODO:********
-    //   1. Use vxColorConvertNode and vxChannelExtractNode APIs to get gray
-    //      scale image for use by Harris and Pyramid computation from input
-    //      RGB image. Make sure to add these nodes into Harris graph.
-    //   2. Use vxGaussianPyramidNode API to add pyramid computation node.
-    //      You need to use the current pyramid from pyramid delay object. 
-    //   3. Use vxOpticalFlowPyrLKNode API to add optical flow node. You need to
-    //      use the current and previous keypoints from keypoints delay object.
-    //   4. Use ERROR_CHECK_OBJECT to check proper creation of objects.
-    //   5. Release node and virtual objects immediately since graph has
-    //      cross-references.
-    //   6. Call vxVerifyGraph to check for any errors in the graph.
+    //   1. Use vxGetPyramidLevel API to get Level of "previousPyramid".
+    //   2. Use userPickFeaturesNode function to add "pick_features" node.
+    vx_image previousPyramidLevel0 = NULL; // vxGetPyramidLevel(previousPyramid, 0);
     vx_node nodesTrack[] = {
         vxColorConvertNode( graphTrack, input_rgb_image, opticalflow_yuv_image ),
         vxChannelExtractNode( graphTrack, opticalflow_yuv_image, 
             VX_CHANNEL_Y, opticalflow_luma_image ),
         vxGaussianPyramidNode( graphTrack, opticalflow_luma_image, 
             currentPyramid ),
+        // userPickFeaturesNode( graphTrack, ... ),
         vxOpticalFlowPyrLKNode( graphTrack, previousPyramid,
-            currentPyramid, previousKeypoints, previousKeypoints,
+            currentPyramid, featureKeypoints, featureKeypoints,
             currentKeypoints, lk_termination, epsilon, num_iterations, 
             use_initial_estimate, lk_window_dimension )
     };
@@ -342,6 +444,7 @@ int main( int argc, char * argv[] )
         ERROR_CHECK_OBJECT( nodesTrack[i] );
         ERROR_CHECK_STATUS( vxReleaseNode( &nodesTrack[i] ));
     }
+    ERROR_CHECK_STATUS( vxReleaseImage( &previousPyramidLevel0 ));
     ERROR_CHECK_STATUS( vxReleaseImage( &opticalflow_yuv_image ));
     ERROR_CHECK_STATUS( vxReleaseImage( &opticalflow_luma_image ));
     ERROR_CHECK_STATUS( vxVerifyGraph( graphTrack ));
@@ -377,11 +480,6 @@ int main( int argc, char * argv[] )
         ////////********
         // Now that input RGB image is ready, just run a graph. Make sure
         // run Harris at the beginning to initialize the previous keypoints.
-        // TODO:********
-        //   1. Run a graph using vxProcessGraph API. Select Harri graph
-        //      if the frame_index == 0 (i.e., first frame of the video
-        //      sequence), otherwise, select the feature tracking graph.
-        //   2. Use ERROR_CHECK_STATUS for error checking.
         status = vxProcessGraph( frame_index == 0 ? graphHarris : graphTrack );
         ERROR_CHECK_STATUS( status );
 
@@ -389,46 +487,16 @@ int main( int argc, char * argv[] )
         // To mark the keypoints in display, you need to access the output
         // keypoint array and draw each item on the output window using
         // gui.DrawArrow().
-        // TODO:********
-        //   1. Use vxGetReferenceFromDelay API to get current and previous
-        //      keypoints array objects from keypoints delay object. 
-        //      Make sure to typecast the vx_reference object to vx_array. 
-        //   2. OpenVX array object has an attribute that keeps the current
-        //      number of items in the array. The name of the attribute is
-        //      VX_ARRAY_ATTRIBUTE_NUMITEMS and its value is of type vx_size.
-        //      Use vxQueryArray API to get number of keypoints in the
-        //      current keypoint array data object, representing number of
-        //      corners detected in the input RGB image.
-        //      IMPORTANT: Make sure to read number of items into "num_corners"
-        //      because this variable is displayed by code segment below.
-        //   3. The data items in output keypoint array are of type
-        //      vx_keypoint_t (see "VX/vx_types.h"). To access the array
-        //      buffer, use vxAccessArrayRange with start index as ZERO,
-        //      end index as number of items in the array, and usage mode as
-        //      VX_READ_ONLY. Note that the stride returned by this access
-        //      call is not guaranteed to be sizeof(vx_keypoint_t). 
-        //      Also make sure that num_corners is > 0, because
-        //      vxAccessArrayRange expects end index > 0.
-        //   4. For each item in the keypoint buffer, use vxArrayItem to
-        //      access individual keypoint and draw a marker at (x,y)
-        //      using gui.DrawArrow() if tracking_status field of keypoint
-        //      is non-zero. Also count number of keypoints with 
-        //      non-zero tracking_status into "num_tracking" variable.
-        //   5. Handover the control of output keypoint buffer back to
-        //      OpenVX framework by calling vxCommitArrayRange API.
-        //   6. Use ERROR_CHECK_STATUS for error checking.
         vx_size num_corners = 0, num_tracking = 0;
         currentKeypoints = (vx_array)vxGetReferenceFromDelay( keypointsDelay, 0 );
-        previousKeypoints = (vx_array)vxGetReferenceFromDelay( keypointsDelay, -1 );
         ERROR_CHECK_OBJECT( currentKeypoints );
-        ERROR_CHECK_OBJECT( previousKeypoints );
-        status = vxQueryArray( previousKeypoints,
+        status = vxQueryArray( featureKeypoints,
             VX_ARRAY_ATTRIBUTE_NUMITEMS, &num_corners, sizeof( num_corners ));
         ERROR_CHECK_STATUS( status );
         if( num_corners > 0 ) {
             vx_size kp_old_stride, kp_new_stride;
             vx_keypoint_t * kp_old_buf = NULL, * kp_new_buf = NULL;
-            status = vxAccessArrayRange( previousKeypoints, 0, num_corners,
+            status = vxAccessArrayRange( featureKeypoints, 0, num_corners,
                 &kp_old_stride, (void **) &kp_old_buf, VX_READ_ONLY );
             ERROR_CHECK_STATUS( status );
             status = vxAccessArrayRange( currentKeypoints, 0, num_corners,
@@ -442,7 +510,7 @@ int main( int argc, char * argv[] )
                     gui.DrawArrow( kp_old->x, kp_old->y, kp_new->x, kp_new->y );
                 }
             }
-            status = vxCommitArrayRange( previousKeypoints, 0, num_corners, kp_old_buf );
+            status = vxCommitArrayRange( featureKeypoints, 0, num_corners, kp_old_buf );
             ERROR_CHECK_STATUS( status );
             status = vxCommitArrayRange( currentKeypoints, 0, num_corners, kp_new_buf );
             ERROR_CHECK_STATUS( status );
@@ -451,10 +519,6 @@ int main( int argc, char * argv[] )
         ////////********
         // Flip the current and previous pyramid and keypoints in the delay
         // objects.
-        // TODO:********
-        //   1. Use vxAgeDelay API to flip the current and previous buffers
-        //      in pyramid and keypoint delay objects.
-        //   2. Use ERROR_CHECK_STATUS for error checking.
         ERROR_CHECK_STATUS( vxAgeDelay( pyramidDelay ) );
         ERROR_CHECK_STATUS( vxAgeDelay( keypointsDelay ) );
 
@@ -463,7 +527,7 @@ int main( int argc, char * argv[] )
         char text[128];
         sprintf( text, "Keyboard ESC/Q-Quit SPACE-Pause [FRAME %d]", frame_index );
         gui.DrawText( 0, 16, text );
-        sprintf( text, "Number of Corners: %d [tracking %d]", (int)num_corners, (int)num_tracking );
+        sprintf( text, "Number of Corners: %d [tracking %d %.1f%%]", (int)num_corners, (int)num_tracking, num_corners ? (100.0f * num_tracking / num_corners) : 0.0f );
         gui.DrawText( 0, 36, text );
         gui.Show();
         if( !gui.Grab())
@@ -480,12 +544,9 @@ int main( int argc, char * argv[] )
     // need to call vxRelease<Object> API which takes a pointer to the object.
     // If the release operation is successful, the OpenVX framework will
     // reset the object to NULL.
-    // TODO:********
-    //   1. Release all the image objects using vxReleaseImage API.
-    //   2. For releasing all other objects use vxRelease<Object> APIs.
-    //   3. Use ERROR_CHECK_STATUS for error checking.
     ERROR_CHECK_STATUS( vxReleaseGraph( &graphHarris ));
     ERROR_CHECK_STATUS( vxReleaseGraph( &graphTrack ));
+    ERROR_CHECK_STATUS( vxReleaseArray( &featureKeypoints ));
     ERROR_CHECK_STATUS( vxReleaseImage( &input_rgb_image ));
     ERROR_CHECK_STATUS( vxReleaseDelay( &pyramidDelay ));
     ERROR_CHECK_STATUS( vxReleaseDelay( &keypointsDelay ));

@@ -79,6 +79,7 @@ void log_callback( vx_context context, vx_reference ref,
     vx_status status, const vx_char string[] )
 {
     printf( "LOG: [ %3d ] %s", status, string );
+    fflush(stdout);
 }
 
 ////////

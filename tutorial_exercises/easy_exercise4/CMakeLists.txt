@@ -20,7 +20,7 @@
 # MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
 
 cmake_minimum_required  ( VERSION 2.8                 )
-project                 ( exercise1                   )
+project                 ( easy_exercise4              )
 aux_source_directory    ( . SRC_LIST                  )
 
 option(USE_KHRONOS_SAMPLE "Use Khronos Sample Implementation" ON)

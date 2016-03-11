@@ -71,6 +71,7 @@ void log_callback( vx_context context, vx_reference ref,
     vx_status status, const vx_char string[] )
 {
     printf( "LOG: [ %3d ] %s", status, string );
+    fflush(stdout);
 }
 
 ////////
@@ -257,8 +258,8 @@ int main( int argc, char * argv[] )
     //      RGB image. Make sure to add these nodes into Harris graph.
     //   2. Use vxGaussianPyramidNode API to add pyramid computation node.
     //      You need to use the current pyramid from pyramid delay object. 
-    //   3. Use vxHarrisCornersNode API to add Harris corners node.
-    //      You need to use the current keypoints from keypoints delay object. 
+    //   3. Use vxOpticalFlowPyrLKNode API to add optical flow node. You need to
+    //      use the current and previous keypoints from keypoints delay object.
     //   4. Use ERROR_CHECK_OBJECT to check proper creation of objects.
     //   5. Release node and virtual objects immediately since graph has
     //      cross-references.

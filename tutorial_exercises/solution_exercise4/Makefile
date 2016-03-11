@@ -19,24 +19,31 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
 
-cmake_minimum_required  ( VERSION 2.8                 )
-project                 ( exercise1                   )
-aux_source_directory    ( . SRC_LIST                  )
+OPENVX_INSTALL_DIR ?= /home/openvx/openvx_sample/install/Linux/x64/Release
+IDIRS ?= /usr/include $(OPENVX_INSTALL_DIR)/include
 
-option(USE_KHRONOS_SAMPLE "Use Khronos Sample Implementation" ON)
+CPP_FILES = $(wildcard *.cpp)
 
-if( USE_KHRONOS_SAMPLE )
-  set                   ( VX_PATH /home/openvx/openvx_sample/install/Linux/x64 )
-  if( CMAKE_BUILD_TYPE MATCHES ".*Deb.*" )
-    link_directories    ( ${VX_PATH}/Debug/bin   )
-  else( CMAKE_BUILD_TYPE MATCHES ".*Deb.*" )
-    link_directories    ( ${VX_PATH}/Release/bin )
-  endif( CMAKE_BUILD_TYPE MATCHES ".*Deb.*" )
-  include_directories   ( ${VX_PATH}/Release/include  )
-  add_executable          ( ${PROJECT_NAME} ${SRC_LIST} )
-  target_link_libraries ( ${PROJECT_NAME} openvx vxu opencv_imgproc opencv_highgui opencv_core )
-else( USE_KHRONOS_SAMPLE )
-  include_directories   ( ${CMAKE_SOURCE_DIR}/openvx/include  )
-  add_executable          ( ${PROJECT_NAME} ${SRC_LIST} )
-  target_link_libraries ( ${PROJECT_NAME} openvx opencv_imgproc opencv_highgui opencv_core )
-endif( USE_KHRONOS_SAMPLE )
+ODIR = obj
+OBJ_FILES = $(CPP_FILES:.cpp=.o)
+OBJ = $(patsubst %,$(ODIR)/%,$(OBJ_FILES))
+
+LDIRS  = $(OPENVX_INSTALL_DIR)/bin
+LIBS = m openvx vxu opencv_highgui opencv_imgproc opencv_core
+
+TARGET = solution_exercise4
+
+CC = g++
+CFLAGS = -g
+
+$(TARGET) : $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS) -Wl,-rpath,$(OPENVX_INSTALL_DIR)/bin \
+	$(patsubst %,-L%,$(LDIRS)) $(patsubst %,-l%,$(LIBS))
+
+$(ODIR)/%.o: %.cpp
+	@mkdir -p $(ODIR)
+	$(CC) -c $(patsubst %,-I%,$(IDIRS)) -o $@ $< $(CFLAGS)
+
+clean :
+	rm -rf $(ODIR)
+	rm -f $(TARGET)
