@@ -27,7 +27,9 @@
 *.out
 *.app
 
-# Folders
+# Downloaded and build files
 tutorial_videos/
 tutorial_exercises/amdovx-core/
 tutorial_exercises/openvx_sample/
+build-*/
+tutorial_exercises/CMakeLists.txt.user
