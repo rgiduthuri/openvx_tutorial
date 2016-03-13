@@ -179,8 +179,7 @@ int main( int argc, char * argv[] )
     // Get default video sequence when nothing is specified on command-line and
     // instantiate OpenCV GUI module for reading input RGB images and displaying
     // the image with OpenVX results
-    const char * video_sequence = (argc > 1) ? argv[1] :
-        "/home/openvx/tutorial_videos/PETS09-S1-L1-View001.avi";
+    const char * video_sequence = argv[1];
     CGuiModule gui( video_sequence );
 
     // Try grab first video frame from the sequence using cv::VideoCapture

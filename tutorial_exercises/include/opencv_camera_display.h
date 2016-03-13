@@ -30,16 +30,18 @@
 #ifndef __opencv_camera_display_h__
 #define __opencv_camera_display_h__
 
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+#include <opencv2/opencv.hpp>
 #include <stdio.h>
 #include <string>
+
+#define DEFAULT_VIDEO_SEQUENCE "../../tutorial_videos/PETS09-S1-L1-View001.avi"
 
 class CGuiModule {
 public:
 	CGuiModule(const char * captureFile)
-		: m_cap( captureFile )
+		: m_cap( captureFile ? captureFile : DEFAULT_VIDEO_SEQUENCE )
 	{
+		captureFile = captureFile ? captureFile : DEFAULT_VIDEO_SEQUENCE;
 	    m_windowName = captureFile;
 	    if( !m_cap.isOpened()) {
 	        printf( "ERROR: unable to open: %s\n", captureFile );

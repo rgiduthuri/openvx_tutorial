@@ -9,8 +9,30 @@ graph API will be discussed. Also covered is the relationship between OpenVX and
 as well as OpenCL. The tutorial includes hands-on practice session that gets the participants 
 started on solving real computer vision problems using OpenVX.
 
-## Tutorial Preperations
-You should setup your computer before starting the tutorial.
+## Tutorial Exercises
+All the tutorial exercises are kept in tutorial_exercises folder. The tutorial_exercises/CMakeLists.txt includes
+all the exercises as separate projects. It is best to start doing these exercises after going over the tutorial presentations.
+  * exercise1: framework basics, import media, run a keypoint detector
+  * exercise2: graph concepts, keypoint tracking
+  * exercise3: user kernels, build a wrapper kernel to OpenCV function
+  * exercise4: user kernels, build a keypoint tracker
+  * easy_exercise*: partial solution with lot of hints in the code (use it only if you find exercise1/exercise2/... are hard)
+  * solution_exercise*: complete solution of exercises (just for reference)
+
+All of the exercise folders contain only one .cpp file with main() as the entry point. All the include files are kept in the include folder.
+  * Look for TODO keyword in comments to code snipets that you need to write. 
+  * Walk through the code from top to bottom and follow the instructions in the comments.
+  * The "opencv_camera_display.h" is a wrapper for importing media and displaying results using OpenCV library.
+  * The "VX/vx.h" & "VX/vxu.h" are part of OpenVX header files directly from [Khronos OpenVX registry](https://www.khronos.org/registry/vx/)
+
+Use the CMake option USE_KHRONOS_SAMPLE to turn ON/OFF the use of sample implementation.
+
+## Tutorial Preperations using Virtual Box
+The first version of the virtual machine, used at CVPR 2015, was prepared with contributions from 
+Colin Tracey (NVIDIA), Elif Albuz (NVIDIA), Kari Pulli (Intel), Radha Giduthuri (AMD), Thierry Lepley (NVIDIA), 
+Victor Eruhimov (Itseez), and Vlad Vinogradov (Itseez).
+
+The current version of VirtualBox VM has been updated to use the exercises in this project. You should setup your computer before starting the tutorial.
   * Choose a laptop with a recent 64-bit OS.
   * Download and install a recent VirtualBox from https://www.virtualbox.org/wiki/Downloads.
   * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from https://goo.gl/3HRmdi and extract files into a local folder.
@@ -21,22 +43,3 @@ You should setup your computer before starting the tutorial.
   * Start the "Ubuntu-64-OpenVX" virtual machine. 
   * Run "Qt Creator" (click Qt icon on left) and open project /home/openvx/openvx_tutorial/tutorial_exercises/CMakeLists.txt.
   * Build and run to make sure a window opens playing a video. Press ESC to stop the app.
-
-The first version of the virtual machine, used at CVPR 2015, was prepared with contributions from 
-Colin Tracey (NVIDIA), Elif Albuz (NVIDIA), Kari Pulli (Intel), Radha Giduthuri (AMD), Thierry Lepley (NVIDIA), 
-Victor Eruhimov (Itseez), and Vlad Vinogradov (Itseez).
-
-## Tutorial Exercises
-All the tutorial exercises are kept in tutorial_exercises folder. The tutorial_exercises/CMakeLists.txt includes
-all the exercises as separate projects. It is best to start doing these exercises after going over the tutorial presentations.
-  * exercise1: framework basics, import media, run a keypoint detector
-  * exercise2: graph concepts, keypoint tracking
-  * exercise3: user kernels, build a wrapper kernel to OpenCV function
-  * exercise4: user kernels, build a keypoint tracker
-  * easy_exercise#: partial solution with lot of hints in the code (use it only if you find exercise1/exercise2/... are hard)
-  * solution_exercise#: complete solution of exercises (just for reference)
-  
-All of the exercise folders contain two important files:
-  * opencv_camera_display.h: wrapper for importing media and displaying results using OpenCV library.
-  * exercise*.cpp: OpenVX application. Look for TODO keyword in comments to code snipets that you need to write. 
-    Walk through the code from top to bottom and follow the instructions in the comments.
