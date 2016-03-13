@@ -26,3 +26,8 @@
 *.exe
 *.out
 *.app
+
+# Folders
+tutorial_videos/
+tutorial_exercises/amdovx-core/
+tutorial_exercises/openvx_sample/
