@@ -1,9 +1,10 @@
 cmake_minimum_required ( VERSION 2.8        )
 project                ( tutorial_exercises )
 
+option                 ( USE_KHRONOS_SAMPLE "Use khronos sample implementation" ON                 )
 set                    ( OpenVX_SAMPLE /home/openvx/openvx_sample/install/Linux/x64                )
 set                    ( CMAKE_MACOSX_RPATH ON                                                     )
-if( EXISTS ${OpenVX_SAMPLE}/ )
+if( USE_KHRONOS_SAMPLE AND EXISTS ${OpenVX_SAMPLE}/ )
   set                  ( OpenVX_LIBRARIES openvx vxu CACHE INTERNAL OpenVX_LIBRARIES               )
   if( CMAKE_BUILD_TYPE MATCHES ".*Deb.*" )
     set                ( OpenVX_LIBPATH ${OpenVX_SAMPLE}/Debug/bin CACHE INTERNAL OpenVX_LIBPATH   )
