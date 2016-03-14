@@ -71,7 +71,7 @@ public:
 	}
 
 	int GetStride() {
-	    return m_imgRGB.step;
+	    return (int)m_imgRGB.step;
 	}
 
 	unsigned char * GetBuffer() {
@@ -104,8 +104,8 @@ public:
 			cv::Scalar color = cv::Scalar( 0, 255, 255 );
 			float tip_len = 5.0f + arrow_len * 0.1f, angle = atan2f(dy, dx);
 		    cv::line( m_imgBGR, cv::Point(x0, y0), cv::Point(x1, y1), color, 1 );
-		    cv::line( m_imgBGR, cv::Point(x1, y1), cv::Point(x1 - (int)(tip_len * cosf(angle + CV_PI/6)), y1 - (int)(tip_len * sinf(angle + CV_PI/6))), color, 1 );
-		    cv::line( m_imgBGR, cv::Point(x1, y1), cv::Point(x1 - (int)(tip_len * cosf(angle - CV_PI/6)), y1 - (int)(tip_len * sinf(angle - CV_PI/6))), color, 1 );
+		    cv::line( m_imgBGR, cv::Point(x1, y1), cv::Point(x1 - (int)(tip_len * cosf(angle + (float)CV_PI/6)), y1 - (int)(tip_len * sinf(angle + (float)CV_PI/6))), color, 1 );
+		    cv::line( m_imgBGR, cv::Point(x1, y1), cv::Point(x1 - (int)(tip_len * cosf(angle - (float)CV_PI/6)), y1 - (int)(tip_len * sinf(angle - (float)CV_PI/6))), color, 1 );
 		}
 	}
 
