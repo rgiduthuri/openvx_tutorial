@@ -19,16 +19,23 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
 
+# Author: Radhakrishna Giduthuri (radha.giduthuri@ieee.org)
+# Assumes that there is only one .cpp file with same name as project folder name
+
 cmake_minimum_required  ( VERSION 2.8                                              )
 get_filename_component  ( project_dir ${CMAKE_CURRENT_LIST_DIR} NAME               )
 project                 ( ${project_dir}                                           )
 find_package            ( OpenCV REQUIRED                                          )
 include_directories     ( ${OpenCV_INCLUDE_DIRS}                                   )
+include_directories     ( ${OpenVX_INCLUDE_DIRS}                                   )
 include_directories     ( ${CMAKE_SOURCE_DIR}/include                              )
-link_directories        ( ${OpenVX_LIBPATH}                                        )
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+link_directories        ( ${OpenVX_LIBS_DIR}                                       )
+if( POLICY CMP0054 )
+  cmake_policy( SET CMP0054 OLD )
+endif()
+if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" )
   set                   ( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" )
   set                   ( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd"    )
 endif()
 add_executable          ( ${PROJECT_NAME} ${project_dir}.cpp                       )
-target_link_libraries   ( ${PROJECT_NAME} ${OpenVX_LIBRARIES} ${OpenCV_LIBRARIES}  )
+target_link_libraries   ( ${PROJECT_NAME} ${OpenVX_LIBS} ${OpenCV_LIBRARIES}       )

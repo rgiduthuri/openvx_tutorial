@@ -1,31 +1,77 @@
-cmake_minimum_required ( VERSION 2.8        )
-project                ( tutorial_exercises )
+# Copyright (c) 2016 The Khronos Group Inc.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and/or associated documentation files (the
+# "Materials"), to deal in the Materials without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Materials, and to
+# permit persons to whom the Materials are furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Materials.
+#
+# THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
 
-option                 ( USE_KHRONOS_SAMPLE "Use khronos sample implementation" ON                 )
-set                    ( OpenVX_SAMPLE /home/openvx/openvx_sample/install/Linux/x64                )
-set                    ( CMAKE_MACOSX_RPATH ON                                                     )
-if( USE_KHRONOS_SAMPLE AND EXISTS ${OpenVX_SAMPLE}/ )
-  set                  ( OpenVX_LIBRARIES openvx vxu CACHE INTERNAL OpenVX_LIBRARIES               )
+# Author: Radhakrishna Giduthuri (radha.giduthuri@ieee.org)
+# 
+# Supported cmake variables and CACHE entries:
+#   OpenVX_SOURCE_DIR   -- OpenVX open source folder with CMakeLists.txt
+#   OpenVX_LIBS         -- list of OpenVX libraries
+#   OpenVX_LIBS_DIR     -- path to OpenVX libraries
+#   OpenVX_INCLUDE_DIRS -- path to non-khronos OpenVX header files (optional)
+#
+# Here are few examples:
+# * Build exercises using pre-installed khronos sample binaries in VM
+#     % cmake .../openvx_tutorial/tutorial_exercises
+# * Build exerciese using an open source implementation without using OpenCL
+#     % pushd .../openvx_tutorial/tutorial_exercises
+#     % git clone https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core
+#     % popd
+#     % cmake -DOpenVX_SOURCE_DIR=amdovx-core/openvx \
+#             -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL=TRUE \
+#             .../openvx_tutorial/tutorial_exercises
+# * Build exerciese using a 3rd-party OpenVX library
+#     % cmake -DOpenVX_LIBS_DIR=<path-to-openvx-libraries> \
+#             -DOpenVX_LIBS=<list-of-openvx-libraries> \
+#             .../openvx_tutorial/tutorial_exercises
+
+cmake_minimum_required ( VERSION 2.8            )
+project                ( tutorial_exercises     )
+
+set ( CMAKE_MACOSX_RPATH ON                                                  )
+set ( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} )
+
+if( OpenVX_SOURCE_DIR AND EXISTS ${CMAKE_SOURCE_DIR}/${OpenVX_SOURCE_DIR} )
+  add_subdirectory     ( ${OpenVX_SOURCE_DIR} )
+  if( NOT OpenVX_LIBS )
+    set   ( OpenVX_LIBS openvx CACHE INTERNAL OpenVX_LIBS                              )
+  endif()
+elseif( NOT OpenVX_LIBS_DIR )
+  set     ( OpenVX_SAMPLE /home/openvx/openvx_sample/install/Linux/x64                 )
+  set     ( OpenVX_LIBS openvx vxu CACHE INTERNAL OpenVX_LIBS                          )
   if( CMAKE_BUILD_TYPE MATCHES ".*Deb.*" )
-    set                ( OpenVX_LIBPATH ${OpenVX_SAMPLE}/Debug/bin CACHE INTERNAL OpenVX_LIBPATH   )
+    set   ( OpenVX_LIBS_DIR ${OpenVX_SAMPLE}/Debug/bin CACHE INTERNAL OpenVX_LIBPATH   )
   else( CMAKE_BUILD_TYPE MATCHES ".*Deb.*" )
-    set                ( OpenVX_LIBPATH ${OpenVX_SAMPLE}/Release/bin CACHE INTERNAL OpenVX_LIBPATH )
+    set   ( OpenVX_LIBS_DIR ${OpenVX_SAMPLE}/Release/bin CACHE INTERNAL OpenVX_LIBPATH )
   endif( CMAKE_BUILD_TYPE MATCHES ".*Deb.*" )
-elseif( EXISTS ${CMAKE_SOURCE_DIR}/amdovx-core/ )
-  set                  ( CMAKE_DISABLE_FIND_PACKAGE_OpenCL TRUE CACHE INTERNAL CMAKE_DISABLE_FIND_PACKAGE_OpenCL )
-  add_subdirectory     ( amdovx-core/openvx                                                        )
-  set                  ( OpenVX_LIBRARIES openvx CACHE INTERNAL OpenVX_LIBRARIES                   )
 endif()
 
-add_subdirectory       ( exercise1          )
-add_subdirectory       ( exercise2          )
-add_subdirectory       ( exercise3          )
-add_subdirectory       ( exercise4          )
-add_subdirectory       ( easy_exercise1     )
-add_subdirectory       ( easy_exercise2     )
-add_subdirectory       ( easy_exercise3     )
-add_subdirectory       ( easy_exercise4     )
-add_subdirectory       ( solution_exercise1 )
-add_subdirectory       ( solution_exercise2 )
-add_subdirectory       ( solution_exercise3 )
-add_subdirectory       ( solution_exercise4 )
+add_subdirectory       ( exercise1            )
+add_subdirectory       ( exercise2            )
+add_subdirectory       ( exercise3            )
+add_subdirectory       ( exercise4            )
+add_subdirectory       ( easy_exercise1       )
+add_subdirectory       ( easy_exercise2       )
+add_subdirectory       ( easy_exercise3       )
+add_subdirectory       ( easy_exercise4       )
+add_subdirectory       ( solution_exercise1   )
+add_subdirectory       ( solution_exercise2   )
+add_subdirectory       ( solution_exercise3   )
+add_subdirectory       ( solution_exercise4   )
