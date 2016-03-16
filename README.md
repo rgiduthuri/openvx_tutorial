@@ -25,6 +25,7 @@ All of the exercise folders contain only one .cpp file with main() as the entry 
   * The "opencv_camera_display.h" is a wrapper for importing media and displaying results using OpenCV library.
   * The "VX/vx.h" & "VX/vxu.h" are part of OpenVX header files directly from [Khronos OpenVX registry](https://www.khronos.org/registry/vx/)
 
+## Tutorial Preperations using CMake
 The HOME/openvx_tutorial/tutorial_exercises/CMakeLists.txt supports the following cmake variables:
   * OpenVX_SOURCE_DIR:   OpenVX open-source implementation directory that has CMakeLists.txt
   * OpenVX_LIBS:         list of OpenVX libraries
