@@ -45,8 +45,14 @@
 cmake_minimum_required ( VERSION 2.8            )
 project                ( tutorial_exercises     )
 
-set ( CMAKE_MACOSX_RPATH ON                                                  )
-set ( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} )
+if( POLICY CMP0054 )
+  cmake_policy( SET CMP0054 OLD )
+endif()
+if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" )
+  set ( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} )
+else()
+  set ( CMAKE_MACOSX_RPATH ON                                                  )
+endif()
 
 if( OpenVX_SOURCE_DIR AND EXISTS ${CMAKE_SOURCE_DIR}/${OpenVX_SOURCE_DIR} )
   add_subdirectory     ( ${OpenVX_SOURCE_DIR} )
