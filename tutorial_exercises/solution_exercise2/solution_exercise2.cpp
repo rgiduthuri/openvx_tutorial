@@ -474,6 +474,22 @@ int main( int argc, char * argv[] )
     }
 
     ////////********
+    // Query graph performance using VX_GRAPH_ATTRIBUTE_PERFORMANCE and print timing
+    // in milliseconds. Note that time units of vx_perf_t fields are nanoseconds.
+    // TODO:********
+    //   1. Use vxQueryGraph API with VX_GRAPH_ATTRIBUTE_PERFORMANCE to query
+    //      graph performance
+    //   2. Print the average and min execution times in milliseconds
+    vx_perf_t perfHarris = { 0 }, perfTrack = { 0 };
+    ERROR_CHECK_STATUS( vxQueryGraph( graphHarris, VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perfHarris, sizeof(perfHarris)));
+    ERROR_CHECK_STATUS( vxQueryGraph( graphTrack, VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perfTrack, sizeof(perfTrack)));
+    printf("GraphName NumFrames Avg(ms) Min(ms)\n"
+           "Harris    %9d %7.3f %7.3f\n"
+           "Track     %9d %7.3f %7.3f\n",
+           (int)perfHarris.num, (float)perfHarris.avg * 1e-6f, (float)perfHarris.min * 1e-6f,
+           (int)perfTrack.num, (float)perfTrack.avg * 1e-6f, (float)perfTrack.min * 1e-6f);
+
+    ////////********
     // Release all the OpenVX objects created in this exercise and make sure
     // to release the context at the end. To release an OpenVX object, you
     // need to call vxRelease<Object> API which takes a pointer to the object.

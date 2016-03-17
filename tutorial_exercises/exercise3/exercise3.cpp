@@ -312,6 +312,15 @@ int main( int argc, char * argv[] )
     }
 
     ////////********
+    // Query graph performance using VX_GRAPH_ATTRIBUTE_PERFORMANCE and print timing
+    // in milliseconds. Note that time units of vx_perf_t fields are nanoseconds.
+    vx_perf_t perf = { 0 };
+    ERROR_CHECK_STATUS( vxQueryGraph( graph, VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perf, sizeof(perf)));
+    printf("GraphName NumFrames Avg(ms) Min(ms)\n"
+           "Median    %9d %7.3f %7.3f\n",
+           (int)perf.num, (float)perf.avg * 1e-6f, (float)perf.min * 1e-6f);
+
+    ////////********
     // Release all the OpenVX objects created in this exercise and make sure
     // to release the context at the end. To release an OpenVX object, you
     // need to call vxRelease<Object> API which takes a pointer to the object.

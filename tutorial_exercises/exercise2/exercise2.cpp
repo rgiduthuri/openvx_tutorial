@@ -364,6 +364,15 @@ int main( int argc, char * argv[] )
     }
 
     ////////********
+    // Query graph performance using VX_GRAPH_ATTRIBUTE_PERFORMANCE and print timing
+    // in milliseconds. Note that time units of vx_perf_t fields are nanoseconds.
+    // TODO:********
+    //   1. Use vxQueryGraph API with VX_GRAPH_ATTRIBUTE_PERFORMANCE to query
+    //      graph performance
+    //   2. Print the average and min execution times in milliseconds
+
+
+    ////////********
     // Release all the OpenVX objects created in this exercise and make sure
     // to release the context at the end. To release an OpenVX object, you
     // need to call vxRelease<Object> API which takes a pointer to the object.

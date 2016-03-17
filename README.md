@@ -26,6 +26,12 @@ All of the exercise folders contain only one .cpp file with main() as the entry 
   * The "VX/vx.h" & "VX/vxu.h" are part of OpenVX header files directly from [Khronos OpenVX registry](https://www.khronos.org/registry/vx/)
 
 ## Tutorial Preperations using CMake
+In order to work with these exercises, you need the following:
+  * Laptop with a recent 64-bit OS (Windows, OS X, or Linux)
+  * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
+  * Recommended IDE: Qt Creator (OS X/Linux) or Visual Studio 2013/2015 (Windows)
+  * [Khronos OpenVX sample implementation](https://www.khronos.org/registry/vx/) (recommended), or any other OpenVX open-source implementation, or any pre-built 3rd party OpenVX libraries. See [Khronos OpenVX Resources](https://www.khronos.org/openvx/resources) for available implementations.
+
 The HOME/openvx_tutorial/tutorial_exercises/CMakeLists.txt supports the following cmake variables:
   * OpenVX_SOURCE_DIR:   OpenVX open-source implementation directory that has CMakeLists.txt
   * OpenVX_LIBS:         list of OpenVX libraries
