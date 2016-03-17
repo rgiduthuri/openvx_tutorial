@@ -1,54 +1,90 @@
 # Khronos OpenVX Tutorial Material
-[OpenVX](https://www.khronos.org/registry/vx/) is a royalty-free open standard API released by the Khronos Group in 2014.
-OpenVX enables performance and power-optimized computer vision functionality,
-especially important in embedded and real-time use cases. The course covers both
-the function-based API and the graph API that enable OpenVX developers to efficiently
-run computer vision algorithms on heterogeneous computing architectures. A set of example
-algorithms from computational photography and advanced driver assistance mapped to the
-graph API will be discussed. Also covered is the relationship between OpenVX and OpenCV,
-as well as OpenCL. The tutorial includes hands-on practice session that gets the participants
-started on solving real computer vision problems using OpenVX.
+[OpenVX](https://www.khronos.org/registry/vx/) 
+is a royalty-free open standard API released by the Khronos Group
+in 2014. OpenVX enables performance and power-optimized computer vision
+functionality, especially important in embedded and real-time use cases.
+This course covers both the function-based API and the graph API that
+enable OpenVX developers to efficiently run computer vision algorithms
+on heterogeneous computing architectures. A set of example algorithms
+from computational photography and advanced driver assistance mapped to
+the graph API will be discussed. Also covered is the relationship between
+OpenVX and OpenCV, as well as OpenCL. The tutorial includes hands-on practice
+session that gets the participants started on solving real computer vision
+problems using OpenVX.
 
 ## Tutorial Exercises
-All the tutorial exercises are kept in tutorial_exercises folder. The tutorial_exercises/CMakeLists.txt includes
-all the exercises as separate projects. It is best to start doing these exercises after going over the tutorial presentations.
+It is best to start doing these exercises after the tutorial presentations.
+The ~ in the below text refers to directory containing the openvx_tutorial
+sub-directory.
+
+All the tutorial exercises are kept in ~/openvx_tutorial/tutorial_exercises.
+The tutorial_exercises/CMakeLists.txt includes all the exercises as separate 
+projects. All of the exercise folders contain only one .cpp file with main() 
+as the entry point. All the include files are kept in the 
+tutorial_exercises/include directory. 
+
+A brief description of exercises in the tutorial_exercises sub-directory:
   * exercise1: framework basics, import media, run a keypoint detector
   * exercise2: graph concepts, keypoint tracking
   * exercise3: user kernels, build a wrapper kernel to OpenCV function
   * exercise4: user kernels, build a keypoint tracker
-  * easy_exercise*: partial solution with lot of hints in the code (use it only if you find exercise1/exercise2/... are hard)
-  * solution_exercise*: complete solution of exercises (just for reference)
 
-All of the exercise folders contain only one .cpp file with main() as the entry point. All the include files are kept in the include folder.
-  * Look for TODO keyword in comments to code snipets that you need to write.
-  * Walk through the code from top to bottom and follow the instructions in the comments.
-  * The "opencv_camera_display.h" is a wrapper for importing media and displaying results using OpenCV library.
-  * The "VX/vx.h" & "VX/vxu.h" are part of OpenVX header files directly from [Khronos OpenVX registry](https://www.khronos.org/registry/vx/)
+There are additional folders with partial and full solutions:
+  * easy_exerciseN: partial solution with lot of hints in the code. Use it
+    only if you don't have much time left to work with exerciseN folders.
+  * solution_exerciseN: complete solution of exerciseN. Just for reference.
 
-## Tutorial Preperations using CMake
-In order to work with these exercises, you need the following:
+Each exercise requires you to modify exerciseN/exerciseN.cpp file.
+Here are few helpful instructions:
+  * Look for *TODO* keyword in *exerciseN/exerciseN.cpp* comments for instructions
+    for code snipets that you need to create.
+  * Walk through the code *top-to-bottom* and follow the instructions
+    in the comments.
+  * All header files are kept in *tutorial_exercises/include*.
+    To open a header file, move the cursor to corresponding #include statement
+    in exerciseN/exerciseN.cpp and press F2.
+    - The "opencv_camera_display.h" is a wrapper that imports media and
+      displays results using OpenCV library.
+    - The "VX/vx.h" & "VX/vxu.h" files are part of OpenVX header files
+      downloaded from https://www.khronos.org/registry/vx/
+  * To view the definition of any OpenVX API or data type, simply move the
+    cursor to the name and press F2.
+  * You may have to download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in *~/openvx_tutorial/tutorial_videos* folder. 
+    * All the exercises in this tutorial use this video sequence as input.
+    * You can also specify you own video sequence on command-line as an argument.
+
+## Custom Build of Tutorials using CMake
+In order to custom build these tutorial exercises using cmake and
+any OpenVX implementation, you need the following:
   * Laptop with a recent 64-bit OS (Windows, OS X, or Linux)
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
   * Recommended IDE: Qt Creator (OS X/Linux) or Visual Studio 2013/2015 (Windows)
   * [Khronos OpenVX sample implementation](https://www.khronos.org/registry/vx/) (recommended), or any other OpenVX open-source implementation, or any pre-built 3rd party OpenVX libraries. See [Khronos OpenVX Resources](https://www.khronos.org/openvx/resources) for available implementations.
 
-The HOME/openvx_tutorial/tutorial_exercises/CMakeLists.txt supports the following cmake variables:
-  * OpenVX_SOURCE_DIR:   OpenVX open-source implementation directory that has CMakeLists.txt
+The ~/openvx_tutorial/tutorial_exercises/CMakeLists.txt has below cmake variables:
   * OpenVX_LIBS:         list of OpenVX libraries
   * OpenVX_LIBS_DIR:     path to OpenVX libraries
+  * OpenVX_SOURCE_DIR:   sub-directory of OpenVX open-source implementation
+                           inside tutorial_exercises with CMakeLists.txt
   * OpenVX_INCLUDE_DIRS: path to non-khronos OpenVX header files (optional)
 
-Here are few cmake build examples to use for tutorial preperation:
-  * Build exercises using pre-installed khronos sample binaries in VM
-      * cmake HOME/openvx_tutorial/tutorial_exercises
-  * Build exerciese using an open source implementation without using OpenCL
-      * pushd HOME/openvx_tutorial/tutorial_exercises
+The above cmake variables are expected in the following combinations:
+  * OpenVX_SOURCE_DIR & OpenVX_LIBS: debug with OpenVX implementation source
+  * OpenVX_LIBS_DIR & OpenVX_LIBS: run with any 3rd-party OpenVX library
+  * None specified: use pre-installed Khronos OpenVX sample implementation
+
+Here are few cmake build examples for this tutorial:
+  * Build exercises using pre-installed khronos sample libraries in
+    /home/openvx/openvx_sample/install/Linux/x64:
+      * cmake ~/openvx_tutorial/tutorial_exercises
+  * Build exerciese using OpenVX open-source implementation from GitHub
+    (works on any x86 CPU with SSE 4.1):
+      * pushd ~/openvx_tutorial/tutorial_exercises
       * git clone https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core
       * popd
-      * cmake -DOpenVX_SOURCE_DIR=amdovx-core/openvx -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL=TRUE HOME/openvx_tutorial/tutorial_exercises
+      * cmake -DOpenVX_SOURCE_DIR=amdovx-core/openvx -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL=TRUE ~/openvx_tutorial/tutorial_exercises
   * Build exerciese using a 3rd-party OpenVX library
-      * cmake -DOpenVX_LIBS_DIR=*path-to-openvx-libraries* -DOpenVX_LIBS=*list-of-openvx-libraries* HOME/openvx_tutorial/tutorial_exercises
-
+      * cmake -DOpenVX_LIBS_DIR=*path-to-openvx-libraries* -DOpenVX_LIBS=*list-of-openvx-libraries* ~/openvx_tutorial/tutorial_exercises
 
 ## Tutorial Preperations using Virtual Box
 The first version of the virtual machine, used at CVPR 2015, was prepared with contributions from
@@ -58,11 +94,17 @@ Victor Eruhimov (Itseez), and Vlad Vinogradov (Itseez).
 The current version of VirtualBox VM has been updated to use the exercises in this project. You should setup your computer before starting the tutorial.
   * Choose a laptop with a recent 64-bit OS.
   * Download and install a recent VirtualBox from https://www.virtualbox.org/wiki/Downloads.
-  * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from https://goo.gl/3HRmdi and extract files into a local folder.
-  * Run VirtualBox and add "Ubuntu-64-OpenVX" virtual machine [Machine -> Add] from the local folder. If you can’t install 64-bit VM,
-  even though you have a 64-bit Windows, you need to enable virtualization in the BIOS. In the Security section,
-  enable Virtualization Technology and VT-d Feature. On Windows 8.1, you also need to turn Hyper-V off
-  (search for Turn Windows features on or off).
+  * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from https://goo.gl/Ia53AB and extract files into a local folder.
+  * Run VirtualBox and add "Ubuntu-64-OpenVX" virtual machine [Machine -> Add] from the local folder. 
+    * If you cannot install 64-bit VM, even though you have a 64-bit Windows, you need to enable virtualization in the BIOS. 
+    * In the Security section, enable Virtualization Technology and VT-d Feature. 
+    * On Windows 8.1, you also need to turn Hyper-V off (search for Turn Windows features on or off).
   * Start the "Ubuntu-64-OpenVX" virtual machine.
-  * Run "Qt Creator" (click Qt icon on left) and open project /home/openvx/openvx_tutorial/tutorial_exercises/CMakeLists.txt.
-  * Build and run to make sure a window opens playing a video. Press ESC to stop the app.
+  * Run "Qt Creator" (click Qt icon on left) and open the project
+   ~/openvx_tutorial/tutorial_exercises/CMakeLists.txt.
+  * In Qt IDE, select exercise1 project from computer icon on bottom-left
+    and open exercise1/exercise1.cpp from project folder.
+  * Build and run to make sure a window opens playing a video.
+    * You may have to move the window to top-left to view the complete video.
+    * Press ESC or 'q' to stop the app.
+
