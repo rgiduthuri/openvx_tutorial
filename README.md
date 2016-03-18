@@ -49,7 +49,7 @@ Here are few helpful instructions:
       downloaded from https://www.khronos.org/registry/vx/
   * To view the definition of any OpenVX API or data type, simply move the
     cursor to the name and press F2.
-  * You may have to download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in *~/openvx_tutorial/tutorial_videos* folder. 
+  * You have to download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in *~/openvx_tutorial/tutorial_videos* folder. 
     * All the exercises in this tutorial use this video sequence as input.
     * You can also specify you own video sequence on command-line as an argument.
 
