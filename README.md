@@ -54,7 +54,7 @@ Here are few helpful instructions:
     * You can also specify you own video sequence on command-line as an argument.
 
 ## Custom Build of Tutorials using CMake
-In order to custom build these tutorial exercises using cmake and
+In order to custom-build these tutorial exercises using cmake and
 any OpenVX implementation, you need the following:
   * Laptop with a recent 64-bit OS (Windows, OS X, or Linux)
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
