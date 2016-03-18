@@ -37,7 +37,7 @@ There are additional folders with partial and full solutions:
 Each exercise requires you to modify exerciseN/exerciseN.cpp file.
 Here are few helpful instructions:
   * Look for *TODO* keyword in *exerciseN/exerciseN.cpp* comments for instructions
-    for code snipets that you need to create.
+    for code snippets that you need to create.
   * Walk through the code *top-to-bottom* and follow the instructions
     in the comments.
   * All header files are kept in *tutorial_exercises/include*.
@@ -77,13 +77,13 @@ Here are few cmake build examples for this tutorial:
   * Build exercises using pre-installed khronos sample libraries in
     /home/openvx/openvx_sample/install/Linux/x64:
       * cmake ~/openvx_tutorial/tutorial_exercises
-  * Build exerciese using OpenVX open-source implementation from GitHub
+  * Build exercises using OpenVX open-source implementation from GitHub
     (works on any x86 CPU with SSE 4.1):
       * pushd ~/openvx_tutorial/tutorial_exercises
       * git clone https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core
       * popd
       * cmake -DOpenVX_SOURCE_DIR=amdovx-core/openvx -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL=TRUE ~/openvx_tutorial/tutorial_exercises
-  * Build exerciese using a 3rd-party OpenVX library
+  * Build exercises using a 3rd-party OpenVX library
       * cmake -DOpenVX_LIBS_DIR=*path-to-openvx-libraries* -DOpenVX_LIBS=*list-of-openvx-libraries* ~/openvx_tutorial/tutorial_exercises
 
 ## Tutorial Preperations using Virtual Box
@@ -99,12 +99,18 @@ The current version of VirtualBox VM has been updated to use the exercises in th
     * If you cannot install 64-bit VM, even though you have a 64-bit Windows, you need to enable virtualization in the BIOS. 
     * In the Security section, enable Virtualization Technology and VT-d Feature. 
     * On Windows 8.1, you also need to turn Hyper-V off (search for Turn Windows features on or off).
-  * Start the "Ubuntu-64-OpenVX" virtual machine.
-  * Run "Qt Creator" (click Qt icon on left) and open the project
-   ~/openvx_tutorial/tutorial_exercises/CMakeLists.txt.
-  * In Qt IDE, select exercise1 project from computer icon on bottom-left
-    and open exercise1/exercise1.cpp from project folder.
-  * Build and run to make sure a window opens playing a video.
-    * You may have to move the window to top-left to view the complete video.
-    * Press ESC or 'q' to stop the app.
+  * Start the "Ubuntu-64-OpenVX" virtual machine ([username: openvx][password: openvx]).
+  * Run "Qt Creator" (click Qt icon on left) and open exercises project.
+    * Open Project: *CMakeLists.txt* in ~/openvx_tutorial/tutorial_exercises
+    * click *"Configure Project"* to open CMake Wizard
+    * click *"Run CMake"* and *"Finish"*
+  * Select exercise1 as active sub-project.
+    * click *"Open Build and Run Kit Selector"* under the *"Build"* menu
+    * select Run *"exercise1"* under the Build *"Default"* and press ESCAPE
+    * expand *"exercise1"* folder and click *"exercise1.cpp"*
+    * you are going to modify this file during the first practice session
+  * Build the project and run.
+    * click *"Run"* under the *"Build"* menu (or use keyboard shortcut Ctrl+R)
+    * you should see video in a window (you can move the window for better view)
+    * press ESCAPE or 'q' to exit the app
 
