@@ -34,13 +34,13 @@
 #include "opencv_camera_display.h"
 
 ////////
-// Most important top-level OpenVX header files are "VX/vx.h" and "VX/vxu.h".
+// The most important top-level OpenVX header files are "VX/vx.h" and "VX/vxu.h".
 // The "VX/vx.h" includes all headers needed to support functionality of the
 // OpenVX specification, except for immediate mode functions, and it includes:
 //    VX/vx_types.h     -- type definitions required by the OpenVX standard
 //    VX/vx_api.h       -- All framework API definitions
-//    VX/vx_kernels.h   -- list of supported kernels in the OpenVX standard 
-//    VX/vx_nodes.h     -- 
+//    VX/vx_kernels.h   -- list of supported kernels in the OpenVX standard
+//    VX/vx_nodes.h     --
 //    VX/vx_vendors.h
 // The "VX/vxu.h" defines immediate mode utility functions (not needed here).
 #include <VX/vx.h>
@@ -71,11 +71,13 @@
 // TODO:********
 //   1. Define USER_LIBRARY_EXAMPLE
 //   2. Define USER_KERNEL_MEDIAN_BLUR using VX_KERNEL_BASE() macro
-enum user_library_e {
+enum user_library_e
+{
     USER_LIBRARY_EXAMPLE        = 1,
 };
-enum user_kernel_e {
-    USER_KERNEL_MEDIAN_BLUR     = VX_KERNEL_BASE(VX_ID_DEFAULT, USER_LIBRARY_EXAMPLE) + 0x001,
+enum user_kernel_e
+{
+    USER_KERNEL_MEDIAN_BLUR     = VX_KERNEL_BASE( VX_ID_DEFAULT, USER_LIBRARY_EXAMPLE ) + 0x001,
 };
 
 ////////
@@ -92,23 +94,23 @@ enum user_kernel_e {
 //   4. Use vxSetParameterByIndex API to set node arguments
 //   5. Release the kernel and scalar objects that are not needed anymore
 //   6. Make sure to ERROR_CHECK_OBJECT and ERROR_CHECK_STATUS macros for error detection.
-vx_node userMedianBlurNode( vx_graph graph, vx_image input, vx_image output, vx_int32 ksize)
+vx_node userMedianBlurNode( vx_graph graph, vx_image input, vx_image output, vx_int32 ksize )
 {
-    vx_context context = vxGetContext((vx_reference) graph);
-    vx_kernel kernel = vxGetKernelByEnum(context, USER_KERNEL_MEDIAN_BLUR);
-    ERROR_CHECK_OBJECT(kernel);
-    vx_node node = vxCreateGenericNode(graph, kernel);
-    ERROR_CHECK_OBJECT(node);
+    vx_context context = vxGetContext( ( vx_reference ) graph );
+    vx_kernel kernel = vxGetKernelByEnum( context, USER_KERNEL_MEDIAN_BLUR );
+    ERROR_CHECK_OBJECT( kernel );
+    vx_node node = vxCreateGenericNode( graph, kernel );
+    ERROR_CHECK_OBJECT( node );
 
     vx_scalar s_ksize = vxCreateScalar( context, VX_TYPE_INT32, &ksize );
-    ERROR_CHECK_OBJECT(s_ksize);
+    ERROR_CHECK_OBJECT( s_ksize );
 
-    ERROR_CHECK_STATUS(vxSetParameterByIndex( node, 0, (vx_reference) input ));
-    ERROR_CHECK_STATUS(vxSetParameterByIndex( node, 1, (vx_reference) output ));
-    ERROR_CHECK_STATUS(vxSetParameterByIndex( node, 2, (vx_reference) s_ksize ));
+    ERROR_CHECK_STATUS( vxSetParameterByIndex( node, 0, ( vx_reference ) input ) );
+    ERROR_CHECK_STATUS( vxSetParameterByIndex( node, 1, ( vx_reference ) output ) );
+    ERROR_CHECK_STATUS( vxSetParameterByIndex( node, 2, ( vx_reference ) s_ksize ) );
 
-    ERROR_CHECK_STATUS(vxReleaseScalar(&s_ksize));
-    ERROR_CHECK_STATUS(vxReleaseKernel(&kernel));
+    ERROR_CHECK_STATUS( vxReleaseScalar( &s_ksize ) );
+    ERROR_CHECK_STATUS( vxReleaseKernel( &kernel ) );
 
     return node;
 }
@@ -128,28 +130,35 @@ vx_status VX_CALLBACK median_blur_input_validator( vx_node node, vx_uint32 index
 {
     vx_reference ref = NULL;
     vx_parameter parameter = vxGetParameterByIndex( node, index );
-    ERROR_CHECK_STATUS(vxQueryParameter( parameter, VX_PARAMETER_ATTRIBUTE_REF, &ref, sizeof( ref )));
-    ERROR_CHECK_STATUS(vxReleaseParameter(&parameter));
-    ERROR_CHECK_OBJECT(ref);
+    ERROR_CHECK_STATUS( vxQueryParameter( parameter, VX_PARAMETER_ATTRIBUTE_REF, &ref, sizeof( ref ) ) );
+    ERROR_CHECK_STATUS( vxReleaseParameter( &parameter ) );
+    ERROR_CHECK_OBJECT( ref );
 
-    if(index == 0)
-    { // parameter#0 -- input image of format VX_DF_IMAGE_U8
+    if( index == 0 )
+    {
+        // parameter#0 -- input image of format VX_DF_IMAGE_U8
         vx_df_image format = VX_DF_IMAGE_VIRT;
-        ERROR_CHECK_STATUS(vxQueryImage((vx_image)ref, VX_IMAGE_ATTRIBUTE_FORMAT, &format, sizeof( format )));
-        ERROR_CHECK_STATUS(vxReleaseImage((vx_image *)&ref));
+        ERROR_CHECK_STATUS( vxQueryImage( ( vx_image )ref, VX_IMAGE_ATTRIBUTE_FORMAT, &format, sizeof( format ) ) );
+        ERROR_CHECK_STATUS( vxReleaseImage( ( vx_image * )&ref ) );
         if( format != VX_DF_IMAGE_U8 )
+        {
             return VX_ERROR_INVALID_FORMAT;
+        }
     }
-    else if(index == 2)
-    { // parameters#2 -- scalar of type VX_TYPE_INT32
+    else if( index == 2 )
+    {
+        // parameters#2 -- scalar of type VX_TYPE_INT32
         vx_enum type = VX_TYPE_INVALID;
-        ERROR_CHECK_STATUS(vxQueryScalar((vx_scalar)ref, VX_SCALAR_ATTRIBUTE_TYPE, &type, sizeof( type )));
-        ERROR_CHECK_STATUS(vxReleaseScalar((vx_scalar *)&ref));
-        if(type != VX_TYPE_INT32)
+        ERROR_CHECK_STATUS( vxQueryScalar( ( vx_scalar )ref, VX_SCALAR_ATTRIBUTE_TYPE, &type, sizeof( type ) ) );
+        ERROR_CHECK_STATUS( vxReleaseScalar( ( vx_scalar * )&ref ) );
+        if( type != VX_TYPE_INT32 )
+        {
             return VX_ERROR_INVALID_TYPE;
+        }
     }
     else
-    { // invalid input parameter
+    {
+        // invalid input parameter
         return VX_ERROR_INVALID_PARAMETERS;
     }
 
@@ -165,25 +174,26 @@ vx_status VX_CALLBACK median_blur_input_validator( vx_node node, vx_uint32 index
 //   2. Set the output image meta data to have same dimensions as input and VX_DF_FORMAT_U8
 vx_status VX_CALLBACK median_blur_output_validator( vx_node node, vx_uint32 index, vx_meta_format meta )
 {
-    if(index == 1)
+    if( index == 1 )
     {
         vx_uint32 width = 0, height = 0;
         vx_image input = NULL;
         vx_parameter parameter = vxGetParameterByIndex( node, 0 );
-        ERROR_CHECK_STATUS(vxQueryParameter( parameter, VX_PARAMETER_ATTRIBUTE_REF, &input, sizeof( input )));
-        ERROR_CHECK_STATUS(vxReleaseParameter(&parameter));
-        ERROR_CHECK_OBJECT(input);
-        ERROR_CHECK_STATUS(vxQueryImage(input, VX_IMAGE_ATTRIBUTE_WIDTH, &width, sizeof(width)));
-        ERROR_CHECK_STATUS(vxQueryImage(input, VX_IMAGE_ATTRIBUTE_HEIGHT, &height, sizeof(height)));
-        ERROR_CHECK_STATUS(vxReleaseImage(&input));
+        ERROR_CHECK_STATUS( vxQueryParameter( parameter, VX_PARAMETER_ATTRIBUTE_REF, &input, sizeof( input ) ) );
+        ERROR_CHECK_STATUS( vxReleaseParameter( &parameter ) );
+        ERROR_CHECK_OBJECT( input );
+        ERROR_CHECK_STATUS( vxQueryImage( input, VX_IMAGE_ATTRIBUTE_WIDTH, &width, sizeof( width ) ) );
+        ERROR_CHECK_STATUS( vxQueryImage( input, VX_IMAGE_ATTRIBUTE_HEIGHT, &height, sizeof( height ) ) );
+        ERROR_CHECK_STATUS( vxReleaseImage( &input ) );
 
         vx_df_image format = VX_DF_IMAGE_U8;
-        ERROR_CHECK_STATUS(vxSetMetaFormatAttribute(meta, VX_IMAGE_ATTRIBUTE_FORMAT, &format, sizeof(format)));
-        ERROR_CHECK_STATUS(vxSetMetaFormatAttribute(meta, VX_IMAGE_ATTRIBUTE_WIDTH, &width, sizeof(width)));
-        ERROR_CHECK_STATUS(vxSetMetaFormatAttribute(meta, VX_IMAGE_ATTRIBUTE_HEIGHT, &height, sizeof(height)));
+        ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( meta, VX_IMAGE_ATTRIBUTE_FORMAT, &format, sizeof( format ) ) );
+        ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( meta, VX_IMAGE_ATTRIBUTE_WIDTH, &width, sizeof( width ) ) );
+        ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( meta, VX_IMAGE_ATTRIBUTE_HEIGHT, &height, sizeof( height ) ) );
     }
     else
-    { // invalid input parameter
+    {
+        // invalid input parameter
         return VX_ERROR_INVALID_PARAMETERS;
     }
 
@@ -204,29 +214,29 @@ vx_status VX_CALLBACK median_blur_output_validator( vx_node node, vx_uint32 inde
 //   4. Use vxCommitImagePatch API to give the image buffers control back to OpenVX framework
 vx_status VX_CALLBACK median_blur_host_side_function( vx_node node, const vx_reference * refs, vx_uint32 num )
 {
-    vx_image input = (vx_image)refs[0];
-    vx_image output = (vx_image)refs[1];
-    vx_scalar s_ksize = (vx_scalar)refs[2];
+    vx_image input = ( vx_image )refs[0];
+    vx_image output = ( vx_image )refs[1];
+    vx_scalar s_ksize = ( vx_scalar )refs[2];
 
     vx_int32 ksize = 0;
-    ERROR_CHECK_STATUS(vxReadScalarValue(s_ksize, &ksize));
+    ERROR_CHECK_STATUS( vxReadScalarValue( s_ksize, &ksize ) );
 
     vx_uint32 width = 0, height = 0;
-    ERROR_CHECK_STATUS(vxQueryImage(input, VX_IMAGE_ATTRIBUTE_WIDTH, &width, sizeof(width)));
-    ERROR_CHECK_STATUS(vxQueryImage(input, VX_IMAGE_ATTRIBUTE_HEIGHT, &height, sizeof(height)));
+    ERROR_CHECK_STATUS( vxQueryImage( input, VX_IMAGE_ATTRIBUTE_WIDTH, &width, sizeof( width ) ) );
+    ERROR_CHECK_STATUS( vxQueryImage( input, VX_IMAGE_ATTRIBUTE_HEIGHT, &height, sizeof( height ) ) );
 
     vx_rectangle_t rect = { 0, 0, width, height };
     vx_imagepatch_addressing_t addr_input = { 0 }, addr_output = { 0 };
     void * ptr_input = NULL, * ptr_output = NULL;
-    ERROR_CHECK_STATUS(vxAccessImagePatch(input, &rect, 0, &addr_input, &ptr_input, VX_READ_ONLY));
-    ERROR_CHECK_STATUS(vxAccessImagePatch(output, &rect, 0, &addr_output, &ptr_output, VX_WRITE_ONLY));
+    ERROR_CHECK_STATUS( vxAccessImagePatch( input, &rect, 0, &addr_input, &ptr_input, VX_READ_ONLY ) );
+    ERROR_CHECK_STATUS( vxAccessImagePatch( output, &rect, 0, &addr_output, &ptr_output, VX_WRITE_ONLY ) );
 
-    cv::Mat mat_input(height, width, CV_8U, ptr_input, addr_input.stride_y);
-    cv::Mat mat_output(height, width, CV_8U, ptr_output, addr_output.stride_y);
-    cv::medianBlur(mat_input, mat_output, ksize);
+    cv::Mat mat_input( height, width, CV_8U, ptr_input, addr_input.stride_y );
+    cv::Mat mat_output( height, width, CV_8U, ptr_output, addr_output.stride_y );
+    cv::medianBlur( mat_input, mat_output, ksize );
 
-    ERROR_CHECK_STATUS(vxCommitImagePatch(input, &rect, 0, &addr_input, ptr_input));
-    ERROR_CHECK_STATUS(vxCommitImagePatch(output, &rect, 0, &addr_output, ptr_output));
+    ERROR_CHECK_STATUS( vxCommitImagePatch( input, &rect, 0, &addr_input, ptr_input ) );
+    ERROR_CHECK_STATUS( vxCommitImagePatch( output, &rect, 0, &addr_output, ptr_output ) );
 
     return VX_SUCCESS;
 }
@@ -247,42 +257,42 @@ vx_status VX_CALLBACK median_blur_host_side_function( vx_node node, const vx_ref
 vx_status registerUserKernel( vx_context context )
 {
     vx_kernel kernel = vxAddKernel( context,
-            "app.userkernels.median_blur",
-            USER_KERNEL_MEDIAN_BLUR,
-            median_blur_host_side_function,
-            3,   // numParams
-            median_blur_input_validator,
-            median_blur_output_validator,
-            NULL,
-            NULL
-        );
-    ERROR_CHECK_OBJECT(kernel);
+                                    "app.userkernels.median_blur",
+                                    USER_KERNEL_MEDIAN_BLUR,
+                                    median_blur_host_side_function,
+                                    3,   // numParams
+                                    median_blur_input_validator,
+                                    median_blur_output_validator,
+                                    NULL,
+                                    NULL
+                                  );
+    ERROR_CHECK_OBJECT( kernel );
 
-    ERROR_CHECK_STATUS(vxAddParameterToKernel( kernel, 0, VX_INPUT, VX_TYPE_IMAGE, VX_PARAMETER_STATE_REQUIRED )); // input
-    ERROR_CHECK_STATUS(vxAddParameterToKernel( kernel, 1, VX_OUTPUT, VX_TYPE_IMAGE, VX_PARAMETER_STATE_REQUIRED )); // output
-    ERROR_CHECK_STATUS(vxAddParameterToKernel( kernel, 2, VX_INPUT, VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED )); // ksize
-    ERROR_CHECK_STATUS(vxFinalizeKernel( kernel ));
-    ERROR_CHECK_STATUS(vxReleaseKernel( &kernel ));
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 0, VX_INPUT, VX_TYPE_IMAGE, VX_PARAMETER_STATE_REQUIRED ) ); // input
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 1, VX_OUTPUT, VX_TYPE_IMAGE, VX_PARAMETER_STATE_REQUIRED ) ); // output
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 2, VX_INPUT, VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // ksize
+    ERROR_CHECK_STATUS( vxFinalizeKernel( kernel ) );
+    ERROR_CHECK_STATUS( vxReleaseKernel( &kernel ) );
 
-    vxAddLogEntry((vx_reference) context, VX_SUCCESS, "OK: registered user kernel app.userkernels.median_blur\n" );
+    vxAddLogEntry( ( vx_reference ) context, VX_SUCCESS, "OK: registered user kernel app.userkernels.median_blur\n" );
     return VX_SUCCESS;
 }
 
 ////////
-// log_callback function should implements a mechanism to print log messages 
+// log_callback function should implements a mechanism to print log messages
 // from OpenVX framework onto console.
-void log_callback( vx_context context, vx_reference ref, 
-    vx_status status, const vx_char string[] )
+void log_callback( vx_context context, vx_reference ref,
+                   vx_status status, const vx_char string[] )
 {
     printf( "LOG: [ %3d ] %s", status, string );
-    fflush(stdout);
+    fflush( stdout );
 }
 
 ////////
 // main() has all the OpenVX application code for this exercise.
 // Command-line usage:
 //   % solution_exercise2 [<video-sequence>|<camera-device-number>]
-// When neither video sequence nor camera device number is specified, 
+// When neither video sequence nor camera device number is specified,
 // it defaults to the video sequence in "PETS09-S1-L1-View001.avi".
 int main( int argc, char * argv[] )
 {
@@ -294,7 +304,7 @@ int main( int argc, char * argv[] )
 
     // Try grab first video frame from the sequence using cv::VideoCapture
     // and check if video frame is available
-    if( !gui.Grab())
+    if( !gui.Grab() )
     {
         printf( "ERROR: input has no video\n" );
         return 1;
@@ -320,14 +330,14 @@ int main( int argc, char * argv[] )
     // Register user kernels with the context
     // TODO:********
     //   1. Register user kernel with context by calling your implementation of "registerUserKernel()"
-    ERROR_CHECK_STATUS(registerUserKernel( context ));
+    ERROR_CHECK_STATUS( registerUserKernel( context ) );
 
     ////////
     // Create OpenVX image object for input RGB image and median filter output image
     vx_image input_rgb_image = vxCreateImage( context, width, height, VX_DF_IMAGE_RGB );
     vx_image output_filtered_image = vxCreateImage( context, width, height, VX_DF_IMAGE_U8 );
-    ERROR_CHECK_OBJECT(input_rgb_image);
-    ERROR_CHECK_OBJECT(output_filtered_image);
+    ERROR_CHECK_OBJECT( input_rgb_image );
+    ERROR_CHECK_OBJECT( output_filtered_image );
 
     ////////********
     // Create graph object and intermediate image objects.
@@ -352,18 +362,20 @@ int main( int argc, char * argv[] )
     // initialization.
     // TODO:********
     //   1. Use userMedianBlurNode function to add "median_blur" node.
-    vx_node nodes[] = {
+    vx_node nodes[] =
+    {
         vxColorConvertNode( graph, input_rgb_image, yuv_image ),
         vxChannelExtractNode( graph, yuv_image, VX_CHANNEL_Y, luma_image ),
         userMedianBlurNode( graph, luma_image, output_filtered_image, ksize ),
     };
-    for(vx_size i = 0; i < sizeof(nodes)/sizeof(nodes[0]); i++) {
+    for( vx_size i = 0; i < sizeof( nodes ) / sizeof( nodes[0] ); i++ )
+    {
         ERROR_CHECK_OBJECT( nodes[i] );
-        ERROR_CHECK_STATUS( vxReleaseNode( &nodes[i] ));
+        ERROR_CHECK_STATUS( vxReleaseNode( &nodes[i] ) );
     }
-    ERROR_CHECK_STATUS( vxReleaseImage( &yuv_image ));
-    ERROR_CHECK_STATUS( vxReleaseImage( &luma_image ));
-    ERROR_CHECK_STATUS( vxVerifyGraph( graph ));
+    ERROR_CHECK_STATUS( vxReleaseImage( &yuv_image ) );
+    ERROR_CHECK_STATUS( vxReleaseImage( &luma_image ) );
+    ERROR_CHECK_STATUS( vxVerifyGraph( graph ) );
 
     ////////
     // process video sequence frame by frame until end of sequence or aborted.
@@ -386,26 +398,26 @@ int main( int argc, char * argv[] )
         cv_rgb_image_layout.stride_x = 3;
         cv_rgb_image_layout.stride_y = gui.GetStride();
         vx_uint8 * cv_rgb_image_buffer = gui.GetBuffer();
-        status = vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0, 
-            &cv_rgb_image_layout, (void **)&cv_rgb_image_buffer, VX_WRITE_ONLY );
+        status = vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
+                                     &cv_rgb_image_layout, ( void ** )&cv_rgb_image_buffer, VX_WRITE_ONLY );
         ERROR_CHECK_STATUS( status );
         status = vxCommitImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
-            &cv_rgb_image_layout, cv_rgb_image_buffer );
+                                     &cv_rgb_image_layout, cv_rgb_image_buffer );
         ERROR_CHECK_STATUS( status );
 
         ////////********
         // Now that input RGB image is ready, just run a graph.
-        ERROR_CHECK_STATUS(vxProcessGraph( graph ));
+        ERROR_CHECK_STATUS( vxProcessGraph( graph ) );
 
         ////////
         // Display the output filtered image
         vx_rectangle_t rect = { 0, 0, width, height };
         vx_imagepatch_addressing_t addr = { 0 };
         void * ptr = NULL;
-        ERROR_CHECK_STATUS(vxAccessImagePatch(output_filtered_image, &rect, 0, &addr, &ptr, VX_READ_ONLY));
-        cv::Mat mat(height, width, CV_8U, ptr, addr.stride_y);
-        cv::imshow("MedianBlur", mat);
-        ERROR_CHECK_STATUS(vxCommitImagePatch(output_filtered_image, &rect, 0, &addr, ptr));
+        ERROR_CHECK_STATUS( vxAccessImagePatch( output_filtered_image, &rect, 0, &addr, &ptr, VX_READ_ONLY ) );
+        cv::Mat mat( height, width, CV_8U, ptr, addr.stride_y );
+        cv::imshow( "MedianBlur", mat );
+        ERROR_CHECK_STATUS( vxCommitImagePatch( output_filtered_image, &rect, 0, &addr, ptr ) );
 
         ////////
         // Display the input RGB and grab next input RGB frame for next iteration
@@ -413,7 +425,7 @@ int main( int argc, char * argv[] )
         sprintf( text, "Keyboard ESC/Q-Quit SPACE-Pause [FRAME %d] [ksize %d]", frame_index, ksize );
         gui.DrawText( 0, 16, text );
         gui.Show();
-        if( !gui.Grab())
+        if( !gui.Grab() )
         {
             // terminate the processing loop if end of sequence is detected
             gui.WaitForKey();
@@ -425,10 +437,10 @@ int main( int argc, char * argv[] )
     // Query graph performance using VX_GRAPH_ATTRIBUTE_PERFORMANCE and print timing
     // in milliseconds. Note that time units of vx_perf_t fields are nanoseconds.
     vx_perf_t perf = { 0 };
-    ERROR_CHECK_STATUS( vxQueryGraph( graph, VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perf, sizeof(perf)));
-    printf("GraphName NumFrames Avg(ms) Min(ms)\n"
-           "Median    %9d %7.3f %7.3f\n",
-           (int)perf.num, (float)perf.avg * 1e-6f, (float)perf.min * 1e-6f);
+    ERROR_CHECK_STATUS( vxQueryGraph( graph, VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perf, sizeof( perf ) ) );
+    printf( "GraphName NumFrames Avg(ms) Min(ms)\n"
+            "Median    %9d %7.3f %7.3f\n",
+            ( int )perf.num, ( float )perf.avg * 1e-6f, ( float )perf.min * 1e-6f );
 
     ////////********
     // Release all the OpenVX objects created in this exercise and make sure
@@ -436,10 +448,10 @@ int main( int argc, char * argv[] )
     // need to call vxRelease<Object> API which takes a pointer to the object.
     // If the release operation is successful, the OpenVX framework will
     // reset the object to NULL.
-    ERROR_CHECK_STATUS( vxReleaseGraph( &graph ));
-    ERROR_CHECK_STATUS( vxReleaseImage( &input_rgb_image ));
-    ERROR_CHECK_STATUS( vxReleaseImage( &output_filtered_image ));
-    ERROR_CHECK_STATUS( vxReleaseContext( &context ));
+    ERROR_CHECK_STATUS( vxReleaseGraph( &graph ) );
+    ERROR_CHECK_STATUS( vxReleaseImage( &input_rgb_image ) );
+    ERROR_CHECK_STATUS( vxReleaseImage( &output_filtered_image ) );
+    ERROR_CHECK_STATUS( vxReleaseContext( &context ) );
 
     return 0;
 }

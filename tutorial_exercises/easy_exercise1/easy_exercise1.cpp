@@ -24,7 +24,7 @@
 /*!
  * \file main.cpp
  * \example easy_exercise1
- * \brief Harris corners example. 
+ * \brief Harris corners example.
  * Look for TODO keyword in comments to code snipets that you need write.
  * \author Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
  */
@@ -34,13 +34,13 @@
 #include "opencv_camera_display.h"
 
 ////////********
-// Most important top-level OpenVX header files are "VX/vx.h" and "VX/vxu.h".
+// The most important top-level OpenVX header files are "VX/vx.h" and "VX/vxu.h".
 // The "VX/vx.h" includes all headers needed to support functionality of the
 // OpenVX specification, except for immediate mode functions, and it includes:
 //    VX/vx_types.h     -- type definitions required by the OpenVX standard
 //    VX/vx_api.h       -- All framework API definitions
-//    VX/vx_kernels.h   -- list of supported kernels in the OpenVX standard 
-//    VX/vx_nodes.h     -- 
+//    VX/vx_kernels.h   -- list of supported kernels in the OpenVX standard
+//    VX/vx_nodes.h     --
 //    VX/vx_vendors.h
 // The "VX/vxu.h" defines immediate mode utility functions.
 // TODO:********
@@ -68,7 +68,7 @@
     }
 
 ////////********
-// log_callback function should implements a mechanism to print log messages 
+// log_callback function should implements a mechanism to print log messages
 // from OpenVX framework onto console.
 // TODO:********
 //   1. Complete the log_callback function declaration to match with
@@ -84,7 +84,7 @@ void log_callback( /* add function arguments here */ )
 // main() has all the OpenVX application code for this exercise.
 // Command-line usage:
 //   % solution_exercise1 [<video-sequence>|<camera-device-number>]
-// When neither video sequence nor camera device number is specified, 
+// When neither video sequence nor camera device number is specified,
 // it defaults to the video sequence in "PETS09-S1-L1-View001.avi".
 int main( int argc, char * argv[] )
 {
@@ -96,7 +96,7 @@ int main( int argc, char * argv[] )
 
     // Try grab first video frame from the sequence using cv::VideoCapture
     // and check if video frame is available
-    if( !gui.Grab())
+    if( !gui.Grab() )
     {
         printf( "ERROR: input has no video\n" );
         return 1;
@@ -106,14 +106,14 @@ int main( int argc, char * argv[] )
     // Set the application configuration parameters. Note that input video
     // sequence is an 8-bit RGB image with dimensions given by gui.GetWidth()
     // and gui.GetHeight(). Harris corners algorithm specific parameters are:
-    //   harris_strength_thresh - minimum threshold which to eliminate 
+    //   harris_strength_thresh - minimum threshold which to eliminate
     //                            Harris Corner scores (computed using the
     //                            normalized Sobel kernel)
     //   harris_min_distance    - radial L2 distance for non-max suppression
-    //   harris_k_sensitivity   - sensitivity threshold k from the 
-    //                            Harris-Stephens 
+    //   harris_k_sensitivity   - sensitivity threshold k from the
+    //                            Harris-Stephens
     //   harris_gradient_size   - gradient window size to use on the input
-    //   harris_block_size      - block window size used to compute the 
+    //   harris_block_size      - block window size used to compute the
     //                            harris corner score
     vx_uint32  width                  = gui.GetWidth();
     vx_uint32  height                 = gui.GetHeight();
@@ -212,7 +212,7 @@ int main( int argc, char * argv[] )
         //      zeros, whereas, the end_x and end_y should be width and height.
         //   2. Specify the memory layout of OpenCV RGB image buffer by
         //      declaring the layout as a vx_imagepatch_addressing_t type.
-        //      Remember that you need to specify stride_x and stride_y fields 
+        //      Remember that you need to specify stride_x and stride_y fields
         //      of vx_imagepatch_addressing_t for the image buffer layout. The
         //      stride_x should be 3 and stride_y should be gui.GetStride().
         //   3. Get the pointer to buffer using gui.GetBuffer() and call
@@ -267,7 +267,7 @@ int main( int argc, char * argv[] )
         //      buffer, use vxAccessArrayRange with start index as ZERO,
         //      end index as number of items in the array, and usage mode as
         //      VX_READ_ONLY. Note that the stride returned by this access
-        //      call is not guaranteed to be sizeof(vx_keypoint_t). 
+        //      call is not guaranteed to be sizeof(vx_keypoint_t).
         //      Also make sure that num_corners is > 0, because
         //      vxAccessArrayRange expects end index > 0.
         //   3. For each item in the keypoint buffer, use vxArrayItem to
@@ -278,9 +278,10 @@ int main( int argc, char * argv[] )
         //   5. Use ERROR_CHECK_STATUS for error checking.
         vx_size num_corners = 0;
         status = vxQueryArray( output_keypoint_array,
-            VX_ARRAY_ATTRIBUTE_NUMITEMS, &num_corners, sizeof( num_corners ));
+                               VX_ARRAY_ATTRIBUTE_NUMITEMS, &num_corners, sizeof( num_corners ) );
         ERROR_CHECK_STATUS( status );
-        if( num_corners > 0 ) {
+        if( num_corners > 0 )
+        {
             // ...
         }
 
@@ -289,10 +290,10 @@ int main( int argc, char * argv[] )
         char text[128];
         sprintf( text, "Keyboard ESC/Q-Quit SPACE-Pause [FRAME %d]", frame_index );
         gui.DrawText( 0, 16, text );
-        sprintf( text, "Number of Corners: %d", (int)num_corners );
+        sprintf( text, "Number of Corners: %d", ( int )num_corners );
         gui.DrawText( 0, 36, text );
         gui.Show();
-        if( !gui.Grab())
+        if( !gui.Grab() )
         {
             // terminate the processing loop if end of sequence is detected
             gui.WaitForKey();

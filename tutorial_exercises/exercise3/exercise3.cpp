@@ -34,13 +34,13 @@
 #include "opencv_camera_display.h"
 
 ////////
-// Most important top-level OpenVX header files are "VX/vx.h" and "VX/vxu.h".
+// The most important top-level OpenVX header files are "VX/vx.h" and "VX/vxu.h".
 // The "VX/vx.h" includes all headers needed to support functionality of the
 // OpenVX specification, except for immediate mode functions, and it includes:
 //    VX/vx_types.h     -- type definitions required by the OpenVX standard
 //    VX/vx_api.h       -- All framework API definitions
-//    VX/vx_kernels.h   -- list of supported kernels in the OpenVX standard 
-//    VX/vx_nodes.h     -- 
+//    VX/vx_kernels.h   -- list of supported kernels in the OpenVX standard
+//    VX/vx_nodes.h     --
 //    VX/vx_vendors.h
 // The "VX/vxu.h" defines immediate mode utility functions (not needed here).
 #include <VX/vx.h>
@@ -87,7 +87,7 @@
 //   4. Use vxSetParameterByIndex API to set node arguments
 //   5. Release the kernel and scalar objects that are not needed anymore
 //   6. Make sure to ERROR_CHECK_OBJECT and ERROR_CHECK_STATUS macros for error detection.
-vx_node userMedianBlurNode( vx_graph graph, vx_image input, vx_image output, vx_int32 ksize)
+vx_node userMedianBlurNode( vx_graph graph, vx_image input, vx_image output, vx_int32 ksize )
 {
     return NULL;
 }
@@ -154,25 +154,25 @@ vx_status registerUserKernel( vx_context context )
 {
     // ...
 
-    vxAddLogEntry((vx_reference) context, VX_SUCCESS, "OK: registered user kernel app.userkernels.median_blur\n" );
+    vxAddLogEntry( ( vx_reference ) context, VX_SUCCESS, "OK: registered user kernel app.userkernels.median_blur\n" );
     return VX_ERROR_NOT_IMPLEMENTED;
 }
 
 ////////
-// log_callback function should implements a mechanism to print log messages 
+// log_callback function should implements a mechanism to print log messages
 // from OpenVX framework onto console.
-void log_callback( vx_context context, vx_reference ref, 
-    vx_status status, const vx_char string[] )
+void log_callback( vx_context context, vx_reference ref,
+                   vx_status status, const vx_char string[] )
 {
     printf( "LOG: [ %3d ] %s", status, string );
-    fflush(stdout);
+    fflush( stdout );
 }
 
 ////////
 // main() has all the OpenVX application code for this exercise.
 // Command-line usage:
 //   % solution_exercise2 [<video-sequence>|<camera-device-number>]
-// When neither video sequence nor camera device number is specified, 
+// When neither video sequence nor camera device number is specified,
 // it defaults to the video sequence in "PETS09-S1-L1-View001.avi".
 int main( int argc, char * argv[] )
 {
@@ -184,7 +184,7 @@ int main( int argc, char * argv[] )
 
     // Try grab first video frame from the sequence using cv::VideoCapture
     // and check if video frame is available
-    if( !gui.Grab())
+    if( !gui.Grab() )
     {
         printf( "ERROR: input has no video\n" );
         return 1;
@@ -216,8 +216,8 @@ int main( int argc, char * argv[] )
     // Create OpenVX image object for input RGB image and median filter output image
     vx_image input_rgb_image = vxCreateImage( context, width, height, VX_DF_IMAGE_RGB );
     vx_image output_filtered_image = vxCreateImage( context, width, height, VX_DF_IMAGE_U8 );
-    ERROR_CHECK_OBJECT(input_rgb_image);
-    ERROR_CHECK_OBJECT(output_filtered_image);
+    ERROR_CHECK_OBJECT( input_rgb_image );
+    ERROR_CHECK_OBJECT( output_filtered_image );
 
     ////////********
     // Create graph object and intermediate image objects.
@@ -242,18 +242,20 @@ int main( int argc, char * argv[] )
     // initialization.
     // TODO:********
     //   1. Use userMedianBlurNode function to add "median_blur" node.
-    vx_node nodes[] = {
+    vx_node nodes[] =
+    {
         vxColorConvertNode( graph, input_rgb_image, yuv_image ),
         vxChannelExtractNode( graph, yuv_image, VX_CHANNEL_Y, luma_image ),
         // userMedianBlurNode( graph, ... ),
     };
-    for(vx_size i = 0; i < sizeof(nodes)/sizeof(nodes[0]); i++) {
+    for( vx_size i = 0; i < sizeof( nodes ) / sizeof( nodes[0] ); i++ )
+    {
         ERROR_CHECK_OBJECT( nodes[i] );
-        ERROR_CHECK_STATUS( vxReleaseNode( &nodes[i] ));
+        ERROR_CHECK_STATUS( vxReleaseNode( &nodes[i] ) );
     }
-    ERROR_CHECK_STATUS( vxReleaseImage( &yuv_image ));
-    ERROR_CHECK_STATUS( vxReleaseImage( &luma_image ));
-    ERROR_CHECK_STATUS( vxVerifyGraph( graph ));
+    ERROR_CHECK_STATUS( vxReleaseImage( &yuv_image ) );
+    ERROR_CHECK_STATUS( vxReleaseImage( &luma_image ) );
+    ERROR_CHECK_STATUS( vxVerifyGraph( graph ) );
 
     ////////
     // process video sequence frame by frame until end of sequence or aborted.
@@ -276,26 +278,26 @@ int main( int argc, char * argv[] )
         cv_rgb_image_layout.stride_x = 3;
         cv_rgb_image_layout.stride_y = gui.GetStride();
         vx_uint8 * cv_rgb_image_buffer = gui.GetBuffer();
-        status = vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0, 
-            &cv_rgb_image_layout, (void **)&cv_rgb_image_buffer, VX_WRITE_ONLY );
+        status = vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
+                                     &cv_rgb_image_layout, ( void ** )&cv_rgb_image_buffer, VX_WRITE_ONLY );
         ERROR_CHECK_STATUS( status );
         status = vxCommitImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
-            &cv_rgb_image_layout, cv_rgb_image_buffer );
+                                     &cv_rgb_image_layout, cv_rgb_image_buffer );
         ERROR_CHECK_STATUS( status );
 
         ////////********
         // Now that input RGB image is ready, just run a graph.
-        ERROR_CHECK_STATUS(vxProcessGraph( graph ));
+        ERROR_CHECK_STATUS( vxProcessGraph( graph ) );
 
         ////////
         // Display the output filtered image
         vx_rectangle_t rect = { 0, 0, width, height };
         vx_imagepatch_addressing_t addr = { 0 };
         void * ptr = NULL;
-        ERROR_CHECK_STATUS(vxAccessImagePatch(output_filtered_image, &rect, 0, &addr, &ptr, VX_READ_ONLY));
-        cv::Mat mat(height, width, CV_8U, ptr, addr.stride_y);
-        cv::imshow("MedianBlur", mat);
-        ERROR_CHECK_STATUS(vxCommitImagePatch(output_filtered_image, &rect, 0, &addr, ptr));
+        ERROR_CHECK_STATUS( vxAccessImagePatch( output_filtered_image, &rect, 0, &addr, &ptr, VX_READ_ONLY ) );
+        cv::Mat mat( height, width, CV_8U, ptr, addr.stride_y );
+        cv::imshow( "MedianBlur", mat );
+        ERROR_CHECK_STATUS( vxCommitImagePatch( output_filtered_image, &rect, 0, &addr, ptr ) );
 
         ////////
         // Display the input RGB and grab next input RGB frame for next iteration
@@ -303,7 +305,7 @@ int main( int argc, char * argv[] )
         sprintf( text, "Keyboard ESC/Q-Quit SPACE-Pause [FRAME %d] [ksize %d]", frame_index, ksize );
         gui.DrawText( 0, 16, text );
         gui.Show();
-        if( !gui.Grab())
+        if( !gui.Grab() )
         {
             // terminate the processing loop if end of sequence is detected
             gui.WaitForKey();
@@ -315,10 +317,10 @@ int main( int argc, char * argv[] )
     // Query graph performance using VX_GRAPH_ATTRIBUTE_PERFORMANCE and print timing
     // in milliseconds. Note that time units of vx_perf_t fields are nanoseconds.
     vx_perf_t perf = { 0 };
-    ERROR_CHECK_STATUS( vxQueryGraph( graph, VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perf, sizeof(perf)));
-    printf("GraphName NumFrames Avg(ms) Min(ms)\n"
-           "Median    %9d %7.3f %7.3f\n",
-           (int)perf.num, (float)perf.avg * 1e-6f, (float)perf.min * 1e-6f);
+    ERROR_CHECK_STATUS( vxQueryGraph( graph, VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perf, sizeof( perf ) ) );
+    printf( "GraphName NumFrames Avg(ms) Min(ms)\n"
+            "Median    %9d %7.3f %7.3f\n",
+            ( int )perf.num, ( float )perf.avg * 1e-6f, ( float )perf.min * 1e-6f );
 
     ////////********
     // Release all the OpenVX objects created in this exercise and make sure
@@ -326,10 +328,10 @@ int main( int argc, char * argv[] )
     // need to call vxRelease<Object> API which takes a pointer to the object.
     // If the release operation is successful, the OpenVX framework will
     // reset the object to NULL.
-    ERROR_CHECK_STATUS( vxReleaseGraph( &graph ));
-    ERROR_CHECK_STATUS( vxReleaseImage( &input_rgb_image ));
-    ERROR_CHECK_STATUS( vxReleaseImage( &output_filtered_image ));
-    ERROR_CHECK_STATUS( vxReleaseContext( &context ));
+    ERROR_CHECK_STATUS( vxReleaseGraph( &graph ) );
+    ERROR_CHECK_STATUS( vxReleaseImage( &input_rgb_image ) );
+    ERROR_CHECK_STATUS( vxReleaseImage( &output_filtered_image ) );
+    ERROR_CHECK_STATUS( vxReleaseContext( &context ) );
 
     return 0;
 }

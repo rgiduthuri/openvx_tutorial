@@ -24,7 +24,7 @@
 /*!
  * \file main.cpp
  * \example easy_exercise2
- * \brief Feature tracker example. 
+ * \brief Feature tracker example.
  * Look for TODO keyword in comments to code snipets that you need write.
  * \author Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
  */
@@ -34,13 +34,13 @@
 #include "opencv_camera_display.h"
 
 ////////
-// Most important top-level OpenVX header files are "VX/vx.h" and "VX/vxu.h".
+// The most important top-level OpenVX header files are "VX/vx.h" and "VX/vxu.h".
 // The "VX/vx.h" includes all headers needed to support functionality of the
 // OpenVX specification, except for immediate mode functions, and it includes:
 //    VX/vx_types.h     -- type definitions required by the OpenVX standard
 //    VX/vx_api.h       -- All framework API definitions
-//    VX/vx_kernels.h   -- list of supported kernels in the OpenVX standard 
-//    VX/vx_nodes.h     -- 
+//    VX/vx_kernels.h   -- list of supported kernels in the OpenVX standard
+//    VX/vx_nodes.h     --
 //    VX/vx_vendors.h
 // The "VX/vxu.h" defines immediate mode utility functions (not needed here).
 #include <VX/vx.h>
@@ -65,20 +65,20 @@
     }
 
 ////////
-// log_callback function should implements a mechanism to print log messages 
+// log_callback function should implements a mechanism to print log messages
 // from OpenVX framework onto console.
-void log_callback( vx_context context, vx_reference ref, 
-    vx_status status, const vx_char string[] )
+void log_callback( vx_context context, vx_reference ref,
+                   vx_status status, const vx_char string[] )
 {
     printf( "LOG: [ %3d ] %s", status, string );
-    fflush(stdout);
+    fflush( stdout );
 }
 
 ////////
 // main() has all the OpenVX application code for this exercise.
 // Command-line usage:
 //   % solution_exercise2 [<video-sequence>|<camera-device-number>]
-// When neither video sequence nor camera device number is specified, 
+// When neither video sequence nor camera device number is specified,
 // it defaults to the video sequence in "PETS09-S1-L1-View001.avi".
 int main( int argc, char * argv[] )
 {
@@ -90,7 +90,7 @@ int main( int argc, char * argv[] )
 
     // Try grab first video frame from the sequence using cv::VideoCapture
     // and check if video frame is available
-    if( !gui.Grab())
+    if( !gui.Grab() )
     {
         printf( "ERROR: input has no video\n" );
         return 1;
@@ -101,14 +101,14 @@ int main( int argc, char * argv[] )
     // sequence is an 8-bit RGB image with dimensions given by gui.GetWidth()
     // and gui.GetHeight(). Harris corners algorithm specific parameters are:
     //   max_keypoint_count      - maximum number of keypoints to track
-    //   harris_strength_thresh  - minimum threshold which to eliminate 
+    //   harris_strength_thresh  - minimum threshold which to eliminate
     //                               Harris Corner scores (computed using the
     //                               normalized Sobel kernel)
     //   harris_min_distance     - radial L2 distance for non-max suppression
-    //   harris_k_sensitivity    - sensitivity threshold k from the 
-    //                               Harris-Stephens 
+    //   harris_k_sensitivity    - sensitivity threshold k from the
+    //                               Harris-Stephens
     //   harris_gradient_size    - gradient window size to use on the input
-    //   harris_block_size       - block window size used to compute the 
+    //   harris_block_size       - block window size used to compute the
     //                               harris corner score
     //   lk_pyramid_levels       - number of pyramid levels for LK optical flow
     //   lk_termination          - can be VX_TERM_CRITERIA_ITERATIONS or
@@ -144,7 +144,7 @@ int main( int argc, char * argv[] )
     ////////
     // Create OpenVX image object for input RGB image.
     vx_image input_rgb_image = vxCreateImage( context, width, height, VX_DF_IMAGE_RGB );
-    ERROR_CHECK_OBJECT(input_rgb_image);
+    ERROR_CHECK_OBJECT( input_rgb_image );
 
     ////////********
     // OpenVX optical flow functionality requires pyramids of current input
@@ -174,8 +174,8 @@ int main( int argc, char * argv[] )
     vx_delay keypointsDelay = NULL;
     ERROR_CHECK_OBJECT( pyramidDelay );
     ERROR_CHECK_OBJECT( keypointsDelay );
-    ERROR_CHECK_STATUS( vxReleasePyramid( &pyramidExemplar ));
-    ERROR_CHECK_STATUS( vxReleaseArray( &keypointsExemplar ));
+    ERROR_CHECK_STATUS( vxReleasePyramid( &pyramidExemplar ) );
+    ERROR_CHECK_STATUS( vxReleaseArray( &keypointsExemplar ) );
 
     ////////********
     // An object from delay slot can be accessed using vxGetReferenceFromDelay
@@ -183,8 +183,8 @@ int main( int argc, char * argv[] )
     // previous object.
     // TODO:********
     //   1. Use vxGetReferenceFromDelay API to get current and previous
-    //      pyramid objects from pyramid delay object. Note that you need 
-    //      to typecast the vx_reference object to vx_pyramid. 
+    //      pyramid objects from pyramid delay object. Note that you need
+    //      to typecast the vx_reference object to vx_pyramid.
     //   2. Similarly, get current and previous keypoint array objects from
     //      keypoint delay object.
     //   3. Use ERROR_CHECK_OBJECT for proper error checking.
@@ -251,7 +251,7 @@ int main( int argc, char * argv[] )
     //   2. Similarly, create scalar objects for num_iterations and
     //      use_initial_estimate with initial values: lk_num_iterations and
     //      lk_use_initial_estimate. Make sure to use proper data types for
-    //      these parameters. 
+    //      these parameters.
     //   3. Use ERROR_CHECK_OBJECT to check proper creation of objects.
     vx_scalar strength_thresh = NULL;
     vx_scalar min_distance = NULL;
@@ -276,24 +276,26 @@ int main( int argc, char * argv[] )
     //      scale image for use by Harris and Pyramid computation from input
     //      RGB image. Make sure to add these nodes into Harris graph.
     //   2. Use vxGaussianPyramidNode API to add pyramid computation node.
-    //      You need to use the current pyramid from pyramid delay object. 
+    //      You need to use the current pyramid from pyramid delay object.
     //   3. Use vxOpticalFlowPyrLKNode API to add optical flow node. You need to
     //      use the current and previous keypoints from keypoints delay object.
     //   4. Use ERROR_CHECK_OBJECT to check proper creation of objects.
     //   5. Release node and virtual objects immediately since graph has
     //      cross-references.
     //   6. Call vxVerifyGraph to check for any errors in the graph.
-    vx_node nodesHarris[] = {
+    vx_node nodesHarris[] =
+    {
         vxColorConvertNode( graphHarris, input_rgb_image, harris_yuv_image ),
         // ...
     };
-    for(vx_size i = 0; i < sizeof(nodesHarris)/sizeof(nodesHarris[0]); i++) {
+    for( vx_size i = 0; i < sizeof( nodesHarris ) / sizeof( nodesHarris[0] ); i++ )
+    {
         ERROR_CHECK_OBJECT( nodesHarris[i] );
-        ERROR_CHECK_STATUS( vxReleaseNode( &nodesHarris[i] ));
+        ERROR_CHECK_STATUS( vxReleaseNode( &nodesHarris[i] ) );
     }
-    ERROR_CHECK_STATUS( vxReleaseImage( &harris_yuv_image ));
-    ERROR_CHECK_STATUS( vxReleaseImage( &harris_luma_image ));
-    ERROR_CHECK_STATUS( vxVerifyGraph( graphHarris ));
+    ERROR_CHECK_STATUS( vxReleaseImage( &harris_yuv_image ) );
+    ERROR_CHECK_STATUS( vxReleaseImage( &harris_luma_image ) );
+    ERROR_CHECK_STATUS( vxVerifyGraph( graphHarris ) );
 
     ////////********
     // Now, build a graph that performs pyramid computation and feature
@@ -303,24 +305,26 @@ int main( int argc, char * argv[] )
     //      scale image for use by Harris and Pyramid computation from input
     //      RGB image. Make sure to add these nodes into Harris graph.
     //   2. Use vxGaussianPyramidNode API to add pyramid computation node.
-    //      You need to use the current pyramid from pyramid delay object. 
+    //      You need to use the current pyramid from pyramid delay object.
     //   3. Use vxHarrisCornersNode API to add Harris corners node.
-    //      You need to use the current keypoints from keypoints delay object. 
+    //      You need to use the current keypoints from keypoints delay object.
     //   4. Use ERROR_CHECK_OBJECT to check proper creation of objects.
     //   5. Release node and virtual objects immediately since graph has
     //      cross-references.
     //   6. Call vxVerifyGraph to check for any errors in the graph.
-    vx_node nodesTrack[] = {
+    vx_node nodesTrack[] =
+    {
         vxColorConvertNode( graphTrack, input_rgb_image, opticalflow_yuv_image ),
         // ...
     };
-    for(vx_size i = 0; i < sizeof(nodesTrack)/sizeof(nodesTrack[0]); i++) {
+    for( vx_size i = 0; i < sizeof( nodesTrack ) / sizeof( nodesTrack[0] ); i++ )
+    {
         ERROR_CHECK_OBJECT( nodesTrack[i] );
-        ERROR_CHECK_STATUS( vxReleaseNode( &nodesTrack[i] ));
+        ERROR_CHECK_STATUS( vxReleaseNode( &nodesTrack[i] ) );
     }
-    ERROR_CHECK_STATUS( vxReleaseImage( &opticalflow_yuv_image ));
-    ERROR_CHECK_STATUS( vxReleaseImage( &opticalflow_luma_image ));
-    ERROR_CHECK_STATUS( vxVerifyGraph( graphTrack ));
+    ERROR_CHECK_STATUS( vxReleaseImage( &opticalflow_yuv_image ) );
+    ERROR_CHECK_STATUS( vxReleaseImage( &opticalflow_luma_image ) );
+    ERROR_CHECK_STATUS( vxVerifyGraph( graphTrack ) );
 
     ////////
     // process video sequence frame by frame until end of sequence or aborted.
@@ -343,11 +347,11 @@ int main( int argc, char * argv[] )
         cv_rgb_image_layout.stride_x = 3;
         cv_rgb_image_layout.stride_y = gui.GetStride();
         vx_uint8 * cv_rgb_image_buffer = gui.GetBuffer();
-        status = vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0, 
-            &cv_rgb_image_layout, (void **)&cv_rgb_image_buffer, VX_WRITE_ONLY );
+        status = vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
+                                     &cv_rgb_image_layout, ( void ** )&cv_rgb_image_buffer, VX_WRITE_ONLY );
         ERROR_CHECK_STATUS( status );
         status = vxCommitImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
-            &cv_rgb_image_layout, cv_rgb_image_buffer );
+                                     &cv_rgb_image_layout, cv_rgb_image_buffer );
         ERROR_CHECK_STATUS( status );
 
         ////////********
@@ -366,8 +370,8 @@ int main( int argc, char * argv[] )
         // gui.DrawArrow().
         // TODO:********
         //   1. Use vxGetReferenceFromDelay API to get current and previous
-        //      keypoints array objects from keypoints delay object. 
-        //      Make sure to typecast the vx_reference object to vx_array. 
+        //      keypoints array objects from keypoints delay object.
+        //      Make sure to typecast the vx_reference object to vx_array.
         //   2. OpenVX array object has an attribute that keeps the current
         //      number of items in the array. The name of the attribute is
         //      VX_ARRAY_ATTRIBUTE_NUMITEMS and its value is of type vx_size.
@@ -381,26 +385,27 @@ int main( int argc, char * argv[] )
         //      buffer, use vxAccessArrayRange with start index as ZERO,
         //      end index as number of items in the array, and usage mode as
         //      VX_READ_ONLY. Note that the stride returned by this access
-        //      call is not guaranteed to be sizeof(vx_keypoint_t). 
+        //      call is not guaranteed to be sizeof(vx_keypoint_t).
         //      Also make sure that num_corners is > 0, because
         //      vxAccessArrayRange expects end index > 0.
         //   4. For each item in the keypoint buffer, use vxArrayItem to
         //      access individual keypoint and draw a marker at (x,y)
         //      using gui.DrawArrow() if tracking_status field of keypoint
-        //      is non-zero. Also count number of keypoints with 
+        //      is non-zero. Also count number of keypoints with
         //      non-zero tracking_status into "num_tracking" variable.
         //   5. Handover the control of output keypoint buffer back to
         //      OpenVX framework by calling vxCommitArrayRange API.
         //   6. Use ERROR_CHECK_STATUS for error checking.
         vx_size num_corners = 0, num_tracking = 0;
-        currentKeypoints = (vx_array)vxGetReferenceFromDelay( keypointsDelay, 0 );
-        previousKeypoints = (vx_array)vxGetReferenceFromDelay( keypointsDelay, -1 );
+        currentKeypoints = ( vx_array )vxGetReferenceFromDelay( keypointsDelay, 0 );
+        previousKeypoints = ( vx_array )vxGetReferenceFromDelay( keypointsDelay, -1 );
         ERROR_CHECK_OBJECT( currentKeypoints );
         ERROR_CHECK_OBJECT( previousKeypoints );
         status = vxQueryArray( previousKeypoints,
-            VX_ARRAY_ATTRIBUTE_NUMITEMS, &num_corners, sizeof( num_corners ));
+                               VX_ARRAY_ATTRIBUTE_NUMITEMS, &num_corners, sizeof( num_corners ) );
         ERROR_CHECK_STATUS( status );
-        if( num_corners > 0 ) {
+        if( num_corners > 0 )
+        {
             // ...
         }
 
@@ -418,10 +423,10 @@ int main( int argc, char * argv[] )
         char text[128];
         sprintf( text, "Keyboard ESC/Q-Quit SPACE-Pause [FRAME %d]", frame_index );
         gui.DrawText( 0, 16, text );
-        sprintf( text, "Number of Corners: %d [tracking %d]", (int)num_corners, (int)num_tracking );
+        sprintf( text, "Number of Corners: %d [tracking %d]", ( int )num_corners, ( int )num_tracking );
         gui.DrawText( 0, 36, text );
         gui.Show();
-        if( !gui.Grab())
+        if( !gui.Grab() )
         {
             // terminate the processing loop if end of sequence is detected
             gui.WaitForKey();
@@ -438,11 +443,11 @@ int main( int argc, char * argv[] )
     //   2. Print the average and min execution times in milliseconds
     vx_perf_t perfHarris = { 0 }, perfTrack = { 0 };
     //...
-    printf("GraphName NumFrames Avg(ms) Min(ms)\n"
-           "Harris    %9d %7.3f %7.3f\n"
-           "Track     %9d %7.3f %7.3f\n",
-           (int)perfHarris.num, (float)perfHarris.avg * 1e-6f, (float)perfHarris.min * 1e-6f,
-           (int)perfTrack.num, (float)perfTrack.avg * 1e-6f, (float)perfTrack.min * 1e-6f);
+    printf( "GraphName NumFrames Avg(ms) Min(ms)\n"
+            "Harris    %9d %7.3f %7.3f\n"
+            "Track     %9d %7.3f %7.3f\n",
+            ( int )perfHarris.num, ( float )perfHarris.avg * 1e-6f, ( float )perfHarris.min * 1e-6f,
+            ( int )perfTrack.num, ( float )perfTrack.avg * 1e-6f, ( float )perfTrack.min * 1e-6f );
 
     ////////********
     // Release all the OpenVX objects created in this exercise and make sure
