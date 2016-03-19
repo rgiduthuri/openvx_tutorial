@@ -50,8 +50,8 @@ Here are few helpful instructions:
   * To view the definition of any OpenVX API or data type, simply move the
     cursor to the name and press F2.
   * You have to download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in *~/openvx_tutorial/tutorial_videos* folder. 
-    * All the exercises in this tutorial use this video sequence as input.
-    * You can also specify you own video sequence on command-line as an argument.
+    - All the exercises in this tutorial use this video sequence as input.
+    - You can also specify you own video sequence on command-line as an argument.
 
 ## Custom Build of Tutorials using CMake
 In order to custom-build these tutorial exercises using cmake and
@@ -96,21 +96,21 @@ The current version of VirtualBox VM has been updated to use the exercises in th
   * Download and install a recent VirtualBox from https://www.virtualbox.org/wiki/Downloads.
   * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from https://goo.gl/Ia53AB and extract files into a local folder.
   * Run VirtualBox and add "Ubuntu-64-OpenVX" virtual machine [Machine -> Add] from the local folder. 
-    * If you cannot install 64-bit VM, even though you have a 64-bit Windows, you need to enable virtualization in the BIOS. 
-    * In the Security section, enable Virtualization Technology and VT-d Feature. 
-    * On Windows 8.1, you also need to turn Hyper-V off (search for Turn Windows features on or off).
+    - If you cannot install 64-bit VM, even though you have a 64-bit Windows, you need to enable virtualization in the BIOS. 
+    - In the Security section, enable Virtualization Technology and VT-d Feature. 
+    - On Windows 8.1, you also need to turn Hyper-V off (search for Turn Windows features on or off).
   * Start the "Ubuntu-64-OpenVX" virtual machine ([username: openvx][password: openvx]).
   * Run "Qt Creator" (click Qt icon on left) and open exercises project.
-    * Open Project: *CMakeLists.txt* in ~/openvx_tutorial/tutorial_exercises
-    * click *"Configure Project"* to open CMake Wizard
-    * click *"Run CMake"* and *"Finish"*
+    - Open Project: *CMakeLists.txt* in ~/openvx_tutorial/tutorial_exercises
+    - click *"Configure Project"* to open CMake Wizard
+    - click *"Run CMake"* and *"Finish"*
   * Select exercise1 as active sub-project.
-    * click *"Open Build and Run Kit Selector"* under the *"Build"* menu
-    * select Run *"exercise1"* under the Build *"Default"* and press ESCAPE
-    * expand *"exercise1"* folder and click *"exercise1.cpp"*
-    * you are going to modify this file during the first practice session
+    - click *"Open Build and Run Kit Selector"* under the *"Build"* menu
+    - select Run *"exercise1"* under the Build *"Default"* and press ESCAPE
+    - expand *"exercise1"* folder and click *"exercise1.cpp"*
+    - you are going to modify this file during the first practice session
   * Build the project and run.
-    * click *"Run"* under the *"Build"* menu (or use keyboard shortcut Ctrl+R)
-    * you should see video in a window (you can move the window for better view)
-    * press ESCAPE or 'q' to exit the app
+    - click *"Run"* under the *"Build"* menu (or use keyboard shortcut Ctrl+R)
+    - you should see video in a window (you can move the window for better view)
+    - press ESCAPE or 'q' to exit the app
 
