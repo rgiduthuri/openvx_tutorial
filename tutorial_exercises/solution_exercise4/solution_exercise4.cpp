@@ -25,7 +25,7 @@
  * \file    main.cpp
  * \example solution_exercise4
  * \brief   User kernel example.
- *          Look for TODO keyword in comments to code snippets that you need to write.
+ *          Look for TODO keyword in comments for the code snippets that you need to write.
  * \author  Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
  */
 
@@ -454,7 +454,7 @@ int main( int argc, char * argv[] )
     //   harris_k_sensitivity    - sensitivity threshold k from the Harris-Stephens
     //   harris_gradient_size    - window size for gradient computation
     //   harris_block_size       - block window size used to compute the
-    //                               harris corner score
+    //                             Harris corner score
     //   lk_pyramid_levels       - number of pyramid levels for LK optical flow
     //   lk_termination          - can be VX_TERM_CRITERIA_ITERATIONS or
     //                               VX_TERM_CRITERIA_EPSILON or
@@ -501,11 +501,11 @@ int main( int argc, char * argv[] )
     ////////********
     // OpenVX optical flow functionality requires pyramids of the current input
     // image and the previous image. It also requires keypoints that correspond
-    // to previous pyramid and will output updated keypoints into
+    // to the previous pyramid and will output updated keypoints into
     // another keypoint array. To be able to toggle between the current and
     // the previous buffers, you need to use OpenVX delay objects and vxAgeDelay().
     // Create OpenVX pyramid and array object exemplars and create OpenVX delay
-    // objects for both to hold two of each. Note that exemplar objects are not
+    // objects for both to hold two of each. Note that the exemplar objects are not
     // needed once the delay objects are created.
     vx_pyramid pyramidExemplar = vxCreatePyramid( context, lk_pyramid_levels,
                                                   lk_pyramid_scale, width, height, VX_DF_IMAGE_U8 );
@@ -535,7 +535,7 @@ int main( int argc, char * argv[] )
     ////////********
     // Harris and optical flow algorithms require their own graph objects.
     // The Harris graph needs to extract gray scale image out of input RGB,
-    // compute initial set of keypoints, and compute initial pyramid for use
+    // compute an initial set of keypoints, and compute an initial pyramid for use
     // by the optical flow graph.
     vx_graph graphHarris = vxCreateGraph( context );
     vx_graph graphTrack  = vxCreateGraph( context );
@@ -544,7 +544,7 @@ int main( int argc, char * argv[] )
 
     ////////********
     // Harris and pyramid computation expect input to be an 8-bit image.
-    // Given that input is an RGB image, it is best to extract a gray scale
+    // Given that input is an RGB image, it is best to extract a gray image
     // from RGB image, which requires two steps:
     //   - perform RGB to IYUV color conversion
     //   - extract Y channel from IYUV image
@@ -561,17 +561,17 @@ int main( int argc, char * argv[] )
     ERROR_CHECK_OBJECT( opticalflow_luma_image );
 
     ////////********
-    // The Harris corner detector and opticalflow nodes (see "VX/vx_nodes.h")
+    // The Harris corner detector and optical flow nodes (see "VX/vx_nodes.h")
     // take strength_thresh, min_distance, sensitivity, epsilon,
     // num_iterations, and use_initial_estimate parameters as scalar
-    // data objects. So, you need to create scalar objects with corresponding
+    // data objects. So, you need to create scalar objects with the corresponding
     // configuration parameters.
     vx_scalar strength_thresh      = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_strength_thresh );
     vx_scalar min_distance         = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_min_distance );
     vx_scalar sensitivity          = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_k_sensitivity );
     vx_scalar epsilon              = vxCreateScalar( context, VX_TYPE_FLOAT32, &lk_epsilon );
-    vx_scalar num_iterations       = vxCreateScalar( context, VX_TYPE_UINT32, &lk_num_iterations );
-    vx_scalar use_initial_estimate = vxCreateScalar( context, VX_TYPE_BOOL, &lk_use_initial_estimate );
+    vx_scalar num_iterations       = vxCreateScalar( context, VX_TYPE_UINT32,  &lk_num_iterations );
+    vx_scalar use_initial_estimate = vxCreateScalar( context, VX_TYPE_BOOL,    &lk_use_initial_estimate );
     ERROR_CHECK_OBJECT( strength_thresh );
     ERROR_CHECK_OBJECT( min_distance );
     ERROR_CHECK_OBJECT( sensitivity );
@@ -594,14 +594,14 @@ int main( int argc, char * argv[] )
     ////////********
     // Now all the objects have been created for building the graphs.
     // First, build a graph that performs Harris corner detection and initial pyramid computation.
-    // See "VX/vx_nodes.h" for APIs to add nodes into a graph.
+    // See "VX/vx_nodes.h" for APIs how to add nodes into a graph.
     vx_node nodesHarris[] =
     {
         vxColorConvertNode( graphHarris, input_rgb_image, harris_yuv_image ),
         vxChannelExtractNode( graphHarris, harris_yuv_image, VX_CHANNEL_Y, harris_luma_image ),
         vxGaussianPyramidNode( graphHarris, harris_luma_image, currentPyramid ),
         vxHarrisCornersNode( graphHarris, harris_luma_image, strength_thresh, min_distance,
-        sensitivity, harris_gradient_size, harris_block_size, currentKeypoints, NULL )
+                             sensitivity, harris_gradient_size, harris_block_size, currentKeypoints, NULL )
     };
     for( vx_size i = 0; i < sizeof( nodesHarris ) / sizeof( nodesHarris[0] ); i++ )
     {
@@ -629,9 +629,9 @@ int main( int argc, char * argv[] )
         vxChannelExtractNode( graphTrack, opticalflow_yuv_image, VX_CHANNEL_Y, opticalflow_luma_image ),
         vxGaussianPyramidNode( graphTrack, opticalflow_luma_image, currentPyramid ),
         userPickFeaturesNode( graphTrack, previousKeypoints, previousPyramidLevel0, strength_thresh,
-        min_distance, sensitivity, harris_gradient_size, harris_block_size, featureKeypoints ),
+                              min_distance, sensitivity, harris_gradient_size, harris_block_size, featureKeypoints ),
         vxOpticalFlowPyrLKNode( graphTrack, previousPyramid, currentPyramid, featureKeypoints, featureKeypoints,
-        currentKeypoints, lk_termination, epsilon, num_iterations, use_initial_estimate, lk_window_dimension )
+                                currentKeypoints, lk_termination, epsilon, num_iterations, use_initial_estimate, lk_window_dimension )
     };
     for( vx_size i = 0; i < sizeof( nodesTrack ) / sizeof( nodesTrack[0] ); i++ )
     {
@@ -732,7 +732,7 @@ int main( int argc, char * argv[] )
             "Harris    %9d %7.3f %7.3f\n"
             "Track     %9d %7.3f %7.3f\n",
             ( int )perfHarris.num, ( float )perfHarris.avg * 1e-6f, ( float )perfHarris.min * 1e-6f,
-            ( int )perfTrack.num, ( float )perfTrack.avg  * 1e-6f, ( float )perfTrack.min  * 1e-6f );
+            ( int )perfTrack.num,  ( float )perfTrack.avg  * 1e-6f, ( float )perfTrack.min  * 1e-6f );
 
     ////////********
     // Release all the OpenVX objects created in this exercise, and make the context as the last one to release.

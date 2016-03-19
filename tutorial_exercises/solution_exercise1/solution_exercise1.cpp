@@ -25,7 +25,7 @@
  * \file    main.cpp
  * \example solution_exercise1
  * \brief   Harris corners example.
- *          Look for TODO keyword in comments to code snippets that you need write.
+ *          Look for TODO keyword in comments for the code snippets that you need to write.
  * \author  Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
  */
 
@@ -117,7 +117,7 @@ int main( int argc, char * argv[] )
     //   harris_k_sensitivity   - sensitivity threshold k from the Harris-Stephens
     //   harris_gradient_size   - window size for gradient computation
     //   harris_block_size      - block window size used to compute the
-    //                            harris corner score
+    //                            Harris corner score
     vx_uint32  width                  = gui.GetWidth();
     vx_uint32  height                 = gui.GetHeight();
     vx_float32 harris_strength_thresh = 0.0005f;
