@@ -53,7 +53,7 @@
 // Useful macros for OpenVX error checking:
 //   ERROR_CHECK_STATUS     - check status is VX_SUCCESS
 //   ERROR_CHECK_OBJECT     - check if the object creation is successful
-#define ERROR_CHECK_STATUS(status) { \
+#define ERROR_CHECK_STATUS( status ) { \
         vx_status status_ = (status); \
         if(status_ != VX_SUCCESS) { \
             printf("ERROR: failed with status = (%d) at " __FILE__ "#%d\n", status_, __LINE__); \
@@ -61,7 +61,7 @@
         } \
     }
 
-#define ERROR_CHECK_OBJECT(obj) { \
+#define ERROR_CHECK_OBJECT( obj ) { \
         vx_status status_ = vxGetStatus((vx_reference)(obj)); \
         if(status_ != VX_SUCCESS) { \
             printf("ERROR: failed with status = (%d) at " __FILE__ "#%d\n", status_, __LINE__); \
@@ -205,10 +205,6 @@ int main( int argc, char * argv[] )
     // Process the video sequence frame by frame until the end of sequence or aborted.
     for( int frame_index = 0; !gui.AbortRequested(); frame_index++ )
     {
-        ////////
-        // local variable for checking the status of OpenVX API calls
-        vx_status status;
-
         ////////********
         // Copy the input RGB frame from OpenCV to OpenVX.
         // In order to do this, you need to use vxAccessImagePatch and vxCommitImagePatch APIs.
@@ -239,12 +235,11 @@ int main( int argc, char * argv[] )
         cv_rgb_image_layout.stride_x   = 3;
         cv_rgb_image_layout.stride_y   = gui.GetStride();
         vx_uint8 * cv_rgb_image_buffer = gui.GetBuffer();
-        status = vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
-                                     &cv_rgb_image_layout, ( void ** )&cv_rgb_image_buffer, VX_WRITE_ONLY );
-        ERROR_CHECK_STATUS( status );
-        status = vxCommitImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
-                                     &cv_rgb_image_layout, cv_rgb_image_buffer );
-        ERROR_CHECK_STATUS( status );
+        ERROR_CHECK_STATUS( vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
+                                                &cv_rgb_image_layout, ( void ** )&cv_rgb_image_buffer,
+                                                VX_WRITE_ONLY ) );
+        ERROR_CHECK_STATUS( vxCommitImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
+                                                &cv_rgb_image_layout, cv_rgb_image_buffer ) );
 
         ////////********
         // In order to compute Harris corners from input RGB image, first you
@@ -260,14 +255,11 @@ int main( int argc, char * argv[] )
         //      The num_corners parameter to vxuHarrisCorners is optional,
         //      you need to set it to NULL in this exercise.
         //   4. Use ERROR_CHECK_STATUS for error checking.
-        status = vxuColorConvert( context, input_rgb_image, yuv_image );
-        ERROR_CHECK_STATUS( status );
-        status = vxuChannelExtract( context, yuv_image, VX_CHANNEL_Y, gray_scale_image );
-        ERROR_CHECK_STATUS( status );
-        status = vxuHarrisCorners( context, gray_scale_image, strength_thresh,
-                                   min_distance, sensitivity, harris_gradient_size, harris_block_size,
-                                   output_keypoint_array, NULL );
-        ERROR_CHECK_STATUS( status );
+        ERROR_CHECK_STATUS( vxuColorConvert( context, input_rgb_image, yuv_image ) );
+        ERROR_CHECK_STATUS( vxuChannelExtract( context, yuv_image, VX_CHANNEL_Y, gray_scale_image ) );
+        ERROR_CHECK_STATUS( vxuHarrisCorners( context, gray_scale_image, strength_thresh,
+                                              min_distance, sensitivity, harris_gradient_size,
+                                              harris_block_size, output_keypoint_array, NULL ) );
 
         ////////********
         // To mark the keypoints in display, you need to access the output
@@ -298,23 +290,22 @@ int main( int argc, char * argv[] )
         //      OpenVX framework by calling vxCommitArrayRange API.
         //   5. Use ERROR_CHECK_STATUS for error checking.
         vx_size num_corners = 0;
-        status = vxQueryArray( output_keypoint_array,
-                               VX_ARRAY_ATTRIBUTE_NUMITEMS, &num_corners, sizeof( num_corners ) );
-        ERROR_CHECK_STATUS( status );
+        ERROR_CHECK_STATUS( vxQueryArray( output_keypoint_array,
+                                          VX_ARRAY_ATTRIBUTE_NUMITEMS,
+                                          &num_corners,
+                                          sizeof( num_corners ) ) );
         if( num_corners > 0 )
         {
             vx_size kp_stride;
             vx_keypoint_t * kp_buf = NULL;
-            status = vxAccessArrayRange( output_keypoint_array, 0, num_corners,
-                                         &kp_stride, ( void ** ) &kp_buf, VX_READ_ONLY );
-            ERROR_CHECK_STATUS( status );
+            ERROR_CHECK_STATUS( vxAccessArrayRange( output_keypoint_array, 0, num_corners,
+                                                    &kp_stride, ( void ** ) &kp_buf, VX_READ_ONLY ) );
             for( vx_size i = 0; i < num_corners; i++ )
             {
                 vx_keypoint_t * kp = &vxArrayItem( vx_keypoint_t, kp_buf, i, kp_stride );
                 gui.DrawPoint( kp->x, kp->y );
             }
-            status = vxCommitArrayRange( output_keypoint_array, 0, num_corners, kp_buf );
-            ERROR_CHECK_STATUS( status );
+            ERROR_CHECK_STATUS( vxCommitArrayRange( output_keypoint_array, 0, num_corners, kp_buf ) );
         }
 
         ////////

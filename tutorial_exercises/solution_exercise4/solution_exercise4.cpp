@@ -49,7 +49,7 @@
 // Useful macros for OpenVX error checking:
 //   ERROR_CHECK_STATUS     - check status is VX_SUCCESS
 //   ERROR_CHECK_OBJECT     - check if the object creation is successful
-#define ERROR_CHECK_STATUS(status) { \
+#define ERROR_CHECK_STATUS( status ) { \
         vx_status status_ = (status); \
         if(status_ != VX_SUCCESS) { \
             printf("ERROR: failed with status = (%d) at " __FILE__ "#%d\n", status_, __LINE__); \
@@ -57,7 +57,7 @@
         } \
     }
 
-#define ERROR_CHECK_OBJECT(obj) { \
+#define ERROR_CHECK_OBJECT( obj ) { \
         vx_status status_ = vxGetStatus((vx_reference)(obj)); \
         if(status_ != VX_SUCCESS) { \
             printf("ERROR: failed with status = (%d) at " __FILE__ "#%d\n", status_, __LINE__); \
@@ -601,7 +601,7 @@ int main( int argc, char * argv[] )
         vxChannelExtractNode( graphHarris, harris_yuv_image, VX_CHANNEL_Y, harris_luma_image ),
         vxGaussianPyramidNode( graphHarris, harris_luma_image, currentPyramid ),
         vxHarrisCornersNode( graphHarris, harris_luma_image, strength_thresh, min_distance,
-                             sensitivity, harris_gradient_size, harris_block_size, currentKeypoints, NULL )
+        sensitivity, harris_gradient_size, harris_block_size, currentKeypoints, NULL )
     };
     for( vx_size i = 0; i < sizeof( nodesHarris ) / sizeof( nodesHarris[0] ); i++ )
     {
@@ -629,9 +629,9 @@ int main( int argc, char * argv[] )
         vxChannelExtractNode( graphTrack, opticalflow_yuv_image, VX_CHANNEL_Y, opticalflow_luma_image ),
         vxGaussianPyramidNode( graphTrack, opticalflow_luma_image, currentPyramid ),
         userPickFeaturesNode( graphTrack, previousKeypoints, previousPyramidLevel0, strength_thresh,
-                              min_distance, sensitivity, harris_gradient_size, harris_block_size, featureKeypoints ),
+        min_distance, sensitivity, harris_gradient_size, harris_block_size, featureKeypoints ),
         vxOpticalFlowPyrLKNode( graphTrack, previousPyramid, currentPyramid, featureKeypoints, featureKeypoints,
-                                currentKeypoints, lk_termination, epsilon, num_iterations, use_initial_estimate, lk_window_dimension )
+        currentKeypoints, lk_termination, epsilon, num_iterations, use_initial_estimate, lk_window_dimension )
     };
     for( vx_size i = 0; i < sizeof( nodesTrack ) / sizeof( nodesTrack[0] ); i++ )
     {
@@ -648,10 +648,6 @@ int main( int argc, char * argv[] )
     for( int frame_index = 0; !gui.AbortRequested(); frame_index++ )
     {
         ////////
-        // local variable for checking the status of OpenVX API calls
-        vx_status status;
-
-        ////////
         // Copy the input RGB frame from OpenCV to OpenVX.
         // In order to do this, you need to use vxAccessImagePatch and vxCommitImagePatch APIs.
         // See "VX/vx_api.h" for the description of these APIs.
@@ -664,18 +660,15 @@ int main( int argc, char * argv[] )
         cv_rgb_image_layout.stride_x   = 3;
         cv_rgb_image_layout.stride_y   = gui.GetStride();
         vx_uint8 * cv_rgb_image_buffer = gui.GetBuffer();
-        status = vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
-                                     &cv_rgb_image_layout, ( void ** )&cv_rgb_image_buffer, VX_WRITE_ONLY );
-        ERROR_CHECK_STATUS( status );
-        status = vxCommitImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
-                                     &cv_rgb_image_layout, cv_rgb_image_buffer );
-        ERROR_CHECK_STATUS( status );
+        ERROR_CHECK_STATUS( vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
+                                                &cv_rgb_image_layout, ( void ** )&cv_rgb_image_buffer, VX_WRITE_ONLY ) );
+        ERROR_CHECK_STATUS( vxCommitImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
+                                                &cv_rgb_image_layout, cv_rgb_image_buffer ) );
 
         ////////********
         // Now that input RGB image is ready, just run a graph.
         // Run Harris at the beginning to initialize the previous keypoints.
-        status = vxProcessGraph( frame_index == 0 ? graphHarris : graphTrack );
-        ERROR_CHECK_STATUS( status );
+        ERROR_CHECK_STATUS( vxProcessGraph( frame_index == 0 ? graphHarris : graphTrack ) );
 
         ////////********
         // To mark the keypoints in display, you need to access the output
@@ -683,19 +676,16 @@ int main( int argc, char * argv[] )
         vx_size num_corners = 0, num_tracking = 0;
         currentKeypoints = ( vx_array )vxGetReferenceFromDelay( keypointsDelay, 0 );
         ERROR_CHECK_OBJECT( currentKeypoints );
-        status = vxQueryArray( featureKeypoints,
-                               VX_ARRAY_ATTRIBUTE_NUMITEMS, &num_corners, sizeof( num_corners ) );
-        ERROR_CHECK_STATUS( status );
+        ERROR_CHECK_STATUS( vxQueryArray( featureKeypoints,
+                                          VX_ARRAY_ATTRIBUTE_NUMITEMS, &num_corners, sizeof( num_corners ) ) );
         if( num_corners > 0 )
         {
             vx_size kp_old_stride, kp_new_stride;
             vx_keypoint_t * kp_old_buf = NULL, * kp_new_buf = NULL;
-            status = vxAccessArrayRange( featureKeypoints, 0, num_corners,
-                                         &kp_old_stride, ( void ** ) &kp_old_buf, VX_READ_ONLY );
-            ERROR_CHECK_STATUS( status );
-            status = vxAccessArrayRange( currentKeypoints, 0, num_corners,
-                                         &kp_new_stride, ( void ** ) &kp_new_buf, VX_READ_ONLY );
-            ERROR_CHECK_STATUS( status );
+            ERROR_CHECK_STATUS( vxAccessArrayRange( featureKeypoints, 0, num_corners,
+                                         &kp_old_stride, ( void ** ) &kp_old_buf, VX_READ_ONLY ) );
+            ERROR_CHECK_STATUS( vxAccessArrayRange( currentKeypoints, 0, num_corners,
+                                         &kp_new_stride, ( void ** ) &kp_new_buf, VX_READ_ONLY ) );
             for( vx_size i = 0; i < num_corners; i++ )
             {
                 vx_keypoint_t * kp_old = &vxArrayItem( vx_keypoint_t, kp_old_buf, i, kp_old_stride );
@@ -706,10 +696,8 @@ int main( int argc, char * argv[] )
                     gui.DrawArrow( kp_old->x, kp_old->y, kp_new->x, kp_new->y );
                 }
             }
-            status = vxCommitArrayRange( featureKeypoints, 0, num_corners, kp_old_buf );
-            ERROR_CHECK_STATUS( status );
-            status = vxCommitArrayRange( currentKeypoints, 0, num_corners, kp_new_buf );
-            ERROR_CHECK_STATUS( status );
+            ERROR_CHECK_STATUS( vxCommitArrayRange( featureKeypoints, 0, num_corners, kp_old_buf ) );
+            ERROR_CHECK_STATUS( vxCommitArrayRange( currentKeypoints, 0, num_corners, kp_new_buf ) );
         }
 
         ////////********
@@ -744,7 +732,7 @@ int main( int argc, char * argv[] )
             "Harris    %9d %7.3f %7.3f\n"
             "Track     %9d %7.3f %7.3f\n",
             ( int )perfHarris.num, ( float )perfHarris.avg * 1e-6f, ( float )perfHarris.min * 1e-6f,
-            ( int )perfTrack.num,  ( float )perfTrack.avg  * 1e-6f, ( float )perfTrack.min  * 1e-6f );
+            ( int )perfTrack.num, ( float )perfTrack.avg  * 1e-6f, ( float )perfTrack.min  * 1e-6f );
 
     ////////********
     // Release all the OpenVX objects created in this exercise, and make the context as the last one to release.
