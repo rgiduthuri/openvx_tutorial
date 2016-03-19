@@ -47,8 +47,8 @@
 
 ////////
 // Useful macros for OpenVX error checking:
-//   ERROR_CHECK_STATUS      - check status is VX_SUCCESS
-//   ERROR_CHECK_OBJECT      - check if the object creation is successful
+//   ERROR_CHECK_STATUS     - check status is VX_SUCCESS
+//   ERROR_CHECK_OBJECT     - check if the object creation is successful
 #define ERROR_CHECK_STATUS(status) { \
         vx_status status_ = (status); \
         if(status_ != VX_SUCCESS) { \
@@ -410,14 +410,14 @@ vx_status registerUserKernel( vx_context context )
 }
 
 ////////
-// log_callback function should implements a mechanism to print log messages
+// log_callback function implements a mechanism to print log messages
 // from the OpenVX framework onto console.
 void log_callback( vx_context    context,
                    vx_reference  ref,
                    vx_status     status,
                    const vx_char string[] )
 {
-    printf( "LOG: [ %3d ] %s", status, string );
+    printf( "LOG: [ %3d ] %s\n", status, string );
     fflush( stdout );
 }
 
@@ -446,15 +446,13 @@ int main( int argc, char * argv[] )
     ////////
     // Set the application configuration parameters. Note that input video
     // sequence is an 8-bit RGB image with dimensions given by gui.GetWidth()
-    // and gui.GetHeight(). Harris corners algorithm specific parameters are:
+    // and gui.GetHeight(). The parameters for the Harris corners algorithm are:
     //   max_keypoint_count      - maximum number of keypoints to track
-    //   harris_strength_thresh  - minimum threshold which to eliminate
-    //                               Harris Corner scores (computed using the
-    //                               normalized Sobel kernel)
+    //   harris_strength_thresh  - minimum threshold score to keep a corner
+    //                             (computed using the normalized Sobel kernel)
     //   harris_min_distance     - radial L2 distance for non-max suppression
-    //   harris_k_sensitivity    - sensitivity threshold k from the
-    //                               Harris-Stephens
-    //   harris_gradient_size    - gradient window size to use on the input
+    //   harris_k_sensitivity    - sensitivity threshold k from the Harris-Stephens
+    //   harris_gradient_size    - window size for gradient computation
     //   harris_block_size       - block window size used to compute the
     //                               harris corner score
     //   lk_pyramid_levels       - number of pyramid levels for LK optical flow
@@ -646,15 +644,15 @@ int main( int argc, char * argv[] )
     ERROR_CHECK_STATUS( vxVerifyGraph( graphTrack ) );
 
     ////////
-    // Process video sequence frame by frame until the end of sequence or aborted.
+    // Process the video sequence frame by frame until the end of sequence or aborted.
     for( int frame_index = 0; !gui.AbortRequested(); frame_index++ )
     {
         ////////
-        // local variable for checking status of OpenVX API calls
+        // local variable for checking the status of OpenVX API calls
         vx_status status;
 
         ////////
-        // Copy input RGB frame from OpenCV to OpenVX.
+        // Copy the input RGB frame from OpenCV to OpenVX.
         // In order to do this, you need to use vxAccessImagePatch and vxCommitImagePatch APIs.
         // See "VX/vx_api.h" for the description of these APIs.
         vx_rectangle_t cv_rgb_image_region;
@@ -741,15 +739,15 @@ int main( int argc, char * argv[] )
     // in milliseconds. Note that time units of vx_perf_t fields are nanoseconds.
     vx_perf_t perfHarris = { 0 }, perfTrack = { 0 };
     ERROR_CHECK_STATUS( vxQueryGraph( graphHarris, VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perfHarris, sizeof( perfHarris ) ) );
-    ERROR_CHECK_STATUS( vxQueryGraph( graphTrack, VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perfTrack, sizeof( perfTrack ) ) );
+    ERROR_CHECK_STATUS( vxQueryGraph( graphTrack,  VX_GRAPH_ATTRIBUTE_PERFORMANCE, &perfTrack,  sizeof( perfTrack ) ) );
     printf( "GraphName NumFrames Avg(ms) Min(ms)\n"
             "Harris    %9d %7.3f %7.3f\n"
             "Track     %9d %7.3f %7.3f\n",
             ( int )perfHarris.num, ( float )perfHarris.avg * 1e-6f, ( float )perfHarris.min * 1e-6f,
-            ( int )perfTrack.num, ( float )perfTrack.avg * 1e-6f, ( float )perfTrack.min * 1e-6f );
+            ( int )perfTrack.num,  ( float )perfTrack.avg  * 1e-6f, ( float )perfTrack.min  * 1e-6f );
 
     ////////********
-    // Release all the OpenVX objects created in this exercise and make sure to release the context at the end.
+    // Release all the OpenVX objects created in this exercise, and make the context as the last one to release.
     // To release an OpenVX object, you need to call vxRelease<Object> API which takes a pointer to the object.
     // If the release operation is successful, the OpenVX framework will reset the object to NULL.
     ERROR_CHECK_STATUS( vxReleaseGraph( &graphHarris ) );
