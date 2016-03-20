@@ -78,8 +78,10 @@
 //      vx_log_callback_f in VX/vx_types.h (line 1444).
 //   2. Make the log_callback print a message that looks like:
 //        LOG: [<status>] <message>
-void log_callback( vx_context context, vx_reference ref,
-                   vx_status status, const vx_char string[] )
+void log_callback( vx_context    context,
+                   vx_reference  ref,
+                   vx_status     status,
+                   const vx_char string[] )
 {
     printf( "LOG: [ %3d ] %s\n", status, string );
     fflush( stdout );

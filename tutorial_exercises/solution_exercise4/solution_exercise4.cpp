@@ -90,19 +90,19 @@ enum user_kernel_e
 ////////
 // The node creation interface for the "app.userkernels.pick_features" kernel.
 // This user kernel example expects parameters in the following order:
-//   parameter #0  --  input array            of type VX_TYPE_KEYPOINT
+//   parameter #0  --  input array            of type   VX_TYPE_KEYPOINT
 //   parameter #1  --  input image            of format VX_DF_IMAGE_U8
-//   parameter #2  --  scalar strength_thresh of type VX_TYPE_FLOAT32 for Harris corners
-//   parameter #3  --  scalar min_distance    of type VX_TYPE_FLOAT32 for Harris corners
-//   parameter #4  --  scalar k_sensitivity   of type VX_TYPE_FLOAT32 for Harris corners
-//   parameter #5  --  scalar gradient_size   of type VX_TYPE_INT32   for Harris corners
-//   parameter #6  --  scalar block_size      of type VX_TYPE_INT32   for Harris corners
-//   parameter #7  --  output array           of type VX_TYPE_KEYPOINT
+//   parameter #2  --  scalar strength_thresh of type   VX_TYPE_FLOAT32 for Harris corners
+//   parameter #3  --  scalar min_distance    of type   VX_TYPE_FLOAT32 for Harris corners
+//   parameter #4  --  scalar k_sensitivity   of type   VX_TYPE_FLOAT32 for Harris corners
+//   parameter #5  --  scalar gradient_size   of type   VX_TYPE_INT32   for Harris corners
+//   parameter #6  --  scalar block_size      of type   VX_TYPE_INT32   for Harris corners
+//   parameter #7  --  output array           of type   VX_TYPE_KEYPOINT
 //
 // TODO:********
 //   1. Use vxGetKernelByEnum API to get a kernel object from USER_KERNEL_PICK_FEATURES.
-//      Note that you need to use vxGetContext API to get context from a graph object.
-//   2. Use vxCreateGenericNode API to create a node from kernel object.
+//      Note that you need to use vxGetContext API to get the context from a graph object.
+//   2. Use vxCreateGenericNode API to create a node from the kernel object.
 //   3. Create scalar objects for gradient_size and block_size parameters.
 //   4. Use vxSetParameterByIndex API to set node arguments.
 //   5. Release the kernel and scalar objects that are not needed any more.
@@ -120,7 +120,7 @@ vx_node userPickFeaturesNode( vx_graph  graph,
     vx_context context = vxGetContext( ( vx_reference ) graph );
     vx_kernel kernel   = vxGetKernelByEnum( context, USER_KERNEL_PICK_FEATURES );
     ERROR_CHECK_OBJECT( kernel );
-    vx_node node = vxCreateGenericNode( graph, kernel );
+    vx_node node       = vxCreateGenericNode( graph, kernel );
     ERROR_CHECK_OBJECT( node );
 
     vx_scalar s_gradient_size = vxCreateScalar( context, VX_TYPE_INT32, &gradient_size );
@@ -239,7 +239,7 @@ vx_status VX_CALLBACK pick_features_output_validator( vx_node        node,
         ERROR_CHECK_STATUS( vxReleaseArray( &input_arr ) );
 
         vx_enum type = VX_TYPE_KEYPOINT;
-        ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( meta, VX_ARRAY_ATTRIBUTE_ITEMTYPE, &type, sizeof( type ) ) );
+        ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( meta, VX_ARRAY_ATTRIBUTE_ITEMTYPE, &type,     sizeof( type ) ) );
         ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( meta, VX_ARRAY_ATTRIBUTE_CAPACITY, &capacity, sizeof( capacity ) ) );
     }
     else
@@ -371,7 +371,7 @@ vx_status VX_CALLBACK pick_features_host_side_function( vx_node              nod
 //
 // TODO:********
 //   1. Use vxAddKernel API to register "app.userkernels.pick_features" with
-//      USER_KERNEL_PICK_FEATURES as kernel enumeration, numParams as 8, and
+//      kernel enumeration = USER_KERNEL_PICK_FEATURES, numParams = 8, and
 //      all of the user kernel callback functions you implemented above.
 //   2. Use vxAddParameterToKernel API to specify direction, data_type, and
 //      state of all 8 parameters to the kernel. Look into the comments of
@@ -390,18 +390,17 @@ vx_status registerUserKernel( vx_context context )
                                     pick_features_input_validator,
                                     pick_features_output_validator,
                                     pick_features_initialize,
-                                    pick_features_deinitialize
-                                  );
+                                    pick_features_deinitialize );
     ERROR_CHECK_OBJECT( kernel );
 
-    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 0, VX_INPUT, VX_TYPE_ARRAY, VX_PARAMETER_STATE_REQUIRED ) ); // input_kp
-    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 1, VX_INPUT, VX_TYPE_IMAGE, VX_PARAMETER_STATE_REQUIRED ) ); // input_image
-    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 2, VX_INPUT, VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // strength_thresh
-    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 3, VX_INPUT, VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // min_distance
-    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 4, VX_INPUT, VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // sensitivity
-    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 5, VX_INPUT, VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // gradient_size
-    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 6, VX_INPUT, VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // block_size
-    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 7, VX_OUTPUT, VX_TYPE_ARRAY, VX_PARAMETER_STATE_REQUIRED ) ); // output_kp
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 0, VX_INPUT,  VX_TYPE_ARRAY,  VX_PARAMETER_STATE_REQUIRED ) ); // input_kp
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 1, VX_INPUT,  VX_TYPE_IMAGE,  VX_PARAMETER_STATE_REQUIRED ) ); // input_image
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 2, VX_INPUT,  VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // strength_thresh
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 3, VX_INPUT,  VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // min_distance
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 4, VX_INPUT,  VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // sensitivity
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 5, VX_INPUT,  VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // gradient_size
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 6, VX_INPUT,  VX_TYPE_SCALAR, VX_PARAMETER_STATE_REQUIRED ) ); // block_size
+    ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 7, VX_OUTPUT, VX_TYPE_ARRAY,  VX_PARAMETER_STATE_REQUIRED ) ); // output_kp
     ERROR_CHECK_STATUS( vxFinalizeKernel( kernel ) );
     ERROR_CHECK_STATUS( vxReleaseKernel( &kernel ) );
 
@@ -597,11 +596,11 @@ int main( int argc, char * argv[] )
     // See "VX/vx_nodes.h" for APIs how to add nodes into a graph.
     vx_node nodesHarris[] =
     {
-        vxColorConvertNode( graphHarris, input_rgb_image, harris_yuv_image ),
-        vxChannelExtractNode( graphHarris, harris_yuv_image, VX_CHANNEL_Y, harris_luma_image ),
+        vxColorConvertNode(    graphHarris, input_rgb_image, harris_yuv_image ),
+        vxChannelExtractNode(  graphHarris, harris_yuv_image, VX_CHANNEL_Y, harris_luma_image ),
         vxGaussianPyramidNode( graphHarris, harris_luma_image, currentPyramid ),
-        vxHarrisCornersNode( graphHarris, harris_luma_image, strength_thresh, min_distance,
-                             sensitivity, harris_gradient_size, harris_block_size, currentKeypoints, NULL )
+        vxHarrisCornersNode(   graphHarris, harris_luma_image, strength_thresh, min_distance, sensitivity,
+                               harris_gradient_size, harris_block_size, currentKeypoints, NULL )
     };
     for( vx_size i = 0; i < sizeof( nodesHarris ) / sizeof( nodesHarris[0] ); i++ )
     {
