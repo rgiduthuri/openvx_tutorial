@@ -129,7 +129,7 @@ int main( int argc, char * argv[] )
     vx_int32   harris_block_size      = 3;
 
     ////////********
-    // Create the OpenVX context and make sure returned context is valid.
+    // Create the OpenVX context and make sure the returned context is valid.
     //
     // TODO:********
     //   1. Create an OpenVX context using the vxCreateContext API.
