@@ -83,7 +83,7 @@ void log_callback( vx_context    context,
                    vx_status     status,
                    const vx_char string[] )
 {
-    printf( "LOG: [ %3d ] %s\n", status, string );
+    printf( "LOG: [ status = %d ] %s\n", status, string );
     fflush( stdout );
 }
 
@@ -148,6 +148,11 @@ int main( int argc, char * argv[] )
     //      specify reentrant flag as vx_false_e unless you've a reentrant
     //      implementation of the log_callback.
     vxRegisterLogCallback( context, log_callback, vx_false_e );
+
+    // TODO STEP 02c:********
+    //   1. Uncomment the line below, try that you get a log output
+    //      (in the Application Output tab below in the IDE).
+    vxAddLogEntry( ( vx_reference ) context, VX_FAILURE, "Hello there!\n" );
 
     ////////********
     // Create OpenVX image object for input and OpenVX array object for output.
