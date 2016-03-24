@@ -22,7 +22,7 @@
  */
 
 /*!
- * \file    main.cpp
+ * \file    solution_exercise1.cpp
  * \example solution_exercise1
  * \brief   Harris corners example.
  *          Look for TODO keyword in comments for the code snippets that you need to write.

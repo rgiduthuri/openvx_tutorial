@@ -22,8 +22,8 @@
  */
 
 /*!
- * \file opencv_camera_display.h
- * \brief wrapper for OpenCV camera/file-input and display
+ * \file   opencv_camera_display.h
+ * \brief  wrapper for OpenCV camera/file-input and display
  * \author Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
  */
 
@@ -50,6 +50,7 @@ public:
             exit( 1 );
         }
         printf( "OK: FILE %s %dx%d\n", captureFile, GetWidth(), GetHeight());
+        cv::namedWindow(m_windowName);
     }
 
     CGuiModule( int captureDevice )
@@ -63,6 +64,7 @@ public:
             exit( 1 );
         }
         printf( "OK: CAMERA#%d %dx%d\n", captureDevice, GetWidth(), GetHeight());
+        cv::namedWindow(m_windowName);
     }
 
     int GetWidth()

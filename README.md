@@ -87,10 +87,6 @@ Here are few cmake build examples for this tutorial:
       * cmake -DOpenVX_LIBS_DIR=*path-to-openvx-libraries* -DOpenVX_LIBS=*list-of-openvx-libraries* ~/openvx_tutorial/tutorial_exercises
 
 ## Tutorial Preperations using Virtual Box
-The first version of the virtual machine, used at CVPR 2015, was prepared with contributions from
-Colin Tracey (NVIDIA), Elif Albuz (NVIDIA), Kari Pulli (Intel), Radha Giduthuri (AMD), Thierry Lepley (NVIDIA),
-Victor Eruhimov (Itseez), and Vlad Vinogradov (Itseez).
-
 The current version of VirtualBox VM has been updated to use the exercises in this project. You should setup your computer before starting the tutorial.
   * Choose a laptop with a recent 64-bit OS.
   * Download and install a recent VirtualBox from https://www.virtualbox.org/wiki/Downloads.
@@ -114,3 +110,6 @@ The current version of VirtualBox VM has been updated to use the exercises in th
     - you should see video in a window (you can move the window for better view)
     - press ESCAPE or 'q' to exit the app
 
+The first version of the virtual machine, used at CVPR 2015, was prepared with contributions from
+Colin Tracey (NVIDIA), Elif Albuz (NVIDIA), Kari Pulli (Intel), Radha Giduthuri (AMD), Thierry Lepley (NVIDIA),
+Victor Eruhimov (Itseez), and Vlad Vinogradov (Itseez).

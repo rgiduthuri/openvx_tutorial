@@ -22,7 +22,7 @@
  */
 
 /*!
- * \file    main.cpp
+ * \file    solution_exercise2.cpp
  * \example solution_exercise2
  * \brief   Feature tracker example.
  *          Look for TODO keyword in comments for the code snippets that you need to write.
@@ -73,7 +73,7 @@ void log_callback( vx_context    context,
                    vx_status     status,
                    const vx_char string[] )
 {
-    printf( "LOG: [ %3d ] %s\n", status, string );
+    printf( "LOG: [ status = %d ] %s\n", status, string );
     fflush( stdout );
 }
 

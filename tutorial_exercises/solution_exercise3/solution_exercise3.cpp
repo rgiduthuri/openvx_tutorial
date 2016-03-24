@@ -22,7 +22,7 @@
  */
 
 /*!
- * \file    main.cpp
+ * \file    solution_exercise3.cpp
  * \example solution_exercise3
  * \brief   Access to OpenCV medianBlur function as an OpenVX user kernel.
  *          Look for TODO keyword in comments for the code snippets that you need to write.
@@ -298,7 +298,7 @@ void log_callback( vx_context    context,
                    vx_status     status,
                    const vx_char string[] )
 {
-    printf( "LOG: [ %3d ] %s\n", status, string );
+    printf( "LOG: [ status = %d ] %s\n", status, string );
     fflush( stdout );
 }
 

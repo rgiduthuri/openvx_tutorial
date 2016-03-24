@@ -22,11 +22,11 @@
  */
 
 /*!
- * \file main.cpp
+ * \file    exercise4.cpp
  * \example exercise4
- * \brief User kernel example.
- * Look for TODO keyword in comments to code snipets that you need write.
- * \author Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
+ * \brief   User kernel example.
+ *          Look for TODO keyword in comments to code snipets that you need write.
+ * \author  Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
  */
 
 ////////
@@ -211,7 +211,7 @@ vx_status registerUserKernel( vx_context context )
 void log_callback( vx_context context, vx_reference ref,
                    vx_status status, const vx_char string[] )
 {
-    printf( "LOG: [ %3d ] %s", status, string );
+    printf( "LOG: [ status = %d ] %s", status, string );
     fflush( stdout );
 }
 
