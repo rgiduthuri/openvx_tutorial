@@ -116,7 +116,7 @@ Build using open-source OpenVX in Visual Studio 2015:
     - Click *Configure* button; you get a window asking for compilers to use: select *"Visual Studio 14 2015 Win64"*
     - Click *Generate* button
   * Run Visual Studio 2015 and open solution ``~/openvx_tutorial/build-open-source/tutorial_exercises.sln``
-  * Select *exercise1* as default project
+  * Set *exercise1* as startup project
   * Build and run the project.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
   
