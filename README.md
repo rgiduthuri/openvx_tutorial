@@ -16,8 +16,8 @@ This tutorial material can be used on a PC with recent 64-bit OS (Windows, OS X,
 Tutorial exercises and build procedures on various platforms are explained in this document.
 An additional section explains tutorial exercises with a VirtualBox VM.
   1. [Tutorial Exercises Overview](#1-tutorial-exercises-overview)
-  2. [Build on Mac or Linux PC using Qt Creator](#2-build-on-mac-or-pc-using-qt-creator)
-  3. [Build on Windows PC using Visual Studio 2015 (Free)](#3-build-windows-pc-using-visual-studio-2015-free)
+  2. [Build on Mac or Linux PC using Qt Creator](#2-build-on-mac-or-linux-pc-using-qt-creator)
+  3. [Build on Windows PC using Visual Studio 2015 (Free)](#3-build-on-windows-pc-using-visual-studio-2015-free)
   4. [Build on any PC using VirtualBox software and a pre-built VM](#4-build-on-any-pc-using-virtualbox-software-and-a-pre-built-vm)
 
 NOTE: The directory ``~`` in the text below refers to directory containing the ``openvx_tutorial`` sub-directory.
