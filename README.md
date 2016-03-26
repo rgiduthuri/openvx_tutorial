@@ -17,7 +17,7 @@ Tutorial exercises and build procedures on various platforms are explained in th
 An additional section explains tutorial exercises with a VirtualBox VM.
 The directory ``~`` in the text below refers to directory containing the ``openvx_tutorial`` sub-directory.
 
-## Tutorial Exercises
+## Tutorial Exercises Overview
 It is best to start doing these exercises after the tutorial presentations.
 
 All the tutorial exercises are kept in ``~/openvx_tutorial/tutorial_exercises``.
@@ -133,6 +133,8 @@ The current version of VirtualBox VM has been updated to use the exercises in th
   * Run "Qt Creator" (click Qt icon on left) and open exercises project.
     - Open Project: ``CMakeLists.txt`` in ``/home/openvx/openvx_tutorial/tutorial_exercises``
     - click *"Configure Project"* to open CMake Wizard
+    - CMake arguments for open-source OpenVX: ``-DOpenVX_SOURCE_DIR=amdovx-core/openvx -DOpenVX_LIBS=openvx``
+      * uses Khronos sample implementation if the above CMake arguments are not specified
     - click *"Run CMake"* and *"Finish"*
   * Select exercise1 as active sub-project.
     - click *"Open Build and Run Kit Selector"* under the *"Build"* menu
