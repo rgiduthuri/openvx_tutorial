@@ -34,7 +34,13 @@
 #include <stdio.h>
 #include <string>
 
+#ifndef DEFAULT_VIDEO_SEQUENCE
 #define DEFAULT_VIDEO_SEQUENCE "../../tutorial_videos/PETS09-S1-L1-View001.avi"
+#endif
+
+#ifndef DEFAULT_WAITKEY_DELAY
+#define DEFAULT_WAITKEY_DELAY  1  /* waitKey delay time in milliseconds after each frame processing */
+#endif
 
 class CGuiModule
 {
@@ -131,7 +137,7 @@ public:
 
     bool AbortRequested()
     {
-        char  key = cv::waitKey( 1 );
+        char  key = cv::waitKey( DEFAULT_WAITKEY_DELAY );
         if( key == ' ' )
         {
             key = cv::waitKey( 0 );
