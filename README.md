@@ -74,16 +74,18 @@ In order to build these tutorial exercises, you need the following:
   * Download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in ``~/openvx_tutorial/tutorial_videos`` folder. 
 
 ### 2.1 Build using open-source OpenVX in Qt Creator
-  * Open Project ``~/openvx_tutorial/tutorial_exercises/CMakeLists.txt``; you get a window for running CMake.
-  * Specify CMake arguments: ``-DOpenVX_SOURCE_DIR=amdovx-core/openvx -DOpenVX_LIBS=openvx -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL=TRUE``
-  * Click the *Run CMake* button, then click *Finish* button.
+  * Open Project ``~/openvx_tutorial/tutorial_exercises/CMakeLists.txt``.
+  * Click *"Configure Project"* to open CMake Wizard
+    - Specify arguments: ``-DOpenVX_SOURCE_DIR=amdovx-core/openvx -DOpenVX_LIBS=openvx -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL=TRUE``
+    - Click *"Run CMake"* and *"Done"*
   * Compile and run the project by clicking the higher of the green triangles at left bottom, or with *CTRL-R*.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
   
 ### 2.2 Build using pre-built OpenVX library in Qt Creator
-  * Open Project ``~/openvx_tutorial/tutorial_exercises/CMakeLists.txt``; you get a window for running CMake.
-  * Specify CMake arguments: ``-DOpenVX_LIBS_DIR=<path-to-openvx-libraries> -DOpenVX_LIBS=<list-of-openvx-libraries>``
-  * Click the *Run CMake* button, then click *Finish* button.
+  * Open Project ``~/openvx_tutorial/tutorial_exercises/CMakeLists.txt``.
+  * Click *"Configure Project"* to open CMake Wizard
+    - Specify arguments: ``-DOpenVX_LIBS_DIR=<path-to-openvx-libraries> -DOpenVX_LIBS=<list-of-openvx-libraries>``
+    - Click *"Run CMake"* and *"Done"*
   * Compile and run the project by clicking the higher of the green triangles at left bottom, or with *CTRL-R*.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
   
