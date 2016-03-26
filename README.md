@@ -9,37 +9,34 @@ on heterogeneous computing architectures. A set of example algorithms
 from computational photography and advanced driver assistance mapped to
 the graph API will be discussed. Also covered is the relationship between
 OpenVX and OpenCV, as well as OpenCL. The tutorial includes hands-on practice
-session that gets the participants started on solving real computer vision
+sessions that get the participants started on solving real computer vision
 problems using OpenVX.
 
 ## Tutorial Exercises
 It is best to start doing these exercises after the tutorial presentations.
-The ~ in the below text refers to directory containing the openvx_tutorial
+The directory ~ in the text below refers to directory containing the openvx_tutorial
 sub-directory.
 
 All the tutorial exercises are kept in ~/openvx_tutorial/tutorial_exercises.
 The tutorial_exercises/CMakeLists.txt includes all the exercises as separate 
 projects. All of the exercise folders contain only one .cpp file with main() 
 as the entry point. All the include files are kept in the 
-tutorial_exercises/include directory. 
+tutorial_exercises/include directory.
 
-A brief description of exercises in the tutorial_exercises sub-directory:
+The tutorial_exercises sub-directory contains four exercises:
   * exercise1: framework basics, import media, run a keypoint detector
   * exercise2: graph concepts, keypoint tracking
   * exercise3: user kernels, build a wrapper kernel to OpenCV function
   * exercise4: user kernels, build a keypoint tracker
 
-There are additional folders with partial and full solutions:
-  * easy_exerciseN: partial solution with lot of hints in the code. Use it
-    only if you don't have much time left to work with exerciseN folders.
+There are additional folders with full solutions:
   * solution_exerciseN: complete solution of exerciseN. Just for reference.
 
 Each exercise requires you to modify exerciseN/exerciseN.cpp file.
 Here are few helpful instructions:
   * Look for *TODO* keyword in *exerciseN/exerciseN.cpp* comments for instructions
     for code snippets that you need to create.
-  * Walk through the code *top-to-bottom* and follow the instructions
-    in the comments.
+  * The steps are numbered, do them in that order.
   * All header files are kept in *tutorial_exercises/include*.
     To open a header file, move the cursor to corresponding #include statement
     in exerciseN/exerciseN.cpp and press F2.
