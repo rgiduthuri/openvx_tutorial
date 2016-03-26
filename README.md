@@ -15,9 +15,14 @@ problems using OpenVX.
 This tutorial material can be used on a PC with recent 64-bit OS (Windows, OS X, or Linux).
 Tutorial exercises and build procedures on various platforms are explained in this document.
 An additional section explains tutorial exercises with a VirtualBox VM.
-The directory ``~`` in the text below refers to directory containing the ``openvx_tutorial`` sub-directory.
+  1. [Tutorial Exercises Overview](#1-tutorial-exercises-overview)
+  2. [Build on Mac or Linux PC using Qt Creator](#2-build-on-mac-or-pc-using-qt-creator)
+  3. [Build on Windows PC using Visual Studio 2015 (Free)](#3-build-windows-pc-using-visual-studio-2015-free)
+  4. [Build on any PC using VirtualBox software and a pre-built VM](#4-build-on-any-pc-using-virtualbox-software-and-a-pre-built-vm)
 
-## Tutorial Exercises Overview
+NOTE: The directory ``~`` in the text below refers to directory containing the ``openvx_tutorial`` sub-directory.
+
+## 1. Tutorial Exercises Overview
 It is best to start doing these exercises after the tutorial presentations.
 
 All the tutorial exercises are kept in ``~/openvx_tutorial/tutorial_exercises``.
@@ -53,7 +58,7 @@ Here are few helpful instructions:
     - All the exercises in this tutorial use this video sequence as input.
     - You can also specify you own video sequence on command-line as an argument.
 
-## Build using Qt Creator (OS X or Linux)
+## 2. Build on Mac or Linux PC using Qt Creator
 In order to build these tutorial exercises, you need the following:
   * Laptop with a recent 64-bit OS (OS X or Linux)
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
@@ -66,26 +71,26 @@ In order to build these tutorial exercises, you need the following:
     - See [Khronos OpenVX Resources](https://www.khronos.org/openvx/resources) for available commertial implementations.
   * Download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in ``~/openvx_tutorial/tutorial_videos`` folder. 
 
-Build using open-source OpenVX in Qt Creator:
+### 2.1 Build using open-source OpenVX in Qt Creator
   * Open Project ``~/openvx_tutorial/tutorial_exercises/CMakeLists.txt``; you get a window for running CMake.
   * Specify CMake arguments: ``-DOpenVX_SOURCE_DIR=amdovx-core/openvx -DOpenVX_LIBS=openvx -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL=TRUE``
   * Click the *Run CMake* button, then click *Finish* button.
   * Compile and run the project by clicking the higher of the green triangles at left bottom, or with *CTRL-R*.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
   
-Build using pre-built OpenVX library in Qt Creator:
+### 2.2 Build using pre-built OpenVX library in Qt Creator
   * Open Project ``~/openvx_tutorial/tutorial_exercises/CMakeLists.txt``; you get a window for running CMake.
   * Specify CMake arguments: ``-DOpenVX_LIBS_DIR=<path-to-openvx-libraries> -DOpenVX_LIBS=<list-of-openvx-libraries>``
   * Click the *Run CMake* button, then click *Finish* button.
   * Compile and run the project by clicking the higher of the green triangles at left bottom, or with *CTRL-R*.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
   
-## Build using Visual Studio 2015 (Windows)
+## 3. Build on Windows PC using Visual Studio 2015 (Free)
 In order to build these tutorial exercises, you need the following:
   * Laptop with a recent Windows 64-bit OS
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html) and set ``OpenCV_DIR`` environment variable to ``<installed-folder>\opencv\build`` folder.
   * Download and install latest [CMake](https://cmake.org/download/)
-  * Download and install [Visual Studio Community Free](https://www.visualstudio.com/downloads/download-visual-studio-vs)
+  * Download and install [Visual Studio Community (Free)](https://www.visualstudio.com/downloads/download-visual-studio-vs)
   * Download and install an OpenVX implementation:
     - Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/).
     - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD
@@ -94,7 +99,7 @@ In order to build these tutorial exercises, you need the following:
     - See [Khronos OpenVX Resources](https://www.khronos.org/openvx/resources) for available commertial implementations.
   * Download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in ``~/openvx_tutorial/tutorial_videos`` folder. 
 
-Build using open-source OpenVX in Visual Studio 2015:
+### 3.1 Build using open-source OpenVX in Visual Studio 2015
   * Run CMake (cmake-gui)
     - Click *Browse Source* button and select ``~/openvx_tutorial/tutorial_exercises``
     - Click *Browse Build* button and select ``~/openvx_tutorial/build-open-source``
@@ -120,8 +125,28 @@ Build using open-source OpenVX in Visual Studio 2015:
   * Build and run the project.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
   
-
-## Tutorial Preperations using Virtual Box
+### 3.2 Build using pre-built OpenVX library in Visual Studio 2015
+  * Run CMake (cmake-gui)
+    - Click *Browse Source* button and select ``~/openvx_tutorial/tutorial_exercises``
+    - Click *Browse Build* button and select ``~/openvx_tutorial/build-open-source``
+    - Click *Add Entry* button
+      * Set *Name* to ``OpenVX_LIBS_DIR``
+      * Set *Type* to *STRING*
+      * Set *Value* to ``<path-to-openvx-libraries>``
+      * Click *OK*
+    - Click *Add Entry* button
+      * Set *Name* to ``OpenVX_LIBS``
+      * Set *Type* to *STRING*
+      * Set *Value* to ``<list-of-openvx-libraries>``
+      * Click *OK*
+    - Click *Configure* button; you get a window asking for compilers to use: select *"Visual Studio 14 2015 Win64"*
+    - Click *Generate* button
+  * Run Visual Studio 2015 and open solution ``~/openvx_tutorial/build-open-source/tutorial_exercises.sln``
+  * Set *exercise1* as startup project
+  * Build and run the project.
+  * You should see video in a window. Press ESCAPE or 'q' to exit the app.
+  
+## 4. Build on any PC using VirtualBox software and a pre-built VM
 The current version of VirtualBox VM has been updated to use the exercises in this project. You should setup your computer before starting the tutorial.
   * Choose a laptop with a recent 64-bit OS.
   * Download and install a recent VirtualBox from https://www.virtualbox.org/wiki/Downloads.
