@@ -113,7 +113,8 @@ Build using open-source OpenVX in Visual Studio 2015:
       * Set *Type* to *BOOL*
       * Select *Value* to indicate *TRUE*
       * Click *OK*
-    - Click *Configure* button and then *Generate* button
+    - Click *Configure* button; you get a window asking for compilers to use: select *"Visual Studio 14 2015 Win64"*
+    - Click *Generate* button
   * Run Visual Studio 2015 and open solution ``~/openvx_tutorial/build-open-source/tutorial_exercises.sln``
   * Select *exercise1* as default project
   * Build and run the project.
