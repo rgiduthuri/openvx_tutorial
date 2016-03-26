@@ -83,7 +83,7 @@ Build using pre-built OpenVX library in Qt Creator:
 ## Build using Visual Studio 2015 (Windows)
 In order to build these tutorial exercises, you need the following:
   * Laptop with a recent Windows 64-bit OS
-  * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
+  * Download and install [OpenCV 3.1](http://opencv.org/downloads.html) and set ``OpenCV_DIR`` environment variable to ``<installed-folder>\opencv\build`` folder.
   * Download and install latest [CMake](https://cmake.org/download/)
   * Download and install [Visual Studio Community Free](https://www.visualstudio.com/downloads/download-visual-studio-vs)
   * Download and install an OpenVX implementation:
