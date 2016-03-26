@@ -27,6 +27,7 @@
  * \brief   Harris corners example.
  *          Look for TODO keyword in comments for the code snippets that you need to write.
  * \author  Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
+ *          Kari Pulli             <kari.pulli@gmail.com>
  */
 
 ////////
@@ -44,7 +45,7 @@
 //    VX/vx_vendors.h
 // The "VX/vxu.h" defines immediate mode utility functions.
 //
-// TODO:********
+// TODO STEP 01:********
 //   1. Uncomment the lines below to include OpenVX header files.
 #include <VX/vx.h>
 #include <VX/vxu.h>
@@ -73,11 +74,16 @@
 // log_callback function implements a mechanism to print log messages
 // from OpenVX framework onto console.
 //
-// TODO:********
-//   1. Complete the log_callback function declaration to match with
-//      vx_log_callback_f in VX/vx_types.h (line 1444).
-//   2. Make the log_callback print a message that looks like:
+// TODO STEP 03b (see 03a below):********
+//   1. Find the function signature for the log_callback.
+//      First, go to definition of vxRegisterLogCallback.
+//      Find the type of its second argument (it matches vx_log_*_f).
+//      Follow that type into its definition.
+//      You'll see the function takes in four arguments, add them here.
+//   2. Uncomment the body of the log callback function.
 //        LOG: [<status>] <message>
+//   3. Move to STEP 03c.
+//      Hint: use the Find functionality, CTRL-F or CMD-F, type 02c, hit ENTER.
 void log_callback( vx_context    context,
                    vx_reference  ref,
                    vx_status     status,
@@ -131,11 +137,18 @@ int main( int argc, char * argv[] )
     ////////********
     // Create the OpenVX context and make sure the returned context is valid.
     //
-    // TODO:********
-    //   1. Create an OpenVX context using the vxCreateContext API.
-    //   2. Use vxGetStatus API or ERROR_CHECK_OBJECT macro to check if
-    //      context creation is successful.
-    //      The vxCreateContext and vxGetStatus are defined in "VX/vx_api.h".
+    // TODO STEP 02:********
+    //   1. Create an OpenVX context.
+    //      First, set cursor on vx_context type,
+    //      and right-click -> Follow Symbol Under Cursor (or hit F2).
+    //      Read the documentation. See the reference to function vxCreate...
+    //      Start typing the function instead of the NULL in the context assignment below.
+    //      Move cursor over the function name, hit F2 again to read its documentation.
+    //      Finish creating the context.
+    //
+    //   2. Use ERROR_CHECK_OBJECT macro to check if context creation was successful.
+    //      Start typing ERROR_CHECK_OBJECT, then with cursor on top, hit F2 to see the definition.
+    //      Finish calling the error check by passing it context as an argument.
     vx_context context = vxCreateContext();
     ERROR_CHECK_OBJECT( context );
 
@@ -143,28 +156,33 @@ int main( int argc, char * argv[] )
     // Register the log_callback that you implemented to be able to receive
     // any log messages from the OpenVX framework.
     //
-    // TODO:********
-    //   1. Use vxRegisterLogCallback to register the callback. Make sure to
-    //      specify reentrant flag as vx_false_e unless you've a reentrant
-    //      implementation of the log_callback.
+    // TODO STEP 03a:********
+    //   1. Uncomment the line below.
+    //      Fill in the first argument for vxRegisterLogCallback to register a log callback function.
+    //      See the documentation (use F2).
+    //      The second argument is a function pointer to log_callback, move next to STEP 03b.
+    //      An easy way to find that is to put cursor on top of log_callback and hit F2.
     vxRegisterLogCallback( context, log_callback, vx_false_e );
 
-    // TODO STEP 02c:********
-    //   1. Uncomment the line below, try that you get a log output
+    // TODO STEP 03c:********
+    //   1. Uncomment the line below, run and see that you get a log output
     //      (in the Application Output tab below in the IDE).
     vxAddLogEntry( ( vx_reference ) context, VX_FAILURE, "Hello there!\n" );
 
     ////////********
     // Create OpenVX image object for input and OpenVX array object for output.
     //
-    // TODO:********
-    //   1. Use vxCreateImage API to create an image object with the width and
-    //      height matching the configuration parameters.
-    //      Note that VX_DF_IMAGE_RGB for RGB image format is defined in "VX/vx_types.h".
+    // TODO STEP 04:********
+    //   1. See from vx_image type documentation with which function to create an image.
+    //      Start typing the function name to replace NULL below, use autocomplete.
+    //      Look into documentation (F2).
+    //      The first argument should be obvious.
+    //      For the second and third use local variables defined above, one of them is called width.
+    //      For the last one use VX_DF_IMAGE_RGB.
     //   2. Use vxCreateArray API to create an array object with keypoint data type.
-    //      The VX_TYPE_KEYPOINT (for vx_keypoint_t) is defined in "VX/vx_types.h".
-    //      Make sure the array can hold 10,000 keypoints.
+    //      See the documentation what should be the second argument (it's a type enum for keypoints).
     //   3. Use ERROR_CHECK_OBJECT to check proper creation of objects.
+    //      We gave the one for the array, do a similar check for the image.
     vx_image input_rgb_image       = vxCreateImage( context, width, height, VX_DF_IMAGE_RGB );
     vx_array output_keypoint_array = vxCreateArray( context, VX_TYPE_KEYPOINT, 10000 );
     ERROR_CHECK_OBJECT( input_rgb_image );
@@ -180,8 +198,8 @@ int main( int argc, char * argv[] )
     // going to use immediate mode functions, you need to use vxCreateImage
     // to create the image objects, but not the vxCreateVirtualImage API.
     //
-    // TODO:********
-    //   1. Create a IYUV image and a U8 image (for Y channel) with the same
+    // TODO STEP 05:********
+    //   1. Create an IYUV image and a U8 image (for Y channel) with the same
     //      dimensions as the input RGB image. The image formats for
     //      IYUV and U8 images are VX_DF_IMAGE_IYUV and VX_DF_IMAGE_U8.
     //   2. Use ERROR_CHECK_OBJECT to check that the objects are valid.
@@ -196,10 +214,11 @@ int main( int argc, char * argv[] )
     // data objects. So, you need to create three scalar objects with
     // corresponding configuration parameters.
     //
-    // TODO:********
+    // TODO STEP 06:********
     //   1. Create scalar data objects of VX_TYPE_FLOAT32 for strength_thresh,
     //      min_distance, and sensitivity, with initial values as harris_strength_thresh,
     //      harris_min_distance, and harris_k_sensitivity.
+    //      The first one is given below.
     //   2. Use ERROR_CHECK_OBJECT to check the objects.
     vx_scalar strength_thresh = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_strength_thresh );
     vx_scalar min_distance    = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_min_distance );
@@ -217,20 +236,23 @@ int main( int argc, char * argv[] )
         // In order to do this, you need to use vxAccessImagePatch and vxCommitImagePatch APIs.
         // See "VX/vx_api.h" for the description of these APIs.
         //
-        // TODO:********
+        // TODO STEP 07:********
         //   1. Specify the coordinates of image patch by declaring the patch
-        //      as a vx_rectangle_t data type. The start_x and start_y should
-        //      zeros, while the end_x and end_y should be width and height.
+        //      as a vx_rectangle_t data type. It has four fields, we've given you the first one.
+        //      See for the documentation what are the others. The start values should be zeros,
+        //      end values should be width (for x) and height (for y).
         //   2. Specify the memory layout of the OpenCV RGB image buffer by
         //      declaring the layout as a vx_imagepatch_addressing_t type.
         //      Remember that you need to specify stride_x and stride_y fields
         //      of vx_imagepatch_addressing_t for the image buffer layout.
         //      The stride_x should be 3 and stride_y should be gui.GetStride().
+        //      We've given you the stride_y, add the stride_x.
         //   3. Get the pointer to buffer using gui.GetBuffer() and call
         //      vxAccessImagePatch for VX_WRITE_ONLY usage mode with a pointer
         //      to pointer returned by gui.GetBuffer() so COPY mode is used.
         //      Then immediately call vxCommitImagePatch for the actual copy.
         //      Use the image patch and memory layout in the above two steps.
+        //      We've given you the access function, please fill in the commit function.
         //   4. Compare the return status with VX_SUCCESS to check if access/
         //      commit are successful. Or use the ERROR_CHECK_STATUS macro.
         vx_rectangle_t cv_rgb_image_region;
@@ -254,7 +276,7 @@ int main( int argc, char * argv[] )
         // running the Harris corner detector function. All the immediate mode
         // functions you need are declared in "VX/vxu.h".
         //
-        // TODO:********
+        // TODO STEP 08:********
         //   1. Convert the input RGB image to IYUV image using vxuColorConvert API.
         //   2. Extract Y channel from IYUV image into a gray scale image using
         //      vxuChannelExtract API with VX_CHANNEL_Y as the channel.
@@ -273,26 +295,21 @@ int main( int argc, char * argv[] )
         // keypoint array and draw each item on the output window using
         // gui.DrawPoint().
         //
-        // TODO:********
-        //   1. OpenVX array object has an attribute that stores the current
-        //      number of items. The name of the attribute is
-        //      VX_ARRAY_ATTRIBUTE_NUMITEMS and its value is of type vx_size.
-        //      Use vxQueryArray API to get the number of keypoints in the
-        //      output_keypoint_array data object, representing number of
-        //      corners detected in the input RGB image.
+        // TODO STEP 09:********
+        //   1. OpenVX array object has an attribute that stores the current number of items.
+        //      The name of the attribute is VX_ARRAY_ATTRIBUTE_NUMITEMS and its value is of type vx_size.
+        //      Use vxQueryArray API to get the number of keypoints in the output_keypoint_array
+        //      data object, representing number of corners detected in the input RGB image.
         //      IMPORTANT: read the number of items into "num_corners"
         //      because this variable is displayed by code segment below.
-        //   2. The data items in output keypoint array are of type
-        //      vx_keypoint_t (see "VX/vx_types.h"). To access the array
-        //      buffer, use vxAccessArrayRange with start index = 0,
-        //      end index = number of items in the array, and usage mode =
-        //      VX_READ_ONLY. Note that the stride returned by this access
-        //      call is not guaranteed to be sizeof(vx_keypoint_t).
-        //      Also make sure that num_corners is > 0, because
-        //      vxAccessArrayRange expects an end index > 0.
-        //   3. For each item in the keypoint buffer, use vxArrayItem to
-        //      access individual keypoint and draw a marker at (x,y)
-        //      using gui.DrawPoint(). The vx_keypoint_t has x & y data fields.
+        //   2. The data items in output keypoint array are of type vx_keypoint_t (see "VX/vx_types.h").
+        //      To access the array buffer, use vxAccessArrayRange with start index = 0,
+        //      end index = number of items in the array, and usage mode = VX_READ_ONLY.
+        //      Note that the stride returned by this access call is not guaranteed to be sizeof(vx_keypoint_t).
+        //      Also make sure that num_corners is > 0, because vxAccessArrayRange expects an end index > 0.
+        //      We've given you this code.
+        //   3. For each item in the keypoint buffer, use vxArrayItem to access individual keypoint
+        //      and draw a marker at (x,y) using gui.DrawPoint(). The vx_keypoint_t has x & y data fields.
         //   4. Handover the control of output keypoint buffer back to
         //      OpenVX framework by calling vxCommitArrayRange API.
         //   5. Use ERROR_CHECK_STATUS for error checking.
@@ -336,10 +353,13 @@ int main( int argc, char * argv[] )
     // To release an OpenVX object, you need to call vxRelease<Object> API which takes a pointer to the object.
     // If the release operation is successful, the OpenVX framework will reset the object to NULL.
     //
-    // TODO:********
+    // TODO STEP 10:********
     //   1. Release all the image objects using vxReleaseImage API.
     //   2. Release all other objects using vxRelease<Object> APIs.
     //   3. Use ERROR_CHECK_STATUS for error checking.
+    // Release three images.
+    // Release one array.
+    // Release three Scalars.
     ERROR_CHECK_STATUS( vxReleaseImage( &input_rgb_image ) );
     ERROR_CHECK_STATUS( vxReleaseImage( &yuv_image ) );
     ERROR_CHECK_STATUS( vxReleaseImage( &gray_scale_image ) );

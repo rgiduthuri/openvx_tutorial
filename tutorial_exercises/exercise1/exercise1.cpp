@@ -157,11 +157,11 @@ int main( int argc, char * argv[] )
     //      Fill in the first argument for vxRegisterLogCallback to register a log callback function.
     //      See the documentation (use F2).
     //      The second argument is a function pointer to log_callback, move next to STEP 03b.
-    //      Easy way to find that is to put cursor on top of log_callback and hit F2.
+    //      An easy way to find that is to put cursor on top of log_callback and hit F2.
 //  vxRegisterLogCallback( /* Fill in this argument */, log_callback, vx_false_e );
 
     // TODO STEP 03c:********
-    //   1. Uncomment the line below, try that you get a log output
+    //   1. Uncomment the line below, run and see that you get a log output
     //      (in the Application Output tab below in the IDE).
 //  vxAddLogEntry( ( vx_reference ) context, VX_FAILURE, "Hello there!\n" );
 
@@ -281,26 +281,20 @@ int main( int argc, char * argv[] )
         // gui.DrawPoint().
         //
         // TODO STEP 09:********
-        //   1. OpenVX array object has an attribute that stores the current
-        //      number of items. The name of the attribute is
-        //      VX_ARRAY_ATTRIBUTE_NUMITEMS and its value is of type vx_size.
-        //      Use vxQueryArray API to get the number of keypoints in the
-        //      output_keypoint_array data object, representing number of
-        //      corners detected in the input RGB image.
+        //   1. OpenVX array object has an attribute that stores the current number of items.
+        //      The name of the attribute is VX_ARRAY_ATTRIBUTE_NUMITEMS and its value is of type vx_size.
+        //      Use vxQueryArray API to get the number of keypoints in the output_keypoint_array
+        //      data object, representing number of corners detected in the input RGB image.
         //      IMPORTANT: read the number of items into "num_corners"
         //      because this variable is displayed by code segment below.
-        //   2. The data items in output keypoint array are of type
-        //      vx_keypoint_t (see "VX/vx_types.h"). To access the array
-        //      buffer, use vxAccessArrayRange with start index = 0,
-        //      end index = number of items in the array, and usage mode =
-        //      VX_READ_ONLY. Note that the stride returned by this access
-        //      call is not guaranteed to be sizeof(vx_keypoint_t).
-        //      Also make sure that num_corners is > 0, because
-        //      vxAccessArrayRange expects an end index > 0.
+        //   2. The data items in output keypoint array are of type vx_keypoint_t (see "VX/vx_types.h").
+        //      To access the array buffer, use vxAccessArrayRange with start index = 0,
+        //      end index = number of items in the array, and usage mode = VX_READ_ONLY.
+        //      Note that the stride returned by this access call is not guaranteed to be sizeof(vx_keypoint_t).
+        //      Also make sure that num_corners is > 0, because vxAccessArrayRange expects an end index > 0.
         //      We've given you this code.
-        //   3. For each item in the keypoint buffer, use vxArrayItem to
-        //      access individual keypoint and draw a marker at (x,y)
-        //      using gui.DrawPoint(). The vx_keypoint_t has x & y data fields.
+        //   3. For each item in the keypoint buffer, use vxArrayItem to access individual keypoint
+        //      and draw a marker at (x,y) using gui.DrawPoint(). The vx_keypoint_t has x & y data fields.
         //   4. Handover the control of output keypoint buffer back to
         //      OpenVX framework by calling vxCommitArrayRange API.
         //   5. Use ERROR_CHECK_STATUS for error checking.
