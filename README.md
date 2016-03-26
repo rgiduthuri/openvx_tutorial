@@ -50,6 +50,7 @@ Here are few helpful instructions:
     in ``exerciseN/exerciseN.cpp`` and press *F2*.
     - The ``"opencv_camera_display.h"`` is a wrapper that imports media and
       displays results using OpenCV library.
+      * ``#define DEFAULT_WAITKEY_DELAY 1`` is used to specify wait time in milliseconds after each frame processing; to slowdown use larger numbers; or use 0 to wait for a key after each frame.
     - The ``"VX/vx.h"`` & ``"VX/vxu.h"`` files are part of OpenVX header files
       downloaded from https://www.khronos.org/registry/vx/
   * To view the definition of any OpenVX API or data type, simply move the
@@ -64,10 +65,11 @@ In order to build these tutorial exercises, you need the following:
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
   * Download and install [Qt Creator](http://www.qt.io/download-open-source/)
   * Download and install an OpenVX implementation:
-    - Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/).
     - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD
       * Copy the source code into ``~/openvx_tutorial/tutorial_exercises/amdovx-core`` directory.
-      * *CPU only build is recommended for this tutorial*.
+      * *CPU only build is recommended for this tutorial*. So, make sure to set CMake build flag ``CMAKE_DISABLE_FIND_PACKAGE_OpenCL`` to *TRUE*.
+    - Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/).
+      * Follow the instructions in openvx_sample/README to create pre-built OpenVX libraries
     - See [Khronos OpenVX Resources](https://www.khronos.org/openvx/resources) for available commertial implementations.
   * Download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in ``~/openvx_tutorial/tutorial_videos`` folder. 
 
@@ -92,10 +94,14 @@ In order to build these tutorial exercises, you need the following:
   * Download and install latest [CMake](https://cmake.org/download/)
   * Download and install [Visual Studio Community (Free)](https://www.visualstudio.com/downloads/download-visual-studio-vs)
   * Download and install an OpenVX implementation:
-    - Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/).
     - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD
       * Copy the source code into ``~/openvx_tutorial/tutorial_exercises/amdovx-core`` directory.
-      * *CPU only build is recommended for this tutorial*.
+      * *CPU only build is recommended for this tutorial*. So, make sure to set CMake build flag ``CMAKE_DISABLE_FIND_PACKAGE_OpenCL`` to *TRUE*.
+    - Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/).
+      * Follow the instructions in openvx_sample/README to create pre-built OpenVX libraries
+    - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD
+      * Copy the source code into ``~/openvx_tutorial/tutorial_exercises/amdovx-core`` directory.
+      * *CPU only build is recommended for this tutorial*. So, make sure to set CMake build flag ``CMAKE_DISABLE_FIND_PACKAGE_OpenCL`` to *TRUE*.
     - See [Khronos OpenVX Resources](https://www.khronos.org/openvx/resources) for available commertial implementations.
   * Download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in ``~/openvx_tutorial/tutorial_videos`` folder. 
 
@@ -159,8 +165,9 @@ The current version of VirtualBox VM has been updated to use the exercises in th
   * Run "Qt Creator" (click Qt icon on left) and open exercises project.
     - Open Project: ``CMakeLists.txt`` in ``/home/openvx/openvx_tutorial/tutorial_exercises``
     - click *"Configure Project"* to open CMake Wizard
-    - CMake arguments for open-source OpenVX: ``-DOpenVX_SOURCE_DIR=amdovx-core/openvx -DOpenVX_LIBS=openvx``
-      * uses Khronos sample implementation if the above CMake arguments are not specified
+    - pick one of two OpenVX implementations packaged into VM
+      * leave CMake arguments as empty to pick pre-built Khronos sample implementation libraries (will be slow)
+      * set CMake arguments as ``-DOpenVX_SOURCE_DIR=amdovx-core/openvx -DOpenVX_LIBS=openvx`` to pick open-source OpenVX
     - click *"Run CMake"* and *"Finish"*
   * Select exercise1 as active sub-project.
     - click *"Open Build and Run Kit Selector"* under the *"Build"* menu
