@@ -28,8 +28,6 @@
 #   OpenVX_INCLUDE_DIRS -- path to non-khronos OpenVX header files (optional)
 #
 # Here are few examples:
-# * Build exercises using pre-installed khronos sample binaries in VM
-#     % cmake .../openvx_tutorial/tutorial_exercises
 # * Build exerciese using an open source implementation without using OpenCL
 #     % pushd .../openvx_tutorial/tutorial_exercises
 #     % git clone https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core
@@ -52,6 +50,15 @@ if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" )
   set ( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} )
 else()
   set ( CMAKE_MACOSX_RPATH ON                                                  )
+endif()
+
+# by default, use open-source OpenVX without OpenCL
+if( NOT OpenVX_LIBS_DIR )
+  set   ( OpenVX_SOURCE_DIR                 amdovx-core/openvx CACHE INTERNAL OpenVX_SOURCE_DIR                 )
+  if( EXISTS ${CMAKE_SOURCE_DIR}/${OpenVX_SOURCE_DIR} )
+    set ( OpenVX_LIBS                       openvx             CACHE INTERNAL OpenVX_LIBS                       )
+    set ( CMAKE_DISABLE_FIND_PACKAGE_OpenCL TRUE               CACHE INTERNAL CMAKE_DISABLE_FIND_PACKAGE_OpenCL )
+  endif()
 endif()
 
 if( OpenVX_SOURCE_DIR AND EXISTS ${CMAKE_SOURCE_DIR}/${OpenVX_SOURCE_DIR} )
