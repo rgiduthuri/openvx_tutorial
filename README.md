@@ -23,7 +23,12 @@ An additional section explains tutorial exercises with a VirtualBox VM.
 NOTE: The directory ``~`` in the text below refers to directory containing the ``openvx_tutorial`` sub-directory.
 
 ## 1. Tutorial Exercises Overview
-It is best to start doing these exercises after the tutorial presentations.
+It is best to start doing these exercises after going through the tutorial presentations below.
+  1. [OpenVX_Introduction.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/1_OpenVX_Introduction.pdf)
+  2. [OpenVX_GettingReady.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/2_OpenVX_GettingReady.pdf)
+  3. [OpenVX_Step1.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/3_OpenVX_Step1.pdf)
+  4. [OpenVX_Step2.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/4_OpenVX_Step2.pdf)
+  5. [OpenVX_Step3.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/5_OpenVX_Step3.pdf)
 
 All the tutorial exercises are kept in ``~/openvx_tutorial/tutorial_exercises``.
 The ``tutorial_exercises/CMakeLists.txt`` includes all the exercises as separate 
