@@ -69,7 +69,10 @@ Here are few helpful instructions:
 We have prepared a VirtualBox VM with this new course material. Make sure to setup your computer before starting the tutorial.
   * Choose a laptop with a recent 64-bit OS.
   * Download and install a recent VirtualBox from https://www.virtualbox.org/wiki/Downloads.
-  * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from http://tiny.cc/t5icay and extract files into a local folder.
+  * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from http://tiny.cc/t5icay and extract files into a local folder (~6 GB extracted).
+    - This VM image includes all the necessary tools and packages required to run the tutorial, including the following two OpenVX implementations options:
+      * [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD (default)
+      * Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/)
   * Run VirtualBox and add "Ubuntu-64-OpenVX" virtual machine [Machine -> Add] from the local folder. 
     - If you cannot install 64-bit VM, even though you have a 64-bit Windows, you need to enable virtualization in the BIOS. 
     - In the Security section, enable Virtualization Technology and VT-d Feature. 
