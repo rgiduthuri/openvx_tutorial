@@ -84,7 +84,7 @@
 //        LOG: [<status>] <message>
 //   3. Move to STEP 03c.
 //      Hint: use the Find functionality, CTRL-F or CMD-F, type 02c, hit ENTER.
-void log_callback( /* add the function arguments and their types here */ )
+void VX_CALLBACK log_callback( /* add the function arguments and their types here */ )
 {
 //    printf( "LOG: [ status = %d ] %s\n", status, string );
 //    fflush( stdout );

@@ -84,7 +84,7 @@
 //        LOG: [<status>] <message>
 //   3. Move to STEP 03c.
 //      Hint: use the Find functionality, CTRL-F or CMD-F, type 02c, hit ENTER.
-void log_callback( vx_context    context,
+void VX_CALLBACK log_callback( vx_context    context,
                    vx_reference  ref,
                    vx_status     status,
                    const vx_char string[] )

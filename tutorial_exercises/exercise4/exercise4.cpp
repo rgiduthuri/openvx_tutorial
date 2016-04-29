@@ -208,7 +208,7 @@ vx_status registerUserKernel( vx_context context )
 ////////
 // log_callback function should implements a mechanism to print log messages
 // from OpenVX framework onto console.
-void log_callback( vx_context context, vx_reference ref,
+void VX_CALLBACK log_callback( vx_context context, vx_reference ref,
                    vx_status status, const vx_char string[] )
 {
     printf( "LOG: [ status = %d ] %s", status, string );
