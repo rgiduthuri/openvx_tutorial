@@ -24,11 +24,12 @@ NOTE: The directory ``~`` in the text below refers to directory containing the `
 
 ## 1. Tutorial Exercises Overview
 It is best to start doing these exercises after going through the tutorial presentations below.
-  1. [OpenVX_Step1_Introduction.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/2_OpenVX_Step1_Introduction.pdf)
-  2. [OpenVX_Step2_Graphs.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/3_OpenVX_Step2_Graphs.pdf)
-  3. [OpenVX_Step3_Efficient_IO.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/4_OpenVX_Step3_Efficient_IO.pdf)
-  4. [OpenVX_Step4_User_Kernels.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/5_OpenVX_Step4_User_Kernels.pdf)
-  5. [OpenVX_Spec1.1_Changes.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/6_OpenVX_Spec1.1_Changes.pdf)
+  1. [OpenVX_Ecosystem.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/1_OpenVX_Ecosystem.pdf)
+  2. [OpenVX_Step1_Introduction.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/2_OpenVX_Step1_Introduction.pdf)
+  3. [OpenVX_Step2_Graphs.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/3_OpenVX_Step2_Graphs.pdf)
+  4. [OpenVX_Step3_Efficient_IO.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/4_OpenVX_Step3_Efficient_IO.pdf)
+  5. [OpenVX_Step4_User_Kernels.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/5_OpenVX_Step4_User_Kernels.pdf)
+  6. [OpenVX_Spec1.1_Changes.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/6_OpenVX_Spec1.1_Changes.pdf)
 
 All the tutorial exercises are kept in ``~/openvx_tutorial/tutorial_exercises``.
 The ``tutorial_exercises/CMakeLists.txt`` includes all the exercises as separate 
