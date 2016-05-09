@@ -17,19 +17,19 @@ Tutorial exercises and build procedures on various platforms are explained in th
 An additional section explains tutorial exercises with a VirtualBox VM.
   1. [Tutorial Exercises Overview](#1-tutorial-exercises-overview)
   2. [Build on any PC using VirtualBox software and a pre-built VM](#2-build-on-any-pc-using-virtualbox-software-and-a-pre-built-vm) (recommended)
-  3. [Build on Mac or Linux PC](#3-build-on-mac-or-linux-pc-using-qt-creator)
+  3. [Build on Mac or Linux PC](#3-build-on-mac-or-linux-pc)
   4. [Build on Windows PC using Visual Studio 2015 (Free)](#4-build-on-windows-pc-using-visual-studio-2015-free)
 
 NOTE: The directory ``~`` in the text below refers to directory containing the ``openvx_tutorial`` sub-directory.
 
 ## 1. Tutorial Exercises Overview
 It is best to start doing these exercises after going through the tutorial presentations below.
-  1. [OpenVX_Ecosystem.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/1_OpenVX_Ecosystem.pdf)
-  2. [OpenVX_Step1_Introduction.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/2_OpenVX_Step1_Introduction.pdf)
-  3. [OpenVX_Step2_Graphs.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/3_OpenVX_Step2_Graphs.pdf)
-  4. [OpenVX_Step3_Efficient_IO.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/4_OpenVX_Step3_Efficient_IO.pdf)
-  5. [OpenVX_Step4_User_Kernels.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/5_OpenVX_Step4_User_Kernels.pdf)
-  6. [OpenVX_Spec1.1_Changes.pdf](http://ewh.ieee.org/r6/scv/sps/openvx-material/6_OpenVX_Spec1.1_Changes.pdf)
+  1. [OpenVX_Ecosystem.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T1_OpenVX_Ecosystem.pdf)
+  2. [OpenVX_Step1_Introduction.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T2_OpenVX_Step1_Introduction.pdf)
+  3. [OpenVX_Step2_Graphs.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T3_OpenVX_Step2_Graphs.pdf)
+  4. [OpenVX_Step3_Efficient_IO.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T4_OpenVX_Step3_Efficient_IO.pdf)
+  5. [OpenVX_Step4_User_Kernels.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T5_OpenVX_Step4_User_Kernels.pdf)
+  6. [OpenVX_Spec1.1_Changes.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T6_OpenVX_Spec1.1_Changes.pdf)
 
 All the tutorial exercises are kept in ``~/openvx_tutorial/tutorial_exercises``.
 The ``tutorial_exercises/CMakeLists.txt`` includes all the exercises as separate 
@@ -70,7 +70,7 @@ Here are few helpful instructions:
 We have prepared a VirtualBox VM with this new course material. Make sure to setup your computer before starting the tutorial.
   * Choose a laptop with a recent 64-bit OS.
   * Download and install a recent VirtualBox from https://www.virtualbox.org/wiki/Downloads.
-  * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from http://tiny.cc/t5icay and extract files into a local folder (~6 GB extracted).
+  * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from https://goo.gl/FcZdvt and extract files into a local folder (~6 GB extracted).
     - This VM image includes all the necessary tools and packages required to run the tutorial, including the following two OpenVX implementations options:
       * [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core/tree/OpenVX-1.0.1) from AMD (default)
       * Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/)
