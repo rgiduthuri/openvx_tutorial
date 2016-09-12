@@ -27,6 +27,7 @@
  * \brief   Feature tracker example with two graphs and a user kernel
  *          Look for TODO STEP keyword in comments for the code snippets that you need to write.
  * \author  Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
+ *          Kari Pulli             <kari.pulli@gmail.com>
  */
 
 ////////
@@ -41,14 +42,14 @@
 //    VX/vx_api.h       -- all framework API definitions
 //    VX/vx_kernels.h   -- list of supported kernels in the OpenVX standard
 //    VX/vx_nodes.h     -- easier-to-use functions for the kernels
-//    VX/vx_vendors.h
+//    VX/vx_vendors.h   -- vendor IDs that identify the implementation and extensions
+//
 // The "VX/vxu.h" defines the immediate mode utility functions (not needed here).
 #include <VX/vx.h>
 
 ////////
 // Useful macros for OpenVX error checking:
-//   ERROR_CHECK_STATUS     - check status is VX_SUCCESS
-//   ERROR_CHECK_OBJECT     - check if the object creation is successful
+//   ERROR_CHECK_STATUS     - check whether the status is VX_SUCCESS
 #define ERROR_CHECK_STATUS( status ) { \
         vx_status status_ = (status); \
         if(status_ != VX_SUCCESS) { \
@@ -57,6 +58,7 @@
         } \
     }
 
+//   ERROR_CHECK_OBJECT     - check whether the object creation is successful
 #define ERROR_CHECK_OBJECT( obj ) { \
         vx_status status_ = vxGetStatus((vx_reference)(obj)); \
         if(status_ != VX_SUCCESS) { \
@@ -66,13 +68,13 @@
     }
 
 ////////
-// log_callback function implements a mechanism to print log messages
+// log_callback() function implements a mechanism to print log messages
 // from OpenVX framework onto console. The log_callback function can be
-// activated by calling vxRegisterLogCallback API in STEP 02.
+// activated by calling vxRegisterLogCallback() in STEP 02.
 void VX_CALLBACK log_callback( vx_context    context,
-                   vx_reference  ref,
-                   vx_status     status,
-                   const vx_char string[] )
+                               vx_reference  ref,
+                               vx_status     status,
+                               const vx_char string[] )
 {
     printf( "LOG: [ status = %d ] %s\n", status, string );
     fflush( stdout );
@@ -81,7 +83,7 @@ void VX_CALLBACK log_callback( vx_context    context,
 ////////
 // main() has all the OpenVX application code for this exercise.
 // Command-line usage:
-//   % solution_exercise2 [<video-sequence>|<camera-device-number>]
+//   % solution_exercise2a [<video-sequence>|<camera-device-number>]
 // When neither video sequence nor camera device number is specified,
 // it defaults to the video sequence in "PETS09-S1-L1-View001.avi".
 int main( int argc, char * argv[] )
@@ -101,42 +103,23 @@ int main( int argc, char * argv[] )
     }
 
     ////////
-    // Set the application configuration parameters. Note that input video
-    // sequence is an 8-bit RGB image with dimensions given by gui.GetWidth()
-    // and gui.GetHeight(). The parameters for the Harris corners algorithm are:
-    //   max_keypoint_count      - maximum number of keypoints to track
-    //   harris_strength_thresh  - minimum threshold score to keep a corner
-    //                             (computed using the normalized Sobel kernel)
-    //   harris_min_distance     - radial L2 distance for non-max suppression
-    //   harris_sensitivity      - sensitivity threshold k from the Harris-Stephens
-    //   harris_gradient_size    - window size for gradient computation
-    //   harris_block_size       - block window size used to compute the
-    //                             Harris corner score
-    //   lk_pyramid_levels       - number of pyramid levels for LK optical flow
-    //   lk_termination          - can be VX_TERM_CRITERIA_ITERATIONS or
-    //                               VX_TERM_CRITERIA_EPSILON or
-    //                               VX_TERM_CRITERIA_BOTH
-    //   lk_epsilon              - error for terminating the algorithm
-    //   lk_num_iterations       - number of iterations
-    //   lk_use_initial_estimate - turn on/off use of initial estimates
-    //   lk_window_dimension     - size of window on which to perform the algorithm
-    //   trackable_kp_ratio_thr  - threshold for ratio of keypoints being tracked and total keypoints
-    vx_uint32  width                   = gui.GetWidth();
-    vx_uint32  height                  = gui.GetHeight();
-    vx_size    max_keypoint_count      = 10000;
-    vx_float32 harris_strength_thresh  = 0.0005f;
-    vx_float32 harris_min_distance     = 5.0f;
-    vx_float32 harris_sensitivity      = 0.04f;
-    vx_int32   harris_gradient_size    = 3;
-    vx_int32   harris_block_size       = 3;
-    vx_uint32  lk_pyramid_levels       = 6;
-    vx_float32 lk_pyramid_scale        = VX_SCALE_PYRAMID_HALF;
-    vx_enum    lk_termination          = VX_TERM_CRITERIA_BOTH;
-    vx_float32 lk_epsilon              = 0.01f;
-    vx_uint32  lk_num_iterations       = 5;
-    vx_bool    lk_use_initial_estimate = vx_false_e;
-    vx_uint32  lk_window_dimension     = 6;
-    vx_float32 trackable_kp_ratio_thr  = 0.8f;
+    // Set the application configuration parameters.
+    vx_uint32  width                   = gui.GetWidth();        // image width
+    vx_uint32  height                  = gui.GetHeight();       // image height
+    vx_size    max_keypoint_count      = 10000;                 // maximum number of keypoints to track
+    vx_float32 harris_strength_thresh  = 0.0005f;               // minimum corner strength to keep a corner
+    vx_float32 harris_min_distance     = 5.0f;                  // radial L2 distance for non-max suppression
+    vx_float32 harris_sensitivity      = 0.04f;                 // multiplier k in det(A) - k * trace(A)^2
+    vx_int32   harris_gradient_size    = 3;                     // window size for gradient computation
+    vx_int32   harris_block_size       = 3;                     // block window size for Harris corner score
+    vx_uint32  lk_pyramid_levels       = 6;                     // number of pyramid levels for optical flow
+    vx_float32 lk_pyramid_scale        = VX_SCALE_PYRAMID_HALF; // pyramid levels scale by factor of two
+    vx_enum    lk_termination          = VX_TERM_CRITERIA_BOTH; // iteration termination criteria (eps & iterations)
+    vx_float32 lk_epsilon              = 0.01f;                 // convergence criterion
+    vx_uint32  lk_num_iterations       = 5;                     // maximum number of iterations
+    vx_bool    lk_use_initial_estimate = vx_false_e;            // don't use initial estimate
+    vx_uint32  lk_window_dimension     = 6;                     // window size for evaluation
+    vx_float32 trackable_kp_ratio_thr  = 0.8f;                  // threshold for the ration of tracked keypoints to all
 
     ////////********
     // Create the OpenVX context and make sure the returned context is valid.
@@ -176,8 +159,8 @@ int main( int argc, char * argv[] )
 
 
     ////////********
-    // OpenVX optical flow functionality requires pyramids of the current input
-    // image and the previous image. It also requires keypoints that correspond
+    // OpenVX optical flow functionality requires image pyramids for the current
+    // and the previous image. It also requires keypoints that correspond
     // to the previous pyramid and will output updated keypoints into
     // another keypoint array. To be able to toggle between the current and
     // the previous buffers, you need to use OpenVX delay objects and vxAgeDelay().
@@ -225,8 +208,6 @@ int main( int argc, char * argv[] )
     //   2. Similarly, get the current and previous keypoint array objects from
     //      the keypoint delay object.
     //      We gave code for one in comments; do similar for the other.
-    //   3. Use ERROR_CHECK_OBJECT for proper error checking.
-    //      We gave one error check; do similar for the others.
     vx_pyramid currentPyramid  = ( vx_pyramid ) vxGetReferenceFromDelay( pyramidDelay, 0 );
     vx_pyramid previousPyramid = ( vx_pyramid ) vxGetReferenceFromDelay( pyramidDelay, -1 );
     vx_array currentKeypoints  = ( vx_array )   vxGetReferenceFromDelay( keypointsDelay, 0 );
@@ -248,8 +229,6 @@ int main( int argc, char * argv[] )
     //      the other for feature tracking using optical flow using the
     //      vxCreateGraph API.
     //      We gave code for one graph; do similar for the other.
-    //   2. Use ERROR_CHECK_OBJECT to check the objects.
-    //      We gave one error check; do similar for the other.
     vx_graph graphHarris = vxCreateGraph( context );
     vx_graph graphTrack  = vxCreateGraph( context );
     ERROR_CHECK_OBJECT( graphHarris );
@@ -270,12 +249,10 @@ int main( int argc, char * argv[] )
     //   1. Create an IYUV image and a U8 image (for Y channel) with the same
     //      dimensions as the input RGB image. Note that the image formats for
     //      IYUV and U8 images are VX_DF_IMAGE_IYUV and VX_DF_IMAGE_U8.
-    //      Note that virtual objects are specific to a graph, so you
+    //      Since virtual objects are specific to a graph, you
     //      need to create two sets, one for each graph.
     //      We gave one fully in comments and you need to fill in missing
     //      parameters for the others.
-    //   2. Use ERROR_CHECK_OBJECT to check the objects.
-    //      We gave one error check in comments; do similar for others.
     vx_image harris_yuv_image       = vxCreateVirtualImage( graphHarris, width, height, VX_DF_IMAGE_IYUV );
     vx_image harris_gray_image      = vxCreateVirtualImage( graphHarris, width, height, VX_DF_IMAGE_U8 );
     vx_image opticalflow_yuv_image  = vxCreateVirtualImage( graphTrack,  width, height, VX_DF_IMAGE_IYUV );
@@ -288,10 +265,7 @@ int main( int argc, char * argv[] )
 
     ////////********
     // The Harris corner detector and optical flow nodes (see "VX/vx_nodes.h")
-    // take strength_thresh, min_distance, sensitivity, epsilon,
-    // num_iterations, and use_initial_estimate parameters as scalar
-    // data objects. So, you need to create scalar objects with the corresponding
-    // configuration parameters.
+    // need several scalar objects as parameters.
     //
     // TODO STEP 08:********
     //   1. Create scalar data objects of VX_TYPE_FLOAT32 for strength_thresh,
@@ -304,10 +278,8 @@ int main( int argc, char * argv[] )
     //      use_initial_estimate with initial values: lk_num_iterations and
     //      lk_use_initial_estimate. Make sure to use proper data types for
     //      these parameters.
-    //      We gave code full code for one scalar in comments; fill in
+    //      We gave code full code for one scalar in comments; fill in the
     //      missing arguments for the other.
-    //   3. Use ERROR_CHECK_OBJECT to check proper creation of objects.
-    //      We gave the error check for one scalar; do similar for other 5 scalars.
     vx_scalar strength_thresh      = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_strength_thresh );
     vx_scalar min_distance         = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_min_distance );
     vx_scalar sensitivity          = vxCreateScalar( context, VX_TYPE_FLOAT32, &harris_sensitivity );
@@ -330,7 +302,7 @@ int main( int argc, char * argv[] )
     // TODO STEP 09:********
     //   1. Use vxColorConvertNode and vxChannelExtractNode APIs to get gray
     //      scale image for Harris and Pyramid computation from the input
-    //      RGB image. Add these nodes into Harris graph.
+    //      RGB image. Add these nodes into the Harris graph.
     //      We gave code in comments with a missing parameter for you to fill in.
     //   2. Use vxGaussianPyramidNode API to add pyramid computation node.
     //      You need to use the current pyramid from the pyramid delay object.
@@ -361,26 +333,17 @@ int main( int argc, char * argv[] )
 
 
     ////////********
-    // Now, build a graph that performs pyramid computation and feature
-    // tracking using optical flow.
+    // Now, build a graph that computes image pyramid for the next frame,
+    // and tracks features using optical flow.
     //
     // TODO STEP 10:********
-    //   1. Use vxColorConvertNode and vxChannelExtractNode APIs to get a gray
-    //      scale image for Harris and Pyramid computation from the input
-    //      RGB image. Add these nodes into Harris graph.
-    //      We gave the code in comments for color convert node; do similar
-    //      one for the channel extract node.
-    //   2. Use vxGaussianPyramidNode API to add pyramid computation node.
-    //      You need to use the current pyramid from the pyramid delay object.
-    //      Most of the code is given in the comments; fill in the missing parameter.
-    //   3. Use vxOpticalFlowPyrLKNode API to add an optical flow node. You need to
+    //   1. Color convert, channel extract, and Gaussian pyramid nodes are like above.
+    //      Add them to the tracking graph.
+    //   2. Use vxOpticalFlowPyrLKNode API to add an optical flow node. You need to
     //      use the current and previous keypoints from the keypoints delay object.
     //      Fill in the missing parameters in commented code.
-    //   4. Use ERROR_CHECK_OBJECT to check proper creation of objects.
-    //   5. Release node and virtual objects immediately since the graph
-    //      retains references to them.
-    //   6. Call vxVerifyGraph to check for any errors in the graph.
-    //      Fill in the missing parameter in commented code.
+    //   3. As above, check for errors, release nodes and virtual objects,
+    //      and verify the graph.
     vx_node nodesTrack[] =
     {
         vxColorConvertNode( graphTrack, input_rgb_image, opticalflow_yuv_image ),
@@ -407,37 +370,29 @@ int main( int argc, char * argv[] )
     {
         ////////********
         // Copy the input RGB frame from OpenCV to OpenVX.
-        // In order to do this, you need to use vxAccessImagePatch and vxCommitImagePatch APIs.
-        // See "VX/vx_api.h" for the description of these APIs.
+        // Use vxAccessImagePatch and vxCommitImagePatch APIs (see "VX/vx_api.h").
         //
         // TODO STEP 11:********
         //   1. Specify the coordinates of image patch by declaring the patch
         //      as a vx_rectangle_t data type. It has four fields, we've given you the first one.
-        //      See for the documentation what are the others. The start values should be zeros,
-        //      end values should be width (for x) and height (for y).
-        //   2. Specify the memory layout of the OpenCV RGB image buffer by
-        //      declaring the layout as a vx_imagepatch_addressing_t type.
-        //      Remember that you need to specify stride_x and stride_y fields
-        //      of vx_imagepatch_addressing_t for the image buffer layout.
-        //      The stride_x should be 3 and stride_y should be gui.GetStride().
-        //      We've given you the stride_y, add the stride_x.
-        //   3. Get the pointer to buffer using gui.GetBuffer() and call
-        //      vxAccessImagePatch for VX_WRITE_ONLY usage mode with a pointer
-        //      to pointer returned by gui.GetBuffer() so COPY mode is used.
-        //      Then immediately call vxCommitImagePatch for the actual copy.
-        //      Use the image patch and memory layout in the above two steps.
-        //      We've given you the access function, please fill in the commit function.
+        //      The region goes from (0,0) to (width,height).
+        //   2. Specify the memory layout of the OpenCV RGB image buffer with vx_imagepatch_addressing_t.
+        //      You need to specify x and y strides (number of channels, length of a row).
+        //   3. Write the image data in the OpenCV image to the OpenVX image.
+        //      Use vxAccessImagePatch with VX_WRITE_ONLY, describe the image region and layout,
+        //      and provide a pointer to the image data.
+        //      Then immediately call vxCommitImagePatch to finish the operation.
         //      IMPORTANT: Note that vxCommitImagePatch takes 'void *' instead of 'void **'.
-        //   4. Compare the return status with VX_SUCCESS to check if access/
-        //      commit are successful. Or use the ERROR_CHECK_STATUS macro.
         vx_rectangle_t cv_rgb_image_region;
         cv_rgb_image_region.start_x    = 0;
         cv_rgb_image_region.start_y    = 0;
         cv_rgb_image_region.end_x      = width;
         cv_rgb_image_region.end_y      = height;
+
         vx_imagepatch_addressing_t cv_rgb_image_layout;
         cv_rgb_image_layout.stride_x   = 3;
         cv_rgb_image_layout.stride_y   = gui.GetStride();
+
         vx_uint8 * cv_rgb_image_buffer = gui.GetBuffer();
         ERROR_CHECK_STATUS( vxAccessImagePatch( input_rgb_image, &cv_rgb_image_region, 0,
                                                 &cv_rgb_image_layout, ( void ** )&cv_rgb_image_buffer, VX_WRITE_ONLY ) );
@@ -447,7 +402,8 @@ int main( int argc, char * argv[] )
 
         ////////********
         // Now that input RGB image is ready, just run a graph.
-        // Run Harris at the beginning to initialize the previous keypoints.
+        // Run Harris at the beginning to initialize the previous keypoints,
+        // on other frames run the tracking graph.
         //
         // TODO STEP 12:********
         //   1. Run a graph using vxProcessGraph API. Select Harris graph
@@ -464,29 +420,13 @@ int main( int argc, char * argv[] )
         // TODO STEP 13:********
         //   1. Use vxGetReferenceFromDelay API to get the current and previous
         //      keypoints array objects from the keypoints delay object.
-        //      Make sure to typecast the vx_reference object to vx_array.
-        //      We gave one for the previous previous keypoint array in comments;
-        //      do a similar one for the current keypoint array.
-        //   2. OpenVX array object has an attribute that keeps the current
-        //      number of items in the array. The name of the attribute is
-        //      VX_ARRAY_ATTRIBUTE_NUMITEMS and its value is of type vx_size.
-        //      Use vxQueryArray API to get number of keypoints in the
-        //      current keypoint array data object, representing number of
-        //      corners detected in the input RGB image.
-        //      IMPORTANT: Read number of items into "num_corners"
-        //      because this variable is displayed by code segment below.
-        //      We gave most part of this statement in comment; just fill in the
-        //      missing parameter.
-        //   3. The data items in output keypoint array are of type
-        //      vx_keypoint_t (see "VX/vx_types.h"). To access the array
-        //      buffer, use vxAccessArrayRange with start index = 0,
-        //      end index = number of items in the array, and usage mode =
-        //      VX_READ_ONLY. Note that the stride returned by this access
-        //      call is not guaranteed to be sizeof(vx_keypoint_t).
-        //      Also make sure that num_corners is > 0, because
-        //      vxAccessArrayRange expects end index > 0.
-        //      We gave the code for previous keypoint array in comment;
-        //      do similar one for the current keypoint array.
+        //      Cast the vx_reference object to vx_array.
+        //   2. Read the number of items stored in the array using the VX_ARRAY_ATTRIBUTE_NUMITEMS
+        //      attribute. Use vxQueryArray API, store it in "num_corners".
+        //   3. Access the array bufferf by vxAccessArrayRange with start index = 0,
+        //      end index = number of items in the array, and usage mode = VX_READ_ONLY.
+        //      You also get a stride that helps you to index the keypoints.
+        //      Ensure that num_corners is > 0, because vxAccessArrayRange expects end index > 0.
         //   4. For each item in the keypoint buffer, use vxArrayItem to
         //      access an individual keypoint and draw a marker at (x,y)
         //      using gui.DrawArrow() if tracking_status field of keypoint
@@ -495,9 +435,6 @@ int main( int argc, char * argv[] )
         //      We gave most of the code; fill in the missing parameters and uncomment.
         //   5. Hand the control of output keypoint buffer over back to
         //      OpenVX framework by calling vxCommitArrayRange API.
-        //      We gave the code for previous keypoint array in comment;
-        //      do similar one for the current keypoint array.
-        //   6. Use ERROR_CHECK_STATUS for error checking.
         vx_size num_corners = 0, num_tracking = 0;
         previousKeypoints = ( vx_array )vxGetReferenceFromDelay( keypointsDelay, -1 );
         currentKeypoints  = ( vx_array )vxGetReferenceFromDelay( keypointsDelay, 0 );
@@ -528,12 +465,10 @@ int main( int argc, char * argv[] )
 
 
         ////////********
-        // Flip the current and previous pyramid and keypoints in the delay objects.
+        // Increase the age of the delay objects to make the current entry become previous entry.
         //
         // TODO STEP 14:********
-        //   1. Use vxAgeDelay API to flip the current and previous buffers in delay objects.
-        //      You need to call vxAgeDelay for both two delay objects.
-        //   2. Use ERROR_CHECK_STATUS for error checking.
+        //   1. Use vxAgeDelay API to age the buffers in delay objects.
         ERROR_CHECK_STATUS( vxAgeDelay( pyramidDelay ) );
         ERROR_CHECK_STATUS( vxAgeDelay( keypointsDelay ) );
 
@@ -581,7 +516,6 @@ int main( int argc, char * argv[] )
     //   1. For releasing all other objects use vxRelease<Object> APIs.
     //      You have to release 2 graph objects, 1 image object, 2 delay objects,
     //      6 scalar objects, and 1 context object.
-    //   2. Use ERROR_CHECK_STATUS for error checking.
     ERROR_CHECK_STATUS( vxReleaseGraph( &graphHarris ) );
     ERROR_CHECK_STATUS( vxReleaseGraph( &graphTrack ) );
     ERROR_CHECK_STATUS( vxReleaseImage( &input_rgb_image ) );
