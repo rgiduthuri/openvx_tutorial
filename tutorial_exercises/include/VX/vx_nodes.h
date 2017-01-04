@@ -1,25 +1,30 @@
-/*******************************************************************************
-* Copyright (c) 2012-2015 The Khronos Group Inc.
-*
-* Permission is hereby granted, free of charge, to any person obtaining a
-* copy of this software and/or associated documentation files (the
-* "Materials"), to deal in the Materials without restriction, including
-* without limitation the rights to use, copy, modify, merge, publish,
-* distribute, sublicense, and/or sell copies of the Materials, and to
-* permit persons to whom the Materials are furnished to do so, subject to
-* the following conditions:
-*
-* The above copyright notice and this permission notice shall be included
-* in all copies or substantial portions of the Materials.
-*
-* THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-* MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
-******************************************************************************/
+/* 
+ * Copyright (c) 2012-2016 The Khronos Group Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and/or associated documentation files (the
+ * "Materials"), to deal in the Materials without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Materials, and to
+ * permit persons to whom the Materials are furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Materials.
+ *
+ * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
+ * KHRONOS STANDARDS. THE UNMODIFIED, NORMATIVE VERSIONS OF KHRONOS
+ * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT
+ *    https://www.khronos.org/registry/
+ *
+ * THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+ */
 
 #ifndef _OPENVX_NODES_H_
 #define _OPENVX_NODES_H_
@@ -47,7 +52,7 @@ VX_API_ENTRY vx_node VX_API_CALL vxColorConvertNode(vx_graph graph, vx_image inp
 
 /*! \brief [Graph] Creates a channel extract node.
  * \param [in] graph The reference to the graph.
- * \param [in] input The input image. Must be one of the defined \ref vx_df_image_e multi-planar formats.
+ * \param [in] input The input image. Must be one of the defined \ref vx_df_image_e multi-channel formats.
  * \param [in] channel The <tt>\ref vx_channel_e</tt> channel to extract.
  * \param [out] output The output image. Must be <tt>\ref VX_DF_IMAGE_U8</tt>.
  * <tt>\see VX_KERNEL_CHANNEL_EXTRACT</tt>
@@ -122,22 +127,22 @@ VX_API_ENTRY vx_node VX_API_CALL vxMagnitudeNode(vx_graph graph, vx_image grad_x
  * \param [out] dst The destination image of type <tt>\ref VX_DF_IMAGE_U8</tt>.
  * \param [in] type The interpolation type to use. \see vx_interpolation_type_e.
  * \ingroup group_vision_function_scale_image
- * \note The destination image must have a defined size and format. Only 
- *  <tt>\ref VX_NODE_ATTRIBUTE_BORDER_MODE</tt> value <tt>\ref VX_BORDER_MODE_UNDEFINED</tt>, 
- *  <tt>\ref VX_BORDER_MODE_REPLICATE</tt> or <tt>\ref VX_BORDER_MODE_CONSTANT</tt> is supported.
+ * \note The destination image must have a defined size and format. The border modes 
+ *  <tt>\ref VX_NODE_BORDER</tt> value <tt>\ref VX_BORDER_UNDEFINED</tt>, 
+ *  <tt>\ref VX_BORDER_REPLICATE</tt> and <tt>\ref VX_BORDER_CONSTANT</tt> are supported.
  * \return <tt>\ref vx_node</tt>.
  * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt> 
  */
 VX_API_ENTRY vx_node VX_API_CALL vxScaleImageNode(vx_graph graph, vx_image src, vx_image dst, vx_enum type);
 
-/*! \brief [Graph] Creates a Table Lookup node.
+/*! \brief [Graph] Creates a Table Lookup node. If a value from the input image is not present in the lookup table, the result is undefined.
  * \param [in] graph The reference to the graph.
- * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt>.
- * \param [in] lut The LUT which is of type <tt>\ref VX_TYPE_UINT8</tt>.
- * \param [out] output The output image of type <tt>\ref VX_DF_IMAGE_U8</tt>.
+ * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt>.
+ * \param [in] lut The LUT which is of type <tt>\ref VX_TYPE_UINT8</tt> or <tt>\ref VX_TYPE_INT16</tt>.
+ * \param [out] output The output image of the same type as the input image.
  * \ingroup group_vision_function_lut
  * \return <tt>\ref vx_node</tt>.
- * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt> 
+ * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>.
  */
 VX_API_ENTRY vx_node VX_API_CALL vxTableLookupNode(vx_graph graph, vx_image input, vx_lut lut, vx_image output);
 
@@ -186,8 +191,9 @@ VX_API_ENTRY vx_node VX_API_CALL vxMeanStdDevNode(vx_graph graph, vx_image input
  * \param [in] graph The reference to the graph.
  * \param [in] input The input image. <tt>\ref VX_DF_IMAGE_U8</tt> is supported.
  * \param [in] thresh The thresholding object that defines the parameters of
- * the operation.
- * \param [out] output The output Boolean image. Values are either 0 or 255.
+ * the operation. The <tt>\ref VX_THRESHOLD_TRUE_VALUE</tt> and <tt>\ref VX_THRESHOLD_FALSE_VALUE</tt> are taken into account. 
+ * \param [out] output The output Boolean image with values either <tt>\ref VX_THRESHOLD_TRUE_VALUE</tt> or 
+ * <tt>\ref VX_THRESHOLD_FALSE_VALUE</tt> from the \e thresh parameter.
  * \ingroup group_vision_function_threshold
  * \return <tt>\ref vx_node</tt>.
  * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt> 
@@ -254,10 +260,23 @@ VX_API_ENTRY vx_node VX_API_CALL vxBox3x3Node(vx_graph graph, vx_image input, vx
  */
 VX_API_ENTRY vx_node VX_API_CALL vxGaussian3x3Node(vx_graph graph, vx_image input, vx_image output);
 
+/*! \brief [Graph] Creates a Non-linear Filter Node.
+ * \param [in] graph The reference to the graph.
+ * \param [in] function The non-linear filter function. See <tt>\ref vx_non_linear_filter_e</tt>.
+ * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> format.
+ * \param [in] mask The mask to be applied to the Non-linear function. <tt>\ref VX_MATRIX_ORIGIN</tt> attribute is used 
+ *  to place the mask appropriately when computing the resulting image. See <tt>\ref vxCreateMatrixFromPattern</tt>.  
+ * \param [out] output The output image in <tt>\ref VX_DF_IMAGE_U8</tt> format.
+ * \return <tt>\ref vx_node</tt>.
+ * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt> 
+ * \ingroup group_vision_function_nonlinear_filter
+ */
+VX_API_ENTRY vx_node VX_API_CALL vxNonLinearFilterNode(vx_graph graph, vx_enum function, vx_image input, vx_matrix mask, vx_image output);
+
 /*! \brief [Graph] Creates a custom convolution node.
  * \param [in] graph The reference to the graph.
  * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> format.
- * \param [in] conv The vx_int16 convolution matrix.
+ * \param [in] conv The <tt>\ref vx_int16</tt> convolution matrix.
  * \param [out] output The output image in <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt> format.
  * \ingroup group_vision_function_custom_convolution
  * \return <tt>\ref vx_node</tt>.
@@ -275,6 +294,33 @@ VX_API_ENTRY vx_node VX_API_CALL vxConvolveNode(vx_graph graph, vx_image input, 
  * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>  
  */
 VX_API_ENTRY vx_node VX_API_CALL vxGaussianPyramidNode(vx_graph graph, vx_image input, vx_pyramid gaussian);
+
+/*! \brief [Graph] Creates a node for a Laplacian Image Pyramid.
+ * \param [in] graph The reference to the graph.
+ * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> format.
+ * \param [out] laplacian The Laplacian pyramid with <tt>\ref VX_DF_IMAGE_S16</tt> to construct.
+ * \param [out] output The lowest resolution image of type <tt>\ref VX_DF_IMAGE_S16</tt> necessary to reconstruct the input image from the pyramid.
+ * \ingroup group_vision_function_laplacian_pyramid
+ * \see group_pyramid
+ * \return <tt>\ref vx_node</tt>.
+ * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>  
+ */
+VX_API_ENTRY vx_node VX_API_CALL vxLaplacianPyramidNode(vx_graph graph, vx_image input,
+                                   vx_pyramid laplacian, vx_image output);
+
+/*! \brief [Graph] Reconstructs an image from a Laplacian Image pyramid.
+ * \param [in] graph The reference to the graph.
+ * \param [in] laplacian The Laplacian pyramid with <tt>\ref VX_DF_IMAGE_S16</tt> format.
+ * \param [in] input The lowest resolution image of type <tt>\ref VX_DF_IMAGE_S16</tt> for the Laplacian pyramid
+ * \param [out] output The output image of type <tt>\ref VX_DF_IMAGE_U8</tt> with the highest possible resolution reconstructed from the Laplacian pyramid.
+ * \ingroup group_vision_function_laplacian_reconstruct
+ * \see group_pyramid
+ * \return <tt>\ref vx_node</tt>.
+ * \retval 0 Node could not be created.
+ * \retval * Node handle.
+ */
+VX_API_ENTRY vx_node VX_API_CALL vxLaplacianReconstructNode(vx_graph graph, vx_pyramid laplacian, vx_image input,
+                                       vx_image output);
 
 /*! \brief [Graph] Creates an accumulate node.
  * \param [in] graph The reference to the graph.
@@ -423,7 +469,7 @@ VX_API_ENTRY vx_node VX_API_CALL vxSubtractNode(vx_graph graph,
  * \param [in] graph The reference to the graph.
  * \param [in] input The input image.
  * \param [out] output The output image.
- * \param [in] policy A scalar containing a <tt>\ref VX_TYPE_ENUM</tt> of the \ref vx_convert_policy_e enumeration.
+ * \param [in] policy A <tt>\ref VX_TYPE_ENUM</tt> of the <tt>\ref vx_convert_policy_e</tt> enumeration.
  * \param [in] shift A scalar containing a <tt>\ref VX_TYPE_INT32</tt> of the shift value.
  * \ingroup group_vision_function_convertdepth
  * \return <tt>\ref vx_node</tt>.
@@ -434,10 +480,13 @@ VX_API_ENTRY vx_node VX_API_CALL vxConvertDepthNode(vx_graph graph, vx_image inp
 /*! \brief [Graph] Creates a Canny Edge Detection Node.
  * \param [in] graph The reference to the graph.
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
- * \param [in] hyst The double threshold for hysteresis.
+ * \param [in] hyst The double threshold for hysteresis. The threshold data_type shall be either <tt>\ref VX_TYPE_UINT8</tt> 
+ * or <tt>\ref VX_TYPE_INT16</tt>. The <tt>\ref VX_THRESHOLD_TRUE_VALUE</tt> and <tt>\ref VX_THRESHOLD_FALSE_VALUE</tt> 
+ * of <tt>\ref vx_threshold</tt> are ignored.
  * \param [in] gradient_size The size of the Sobel filter window, must support at least 3, 5, and 7.
  * \param [in] norm_type A flag indicating the norm used to compute the gradient, <tt>\ref VX_NORM_L1</tt> or VX_NORM_L2.
- * \param [out] output The output image in <tt>\ref VX_DF_IMAGE_U8</tt> format with values either 0 or 255.
+ * \param [out] output The output image in <tt>\ref VX_DF_IMAGE_U8</tt> format with values either 
+ * <tt>\ref VX_THRESHOLD_TRUE_VALUE</tt> or <tt>\ref VX_THRESHOLD_FALSE_VALUE</tt> from hyst parameter.
  * \ingroup group_vision_function_canny
  * \return <tt>\ref vx_node</tt>.
  * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>  
@@ -451,11 +500,11 @@ VX_API_ENTRY vx_node VX_API_CALL vxCannyEdgeDetectorNode(vx_graph graph, vx_imag
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \param [in] matrix The affine matrix. Must be 2x3 of type \ref VX_TYPE_FLOAT32.
  * \param [in] type The interpolation type from <tt>\ref vx_interpolation_type_e</tt>.
- * <tt>\ref VX_INTERPOLATION_TYPE_AREA</tt> is not supported.
+ * <tt>\ref VX_INTERPOLATION_AREA</tt> is not supported.
  * \param [out] output The output <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \ingroup group_vision_function_warp_affine
- * \note Only <tt>\ref VX_NODE_ATTRIBUTE_BORDER_MODE</tt> value <tt>\ref VX_BORDER_MODE_UNDEFINED</tt> or
- * <tt>\ref VX_BORDER_MODE_CONSTANT</tt> is supported.
+ * \note The border modes <tt>\ref VX_NODE_BORDER</tt> value <tt>\ref VX_BORDER_UNDEFINED</tt> and
+ * <tt>\ref VX_BORDER_CONSTANT</tt> are supported.
  * \return <tt>\ref vx_node</tt>.
  * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>  
  */
@@ -466,11 +515,11 @@ VX_API_ENTRY vx_node VX_API_CALL vxWarpAffineNode(vx_graph graph, vx_image input
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \param [in] matrix The perspective matrix. Must be 3x3 of type <tt>\ref VX_TYPE_FLOAT32</tt>.
  * \param [in] type The interpolation type from <tt>\ref vx_interpolation_type_e</tt>.
- * <tt>\ref VX_INTERPOLATION_TYPE_AREA</tt> is not supported.
+ * <tt>\ref VX_INTERPOLATION_AREA</tt> is not supported.
  * \param [out] output The output <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \ingroup group_vision_function_warp_perspective
- * \note Only <tt>\ref VX_NODE_ATTRIBUTE_BORDER_MODE</tt> value <tt>\ref VX_BORDER_MODE_UNDEFINED</tt> or
- * <tt>\ref VX_BORDER_MODE_CONSTANT</tt> is supported.
+ * \note The border modes <tt>\ref VX_NODE_BORDER</tt> value <tt>\ref VX_BORDER_UNDEFINED</tt> and 
+ * <tt>\ref VX_BORDER_CONSTANT</tt> are supported.
  * \return <tt>\ref vx_node</tt>.
  * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>  
  */
@@ -486,7 +535,7 @@ VX_API_ENTRY vx_node VX_API_CALL vxWarpPerspectiveNode(vx_graph graph, vx_image 
  * implementation must support at least 3, 5, and 7.
  * \param [in] block_size The block window size used to compute the Harris Corner score.
  * The implementation must support at least 3, 5, and 7.
- * \param [out] corners The array of <tt>\ref VX_TYPE_KEYPOINT</tt> objects.
+ * \param [out] corners The array of <tt>\ref VX_TYPE_KEYPOINT</tt> objects. The order of the keypoints in this array is implementation dependent.
  * \param [out] num_corners The total number of detected corners in image (optional). Use a \ref VX_TYPE_SIZE scalar.
  * \ingroup group_vision_function_harris
  * \return <tt>\ref vx_node</tt>.
@@ -508,7 +557,8 @@ VX_API_ENTRY vx_node VX_API_CALL vxHarrisCornersNode(vx_graph graph,
  * \param [in] strength_thresh Threshold on difference between intensity of the central pixel and pixels on Bresenham's circle of radius 3 (<tt>\ref VX_TYPE_FLOAT32</tt> scalar).
  * \param [in] nonmax_suppression If true, non-maximum suppression is applied to
  * detected corners before being placed in the <tt>\ref vx_array</tt> of <tt>\ref VX_TYPE_KEYPOINT</tt> objects.
- * \param [out] corners Output corner <tt>\ref vx_array</tt> of <tt>\ref VX_TYPE_KEYPOINT</tt>.
+ * \param [out] corners Output corner <tt>\ref vx_array</tt> of <tt>\ref VX_TYPE_KEYPOINT</tt>. The order of the 
+ *                      keypoints in this array is implementation dependent.
  * \param [out] num_corners The total number of detected corners in image (optional). Use a \ref VX_TYPE_SIZE scalar.
  * \ingroup group_vision_function_fast
  * \return <tt>\ref vx_node</tt>.
@@ -532,7 +582,7 @@ VX_API_ENTRY vx_node VX_API_CALL vxFastCornersNode(vx_graph graph, vx_image inpu
  * \param [in] num_iterations The number of iterations. Use a <tt>\ref VX_TYPE_UINT32</tt> scalar.
  * \param [in] use_initial_estimate Use a <tt>\ref VX_TYPE_BOOL</tt> scalar.
  * \param [in] window_dimension The size of the window on which to perform the algorithm. See 
- *  <tt>\ref VX_CONTEXT_ATTRIBUTE_OPTICAL_FLOW_WINDOW_MAXIMUM_DIMENSION</tt>
+ *  <tt>\ref VX_CONTEXT_OPTICAL_FLOW_MAX_WINDOW_DIMENSION</tt>
  * \ingroup group_vision_function_opticalflowpyrlk
  * \return <tt>\ref vx_node</tt>.
  * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>  
@@ -554,10 +604,10 @@ VX_API_ENTRY vx_node VX_API_CALL vxOpticalFlowPyrLKNode(vx_graph graph,
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \param [in] table The remap table object.
  * \param [in] policy An interpolation type from <tt>\ref vx_interpolation_type_e</tt>.
- * <tt>\ref VX_INTERPOLATION_TYPE_AREA</tt> is not supported.
+ * <tt>\ref VX_INTERPOLATION_AREA</tt> is not supported.
  * \param [out] output The output <tt>\ref VX_DF_IMAGE_U8</tt> image.
- * \note Only <tt>\ref VX_NODE_ATTRIBUTE_BORDER_MODE</tt> value <tt>\ref VX_BORDER_MODE_UNDEFINED</tt> or
- * <tt>\ref VX_BORDER_MODE_CONSTANT</tt> is supported.
+ * \note The border modes <tt>\ref VX_NODE_BORDER</tt> value <tt>\ref VX_BORDER_UNDEFINED</tt> and 
+ * <tt>\ref VX_BORDER_CONSTANT</tt> are supported.
  * \return A <tt>\ref vx_node</tt>.
  * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>  
  * \ingroup group_vision_function_remap
@@ -568,7 +618,7 @@ VX_API_ENTRY vx_node VX_API_CALL vxRemapNode(vx_graph graph,
                     vx_enum policy,
                     vx_image output);
 
-/*! \brief [Graph] Performs a Gaussian Blur on an image then half-scales it.
+/*! \brief [Graph] Performs a Gaussian Blur on an image then half-scales it. The interpolation mode used is nearest-neighbor.
  * \details The output image size is determined by:
  * \f[
  * W_{output} = \frac{W_{input} + 1}{2} \\
@@ -578,7 +628,7 @@ VX_API_ENTRY vx_node VX_API_CALL vxRemapNode(vx_graph graph,
  * \param [in] graph The reference to the graph.
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \param [out] output The output <tt>\ref VX_DF_IMAGE_U8</tt> image.
- * \param [in] kernel_size The input size of the Gaussian filter. Supported values are 3 and 5. 
+ * \param [in] kernel_size The input size of the Gaussian filter. Supported values are 1, 3 and 5. 
  * \ingroup group_vision_function_scale_image
  * \return <tt>\ref vx_node</tt>.
  * \retval vx_node A node reference. Any possible errors preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>  

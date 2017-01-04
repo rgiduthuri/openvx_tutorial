@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2012-2015 The Khronos Group Inc.
+/* 
+ * Copyright (c) 2012-2016 The Khronos Group Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and/or associated documentation files (the
@@ -11,6 +11,11 @@
  *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Materials.
+ *
+ * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
+ * KHRONOS STANDARDS. THE UNMODIFIED, NORMATIVE VERSIONS OF KHRONOS
+ * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT
+ *    https://www.khronos.org/registry/
  *
  * THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -29,20 +34,26 @@
  * \brief The top level OpenVX Header.
  */
 
-/*! \brief Defines the maximum number of characters in a implementation string.
+/*! \brief Defines the length of the implementation name string, including the trailing zero.
  * \ingroup group_context
  */
 #define VX_MAX_IMPLEMENTATION_NAME (64)
 
-/*! \brief Defines the maximum string length of a kernel name to be added to OpenVX.
+/*! \brief Defines the length of a kernel name string to be added to OpenVX, including the trailing zero.
  * \ingroup group_kernel
  */
 #define VX_MAX_KERNEL_NAME (256)
 
-/*! \brief Defines the maximum length of a message buffer to copy from the log.
+/*! \brief Defines the length of a message buffer to copy from the log, including the trailing zero.
  * \ingroup group_basic_features
  */
 #define VX_MAX_LOG_MESSAGE_LEN (1024)
+
+/*! \brief Defines the length of the reference name string, including the trailing zero.
+ * \ingroup group_reference
+ * \see vxSetReferenceName
+ */
+#define VX_MAX_REFERENCE_NAME (64)
 
 #include <VX/vx_vendors.h>
 #include <VX/vx_types.h>
@@ -60,14 +71,15 @@
  */
 #define VX_VERSION_MINOR(x) ((x & 0xFF) << 0)
 
-/*! \brief Defines the predefined version number for 1.0.
+/*! \brief Defines the predefined version number for 1.0 and 1.1.
  * \ingroup group_basic_features
  */
 #define VX_VERSION_1_0      (VX_VERSION_MAJOR(1) | VX_VERSION_MINOR(0))
+#define VX_VERSION_1_1      (VX_VERSION_MAJOR(1) | VX_VERSION_MINOR(1))
 
 /*! Defines the OpenVX Version Number.
  * \ingroup group_basic_features
  */
-#define VX_VERSION          VX_VERSION_1_0
+#define VX_VERSION          VX_VERSION_1_1
 
 #endif

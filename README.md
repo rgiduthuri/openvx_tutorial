@@ -96,13 +96,13 @@ We have prepared a VirtualBox VM with this new course material. Make sure to set
 
 Please note that the VirtualBox VM might not have the latest version of tutorial exercises. You can copy files from this GitHub project into ``/home/openvx/openvx_tutorial`` directory when new updates are available.
 
-## 3. Build on Mac or Linux PC
+## 3. Build on Mac or Linux PC (OpenVX 1.1)
 In order to build these tutorial exercises, you need the following:
   * Laptop with a recent 64-bit OS (OS X or Linux)
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
   * Download and install [Qt Creator](http://www.qt.io/download-open-source/) (optional)
   * Download and install an OpenVX implementation:
-    - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core/tree/OpenVX-1.0.1) from AMD
+    - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD
       * Copy the source code into ``~/openvx_tutorial/tutorial_exercises/amdovx-core`` directory.
       * *CPU only build will be used for this tutorial*.
     - Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/).
@@ -123,15 +123,9 @@ Create an empty folder ``~/openvx_tutorial/build-open-source``. The directory st
   │   ├── CMakeLists.txt
   │   ├── exercise1/
   │   ├── exercise2/
-  │   ├── exercise2a/
-  │   ├── exercise3/
-  │   ├── exercise4/
   │   ├── include/
   │   ├── solution_exercise1/
   │   ├── solution_exercise2/
-  │   ├── solution_exercise2a/
-  │   ├── solution_exercise3/
-  │   └── solution_exercise4/
   └── tutorial_videos/
       └── PETS09-S1-L1-View001.avi
 ```
@@ -154,7 +148,7 @@ Create an empty folder ``~/openvx_tutorial/build-open-source``. The directory st
   * Compile and run the project by clicking the higher of the green triangles at left bottom, or with *CTRL-R*.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
   
-## 4. Build on Windows PC using Visual Studio 2015 (Free)
+## 4. Build on Windows PC using Visual Studio 2015 (Free) (OpenVX 1.1)
 In order to build these tutorial exercises, you need the following:
   * Laptop with a recent Windows 64-bit OS
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html) and set ``OpenCV_DIR`` environment variable to ``<installed-folder>\opencv\build`` folder.

@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2012-2015 The Khronos Group Inc.
+/* 
+ * Copyright (c) 2012-2016 The Khronos Group Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and/or associated documentation files (the
@@ -11,6 +11,11 @@
  *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Materials.
+ *
+ * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
+ * KHRONOS STANDARDS. THE UNMODIFIED, NORMATIVE VERSIONS OF KHRONOS
+ * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT
+ *    https://www.khronos.org/registry/
  *
  * THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -46,7 +51,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuColorConvert(vx_context context, vx_image 
 
 /*! \brief [Immediate] Invokes an immediate Channel Extract.
  * \param [in] context The reference to the overall context.
- * \param [in] input The input image. Must be one of the defined <tt>\ref vx_df_image_e</tt> multiplanar formats.
+ * \param [in] input The input image. Must be one of the defined <tt>\ref vx_df_image_e</tt> multi-channel formats.
  * \param [in] channel The <tt>\ref vx_channel_e</tt> enumeration to extract.
  * \param [out] output The output image. Must be <tt>\ref VX_DF_IMAGE_U8</tt>.
  * \ingroup group_vision_function_channelextract
@@ -86,25 +91,25 @@ VX_API_ENTRY vx_status VX_API_CALL vxuSobel3x3(vx_context context, vx_image inpu
  * \param [in] context The reference to the overall context.
  * \param [in] grad_x The input x image. This must be in <tt>\ref VX_DF_IMAGE_S16</tt> format.
  * \param [in] grad_y The input y image. This must be in <tt>\ref VX_DF_IMAGE_S16</tt> format.
- * \param [out] output The magnitude image. This will be in <tt>\ref VX_DF_IMAGE_S16</tt> format.
+ * \param [out] mag The magnitude image. This will be in <tt>\ref VX_DF_IMAGE_S16</tt> format.
  * \ingroup group_vision_function_magnitude
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  */
-VX_API_ENTRY vx_status VX_API_CALL vxuMagnitude(vx_context context, vx_image grad_x, vx_image grad_y, vx_image output);
+VX_API_ENTRY vx_status VX_API_CALL vxuMagnitude(vx_context context, vx_image grad_x, vx_image grad_y, vx_image mag);
 
 /*! \brief [Immediate] Invokes an immediate Phase.
  * \param [in] context The reference to the overall context.
  * \param [in] grad_x The input x image. This must be in <tt>\ref VX_DF_IMAGE_S16</tt> format.
  * \param [in] grad_y The input y image. This must be in <tt>\ref VX_DF_IMAGE_S16</tt> format.
- * \param [out] output The phase image. This will be in <tt>\ref VX_DF_IMAGE_U8</tt> format.
+ * \param [out] orientation The phase image. This will be in <tt>\ref VX_DF_IMAGE_U8</tt> format.
  * \ingroup group_vision_function_phase
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  */
-VX_API_ENTRY vx_status VX_API_CALL vxuPhase(vx_context context, vx_image grad_x, vx_image grad_y, vx_image output);
+VX_API_ENTRY vx_status VX_API_CALL vxuPhase(vx_context context, vx_image grad_x, vx_image grad_y, vx_image orientation);
 
 /*! \brief [Immediate] Scales an input image to an output image.
  * \param [in] context The reference to the overall context.
@@ -120,8 +125,8 @@ VX_API_ENTRY vx_status VX_API_CALL vxuScaleImage(vx_context context, vx_image sr
 
 /*! \brief [Immediate] Processes the image through the LUT.
  * \param [in] context The reference to the overall context.
- * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt>
- * \param [in] lut The LUT which is of type VX_TYPE_UINT8
+ * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt>.
+ * \param [in] lut The LUT which is of type <tt>\ref VX_TYPE_UINT8</tt> or <tt>\ref VX_TYPE_INT16</tt>.
  * \param [out] output The output image of type <tt>\ref VX_DF_IMAGE_U8</tt>
  * \ingroup group_vision_function_lut
  * \return A <tt>\ref vx_status_e</tt> enumeration.
@@ -180,8 +185,9 @@ VX_API_ENTRY vx_status VX_API_CALL vxuMeanStdDev(vx_context context, vx_image in
  * \param [in] context The reference to the overall context.
  * \param [in] input The input image. <tt>\ref VX_DF_IMAGE_U8</tt> is supported.
  * \param [in] thresh The thresholding object that defines the parameters of
- * the operation.
- * \param [out] output The output Boolean image. Values are either 0 or 255.
+ * the operation. The <tt>\ref VX_THRESHOLD_TRUE_VALUE</tt> and <tt>\ref VX_THRESHOLD_FALSE_VALUE</tt> are taken into account.
+ * \param [out] output The output Boolean image with values either <tt>\ref VX_THRESHOLD_TRUE_VALUE</tt> or 
+ * <tt>\ref VX_THRESHOLD_FALSE_VALUE</tt> from the \e thresh parameter.
  * \ingroup group_vision_function_threshold
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
@@ -255,18 +261,33 @@ VX_API_ENTRY vx_status VX_API_CALL vxuBox3x3(vx_context context, vx_image input,
  */
 VX_API_ENTRY vx_status VX_API_CALL vxuGaussian3x3(vx_context context, vx_image input, vx_image output);
 
+/*! \brief [Immediate] Creates a Non-linear Filter Node.
+ * \param [in] context The reference to the overall context.
+ * \param [in] function The non-linear filter function. See <tt>\ref vx_non_linear_filter_e</tt>.
+ * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> format.
+ * \param [in] mask The mask to be applied to the Non-linear function. <tt>\ref VX_MATRIX_ORIGIN</tt> attribute is used 
+ * to place the mask appropriately when computing the resulting image. See <tt>\ref vxCreateMatrixFromPattern</tt>.  
+ * \param [out] output The output image in <tt>\ref VX_DF_IMAGE_U8</tt> format.
+ * \return A <tt>\ref vx_status_e</tt> enumeration.
+ * \retval VX_SUCCESS Success
+ * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
+ * \ingroup group_vision_function_nonlinear_filter
+ */
+VX_API_ENTRY vx_status VX_API_CALL vxuNonLinearFilter(vx_context context, vx_enum function, vx_image input, vx_matrix mask, vx_image output);
+
+
 /*! \brief [Immediate] Computes a convolution on the input image with the supplied
  * matrix.
  * \param [in] context The reference to the overall context.
  * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> format.
- * \param [in] matrix The convolution matrix.
+ * \param [in] conv The <tt>\ref vx_int16</tt> convolution matrix.
  * \param [out] output The output image in <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt> format.
  * \ingroup group_vision_function_custom_convolution
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  */
-VX_API_ENTRY vx_status VX_API_CALL vxuConvolve(vx_context context, vx_image input, vx_convolution matrix, vx_image output);
+VX_API_ENTRY vx_status VX_API_CALL vxuConvolve(vx_context context, vx_image input, vx_convolution conv, vx_image output);
 
 /*! \brief [Immediate] Computes a Gaussian pyramid from an input image.
  * \param [in] context The reference to the overall context.
@@ -278,6 +299,33 @@ VX_API_ENTRY vx_status VX_API_CALL vxuConvolve(vx_context context, vx_image inpu
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  */
 VX_API_ENTRY vx_status VX_API_CALL vxuGaussianPyramid(vx_context context, vx_image input, vx_pyramid gaussian);
+
+/*! \brief [Immediate] Computes a Laplacian pyramid from an input image.
+ * \param [in] context The reference to the overall context.
+ * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> format.
+ * \param [out] laplacian The Laplacian pyramid with <tt>\ref VX_DF_IMAGE_S16</tt> to construct.
+ * \param [out] output The lowest resolution image of type <tt>\ref VX_DF_IMAGE_S16</tt> necessary to reconstruct the input image from the pyramid.
+ * \ingroup group_vision_function_laplacian_pyramid
+ * \see group_pyramid
+ * \return A <tt>\ref vx_status</tt> enumeration.
+ * \retval VX_SUCCESS Success.
+ * \retval * An error occured. See <tt>\ref vx_status_e</tt>
+ */
+VX_API_ENTRY vx_status VX_API_CALL vxuLaplacianPyramid(vx_context context, vx_image input, vx_pyramid laplacian, vx_image output);
+
+/*! \brief [Immediate] Reconstructs an image from a Laplacian Image pyramid.
+ * \param [in] context The reference to the overall context.
+ * \param [in] laplacian The Laplacian pyramid with <tt>\ref VX_DF_IMAGE_S16</tt> format.
+ * \param [in] input The lowest resolution image of type <tt>\ref VX_DF_IMAGE_S16</tt> for the Laplacian pyramid
+ * \param [out] output The output image of type <tt>\ref VX_DF_IMAGE_U8</tt> with the highest possible resolution reconstructed from the Laplacian pyramid.
+ * \ingroup group_vision_function_laplacian_reconstruct
+ * \see group_pyramid
+ * \return A <tt>\ref vx_status</tt> enumeration.
+ * \retval VX_SUCCESS Success.
+ * \retval * An error occured. See <tt>\ref vx_status_e</tt>
+ */
+VX_API_ENTRY vx_status VX_API_CALL vxuLaplacianReconstruct(vx_context context, vx_pyramid laplacian, vx_image input,
+                                       vx_image output);
 
 /*! \brief [Immediate] Computes an accumulation.
  * \param [in] context The reference to the overall context.
@@ -293,14 +341,14 @@ VX_API_ENTRY vx_status VX_API_CALL vxuAccumulateImage(vx_context context, vx_ima
 /*! \brief [Immediate] Computes a weighted accumulation.
  * \param [in] context The reference to the overall context.
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
- * \param [in] scale A <tt>\ref VX_TYPE_FLOAT32</tt> type, the input value with the range \f$ 0.0 \le \alpha \le 1.0 \f$.
+ * \param [in] alpha A <tt>\ref VX_TYPE_FLOAT32</tt> type, the input value with the range \f$ 0.0 \le \alpha \le 1.0 \f$.
  * \param [in,out] accum The <tt>\ref VX_DF_IMAGE_U8</tt> accumulation image.
  * \ingroup group_vision_function_accumulate_weighted
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  */
-VX_API_ENTRY vx_status VX_API_CALL vxuAccumulateWeightedImage(vx_context context, vx_image input, vx_scalar scale, vx_image accum);
+VX_API_ENTRY vx_status VX_API_CALL vxuAccumulateWeightedImage(vx_context context, vx_image input, vx_scalar alpha, vx_image accum);
 
 /*! \brief [Immediate] Computes a squared accumulation.
  * \param [in] context The reference to the overall context.
@@ -317,12 +365,12 @@ VX_API_ENTRY vx_status VX_API_CALL vxuAccumulateSquareImage(vx_context context, 
 /*! \brief [Immediate] Computes the minimum and maximum values of the image.
  * \param [in] context The reference to the overall context.
  * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt> format.
- * \param [out] minVal The minimum value in the image.
- * \param [out] maxVal The maximum value in the image.
- * \param [out] minLoc The minimum locations (optional). If the input image has several minimums, the kernel will return all of them).
- * \param [out] maxLoc The maximum locations (optional). If the input image has several maximums, the kernel will return all of them).
- * \param [out] minCount The total number of detected minimums in image (optional).
- * \param [out] maxCount The total number of detected maximums in image (optional).
+ * \param [out] minVal The minimum value in the image, which corresponds to the type of the input.
+ * \param [out] maxVal The maximum value in the image, which corresponds to the type of the input.
+ * \param [out] minLoc The minimum <tt>\ref VX_TYPE_COORDINATES2D</tt> locations (optional). If the input image has several minimums, the kernel will return up to the capacity of the array.
+ * \param [out] maxLoc The maximum <tt>\ref VX_TYPE_COORDINATES2D</tt> locations (optional). If the input image has several maximums, the kernel will return up to the capacity of the array.
+ * \param [out] minCount The total number of detected minimums in image (optional). Use a <tt>\ref VX_TYPE_UINT32</tt> scalar.
+ * \param [out] maxCount The total number of detected maximums in image (optional). Use a <tt>\ref VX_TYPE_UINT32</tt> scalar.
  * \ingroup group_vision_function_minmaxloc
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
@@ -337,8 +385,8 @@ VX_API_ENTRY vx_status VX_API_CALL vxuMinMaxLoc(vx_context context, vx_image inp
  * \param [in] context The reference to the overall context.
  * \param [in] input The input image.
  * \param [out] output The output image.
- * \param [in] policy A \ref vx_convert_policy_e enumeration.
- * \param [in] shift The shift value.
+ * \param [in] policy A <tt>\ref VX_TYPE_ENUM</tt> of the <tt>\ref vx_convert_policy_e</tt> enumeration.
+ * \param [in] shift A scalar containing a <tt>\ref VX_TYPE_INT32</tt> of the shift value.
  * \ingroup group_vision_function_convertdepth
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
@@ -349,10 +397,13 @@ VX_API_ENTRY vx_status VX_API_CALL vxuConvertDepth(vx_context context, vx_image 
 /*! \brief [Immediate] Computes Canny Edges on the input image into the output image.
  * \param [in] context The reference to the overall context.
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
- * \param [in] hyst The double threshold for hysteresis.
+ * \param [in] hyst The double threshold for hysteresis. The threshold data_type shall be either <tt>\ref VX_TYPE_UINT8</tt> 
+ * or <tt>\ref VX_TYPE_INT16</tt>. The <tt>\ref VX_THRESHOLD_TRUE_VALUE</tt> and <tt>\ref VX_THRESHOLD_FALSE_VALUE</tt> 
+ * of <tt>\ref vx_threshold</tt> are ignored.
  * \param [in] gradient_size The size of the Sobel filter window, must support at least 3, 5 and 7.
  * \param [in] norm_type A flag indicating the norm used to compute the gradient, VX_NORM_L1 or VX_NORM_L2.
- * \param [out] output The output image in <tt>\ref VX_DF_IMAGE_U8</tt> format.
+ * \param [out] output The output image in <tt>\ref VX_DF_IMAGE_U8</tt> format with values either 
+ * <tt>\ref VX_THRESHOLD_TRUE_VALUE</tt> or <tt>\ref VX_THRESHOLD_FALSE_VALUE</tt> from hyst parameter.
  * \ingroup group_vision_function_canny
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
@@ -362,11 +413,11 @@ VX_API_ENTRY vx_status VX_API_CALL vxuCannyEdgeDetector(vx_context context, vx_i
                                vx_int32 gradient_size, vx_enum norm_type,
                                vx_image output);
 
-/*! \brief [Immediate] Performs a Gaussian Blur on an image then half-scales it.
+/*! \brief [Immediate] Performs a Gaussian Blur on an image then half-scales it. The interpolation mode used is nearest-neighbor.
  * \param [in] context The reference to the overall context.
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \param [out] output The output <tt>\ref VX_DF_IMAGE_U8</tt> image.
- * \param [in] kernel_size The input size of the Gaussian filter. Supported values are 3 and 5.
+ * \param [in] kernel_size The input size of the Gaussian filter. Supported values are 1, 3 and 5.
  * \ingroup group_vision_function_scale_image
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
@@ -425,7 +476,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuNot(vx_context context, vx_image input, vx
  * \param [in] context The reference to the overall context.
  * \param [in] in1 A <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt> input image.
  * \param [in] in2 A <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt> input image.
- * \param [in] scale The scale value.
+ * \param [in] scale A non-negative <tt>\ref VX_TYPE_FLOAT32</tt> multiplied to each product before overflow handling.
  * \param [in] overflow_policy A <tt>\ref vx_convert_policy_e</tt> enumeration.
  * \param [in] rounding_policy A <tt>\ref vx_round_policy_e</tt> enumeration.
  * \param [out] out The output image in <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt> format.
@@ -467,7 +518,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuSubtract(vx_context context, vx_image in1,
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \param [in] matrix The affine matrix. Must be 2x3 of type \ref VX_TYPE_FLOAT32.
  * \param [in] type The interpolation type from \ref vx_interpolation_type_e.
- * \ref VX_INTERPOLATION_TYPE_AREA is not supported.
+ * \ref VX_INTERPOLATION_AREA is not supported.
  * \param [out] output The output <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \ingroup group_vision_function_warp_affine
  * \return A <tt>\ref vx_status_e</tt> enumeration.
@@ -481,7 +532,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuWarpAffine(vx_context context, vx_image in
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \param [in] matrix The perspective matrix. Must be 3x3 of type \ref VX_TYPE_FLOAT32.
  * \param [in] type The interpolation type from \ref vx_interpolation_type_e.
- * \ref VX_INTERPOLATION_TYPE_AREA is not supported.
+ * \ref VX_INTERPOLATION_AREA is not supported.
  * \param [out] output The output <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \ingroup group_vision_function_warp_perspective
  * \return A <tt>\ref vx_status_e</tt> enumeration.
@@ -500,7 +551,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuWarpPerspective(vx_context context, vx_ima
  * implementation must support at least 3, 5, and 7.
  * \param [in] block_size The block window size used to compute the harris corner score.
  * The implementation must support at least 3, 5, and 7.
- * \param [out] corners The array of <tt>\ref VX_TYPE_KEYPOINT</tt> structs.
+ * \param [out] corners The array of <tt>\ref VX_TYPE_KEYPOINT</tt> structs. The order of the keypoints in this array is implementation dependent.
  * \param [out] num_corners The total number of detected corners in image (optional). Use a \ref VX_TYPE_SIZE scalar
  * \ingroup group_vision_function_harris
  * \return A <tt>\ref vx_status_e</tt> enumeration.
@@ -524,7 +575,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuHarrisCorners(vx_context context,
  * \param [in] strength_thresh Threshold on difference between intensity of the central pixel and pixels on Bresenham's circle of radius 3 (<tt>\ref VX_TYPE_FLOAT32</tt> scalar)
  * \param [in] nonmax_suppression If true, non-maximum suppression is applied to
  * detected corners before being places in the <tt>\ref vx_array</tt> of <tt>\ref VX_TYPE_KEYPOINT</tt> structs.
- * \param [out] corners Output corner <tt>\ref vx_array</tt> of <tt>\ref VX_TYPE_KEYPOINT</tt>.
+ * \param [out] corners Output corner <tt>\ref vx_array</tt> of <tt>\ref VX_TYPE_KEYPOINT</tt>. The order of the keypoints in this array is implementation dependent.
  * \param [out] num_corners The total number of detected corners in image (optional). Use a \ref VX_TYPE_SIZE scalar.
  * \ingroup group_vision_function_fast
  * \return A <tt>\ref vx_status_e</tt> enumeration.
@@ -535,8 +586,8 @@ VX_API_ENTRY vx_status VX_API_CALL vxuFastCorners(vx_context context, vx_image i
 
 /*! \brief [Immediate] Computes an optical flow on two images.
  * \param [in] context The reference to the overall context.
- * \param [in] old_images Input of first (old) image pyramid
- * \param [in] new_images Input of destination (new) image pyramid
+ * \param [in] old_images Input of first (old) image pyramid in <tt>\ref VX_DF_IMAGE_U8</tt>.
+ * \param [in] new_images Input of destination (new) image pyramid in <tt>\ref VX_DF_IMAGE_U8</tt>
  * \param [in] old_points an array of key points in a vx_array of <tt>\ref VX_TYPE_KEYPOINT</tt> those key points are defined at
  *  the old_images high resolution pyramid
  * \param [in] new_points_estimates an array of estimation on what is the output key points in a <tt>\ref vx_array</tt> of
@@ -549,7 +600,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuFastCorners(vx_context context, vx_image i
  * \param [in] num_iterations is the number of iterations. Use a <tt>\ref VX_TYPE_UINT32</tt> scalar.
  * \param [in] use_initial_estimate Can be set to either <tt>\ref vx_false_e</tt> or <tt>\ref vx_true_e</tt>.
  * \param [in] window_dimension The size of the window on which to perform the algorithm. See 
- *  <tt>\ref VX_CONTEXT_ATTRIBUTE_OPTICAL_FLOW_WINDOW_MAXIMUM_DIMENSION</tt>
+ *  <tt>\ref VX_CONTEXT_OPTICAL_FLOW_MAX_WINDOW_DIMENSION</tt>
  *
  * \ingroup group_vision_function_opticalflowpyrlk
  * \return A <tt>\ref vx_status_e</tt> enumeration.
@@ -573,7 +624,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuOpticalFlowPyrLK(vx_context context,
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \param [in] table The remap table object.
  * \param [in] policy The interpolation policy from \ref vx_interpolation_type_e.
- * \ref VX_INTERPOLATION_TYPE_AREA is not supported.
+ * \ref VX_INTERPOLATION_AREA is not supported.
  * \param [out] output The output <tt>\ref VX_DF_IMAGE_U8</tt> image.
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \ingroup group_vision_function_remap

@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2012-2015 The Khronos Group Inc.
+/* 
+ * Copyright (c) 2012-2016 The Khronos Group Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and/or associated documentation files (the
@@ -11,6 +11,11 @@
  *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Materials.
+ *
+ * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
+ * KHRONOS STANDARDS. THE UNMODIFIED, NORMATIVE VERSIONS OF KHRONOS
+ * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT
+ *    https://www.khronos.org/registry/
  *
  * THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -53,14 +58,6 @@ enum vx_library_e {
  * \ingroup group_kernel
  */
 enum vx_kernel_e {
-
-    /*!
-     * \brief The invalid kernel is used to for conformance failure in relation to
-     * some kernel operation (Get/Release).
-     * \details If the kernel is executed it shall always return an error.
-     * The kernel has no parameters. To address by name use "org.khronos.openvx.invalid".
-     */
-    VX_KERNEL_INVALID = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x0,
 
     /*!
      * \brief The Color Space conversion kernel.
@@ -280,11 +277,27 @@ enum vx_kernel_e {
      */
     VX_KERNEL_REMAP = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x28,
 
-
     /*! \brief The Half Scale Gaussian Kernel.
      * \see group_vision_function_scale_image
      */
     VX_KERNEL_HALFSCALE_GAUSSIAN = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x29,
+
+    /* kernel added in OpenVX 1.1 */
+
+    /*! \brief The Laplacian Image Pyramid Kernel.
+    * \see group_vision_function_laplacian_pyramid
+    */
+    VX_KERNEL_LAPLACIAN_PYRAMID = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x2A,
+
+    /*! \brief The Laplacian Pyramid Reconstruct Kernel.
+    * \see group_vision_function_laplacian_pyramid
+    */
+    VX_KERNEL_LAPLACIAN_RECONSTRUCT = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x2B,
+
+    /*! \brief The Non Linear Filter Kernel.
+    * \see group_vision_function_nonlinear_filter
+    */
+    VX_KERNEL_NON_LINEAR_FILTER = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x2C,
 
     /* insert new kernels here */
     VX_KERNEL_MAX_1_0, /*!< \internal Used for bounds checking in the conformance test. */
