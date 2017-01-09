@@ -370,7 +370,7 @@ int main( int argc, char * argv[] )
                                               &cv_rgb_image_layout, cv_rgb_image_buffer,
                                               VX_WRITE_ONLY, VX_MEMORY_TYPE_HOST ) );
 
-        ////////********
+        ////////
         // Now that input RGB image is ready, just run the graph.
         ERROR_CHECK_STATUS( vxProcessGraph( graph ) );
 

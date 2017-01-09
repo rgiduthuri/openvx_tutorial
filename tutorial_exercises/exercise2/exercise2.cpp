@@ -348,12 +348,12 @@ int main( int argc, char * argv[] )
     // TODO STEP 07:********
     //   1. Use userMedianBlurNode function to add "median_blur" node.
     //      We gave most of the code in comments; fill in parameters for user kernel.
-//    vx_node nodes[] =
-//    {
-//        vxColorConvertNode(   graph, input_rgb_image, yuv_image ),
-//        vxChannelExtractNode( graph, yuv_image, VX_CHANNEL_Y, luma_image ),
+    vx_node nodes[] =
+    {
+        vxColorConvertNode(   graph, input_rgb_image, yuv_image ),
+        vxChannelExtractNode( graph, yuv_image, VX_CHANNEL_Y, output_filtered_image /* change to luma_image */ ),
 //        userMedianBlurNode(   graph, /* Fill in parameters */ )
-//    };
+    };
 //    for( vx_size i = 0; i < sizeof( nodes ) / sizeof( nodes[0] ); i++ )
 //    {
 //        ERROR_CHECK_OBJECT( nodes[i] );
@@ -385,13 +385,9 @@ int main( int argc, char * argv[] )
                                               &cv_rgb_image_layout, cv_rgb_image_buffer,
                                               VX_WRITE_ONLY, VX_MEMORY_TYPE_HOST ) );
 
-        ////////********
+        ////////
         // Now that input RGB image is ready, just run the graph.
-        // TODO STEP 08:********
-        //   1. Use vxProcessGraph to run the graph.
-        //      We gave the code in comments; just uncomment.
-//        ERROR_CHECK_STATUS( vxProcessGraph( graph ) );
-
+        ERROR_CHECK_STATUS( vxProcessGraph( graph ) );
 
         ////////
         // Display the output filtered image.
@@ -419,7 +415,7 @@ int main( int argc, char * argv[] )
         }
     }
 
-    ////////********
+    ////////
     // Query graph performance using VX_GRAPH_PERFORMANCE and print timing
     // in milliseconds. Note that time units of vx_perf_t fields are nanoseconds.
     vx_perf_t perf = { 0 };

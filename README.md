@@ -18,18 +18,17 @@ An additional section explains tutorial exercises with a VirtualBox VM.
   1. [Tutorial Exercises Overview](#1-tutorial-exercises-overview)
   2. [Build on any PC using VirtualBox software and a pre-built VM](#2-build-on-any-pc-using-virtualbox-software-and-a-pre-built-vm) (recommended)
   3. [Build on Mac or Linux PC](#3-build-on-mac-or-linux-pc)
-  4. [Build on Windows PC using Visual Studio 2015 (Free)](#4-build-on-windows-pc-using-visual-studio-2015-free)
+  4. [Build on Windows PC using Visual Studio](#4-build-on-windows-pc-using-visual-studio)
 
 NOTE: The directory ``~`` in the text below refers to directory containing the ``openvx_tutorial`` sub-directory.
 
 ## 1. Tutorial Exercises Overview
 It is best to start doing these exercises after going through the tutorial presentations below.
-  1. [OpenVX_Ecosystem.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T1_OpenVX_Ecosystem.pdf)
-  2. [OpenVX_Step1_Introduction.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T2_OpenVX_Step1_Introduction.pdf)
-  3. [OpenVX_Step2_Graphs.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T3_OpenVX_Step2_Graphs.pdf)
-  4. [OpenVX_Step3_Efficient_IO.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T4_OpenVX_Step3_Efficient_IO.pdf)
-  5. [OpenVX_Step4_User_Kernels.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T5_OpenVX_Step4_User_Kernels.pdf)
-  6. [OpenVX_Spec1.1_Changes.pdf](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T6_OpenVX_Spec1.1_Changes.pdf)
+  1. [OpenVX ecosystem overview](https://goo.gl/0udqwF)
+  2. [Hands-on programming session with exercise1](https://goo.gl/vkY2XM)
+  3. [Brief overview of OpenVX 1.1 features and extensions](https://goo.gl/DeFsKr)
+  4. [Efficient IO](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T4_OpenVX_Step3_Efficient_IO.pdf)
+  5. [User Kernels with exercise2](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T5_OpenVX_Step4_User_Kernels.pdf)
 
 All the tutorial exercises are kept in ``~/openvx_tutorial/tutorial_exercises``.
 The ``tutorial_exercises/CMakeLists.txt`` includes all the exercises as separate 
@@ -38,11 +37,8 @@ as the entry point. All the include files are kept in the
 ``tutorial_exercises/include`` directory.
 
 The ``tutorial_exercises`` sub-directory contains four exercises:
-  * ``exercise1``: framework basics, import media, run a keypoint detector
-  * ``exercise2``: graph concepts, keypoint tracking
-  * ``exercise2a``: framework basics, graph concepts, keypoint tracking (exercise1+exercise2)
-  * ``exercise3``: user kernels, build a wrapper kernel to OpenCV function
-  * ``exercise4``: user kernels, build a keypoint tracker
+  * ``exercise1``: framework basics, graph concepts, keypoint tracking (exercise1+exercise2)
+  * ``exercise2``: user kernels, build a wrapper kernel to OpenCV function
 
 There are additional folders with full solutions:
   * ``solution_exerciseN``: complete solution of ``exerciseN``. Just for reference.
@@ -96,7 +92,7 @@ We have prepared a VirtualBox VM with this new course material. Make sure to set
 
 Please note that the VirtualBox VM might not have the latest version of tutorial exercises. You can copy files from this GitHub project into ``/home/openvx/openvx_tutorial`` directory when new updates are available.
 
-## 3. Build on Mac or Linux PC (OpenVX 1.1)
+## 3. Build on Mac or Linux PC
 In order to build these tutorial exercises, you need the following:
   * Laptop with a recent 64-bit OS (OS X or Linux)
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
@@ -136,6 +132,7 @@ Create an empty folder ``~/openvx_tutorial/build-open-source``. The directory st
 ### 3.2 Build using open-source OpenVX in Qt Creator
   * Open Project ``~/openvx_tutorial/tutorial_exercises/CMakeLists.txt``.
   * Click *"Configure Project"* to open CMake Wizard
+  * CPU only build will be used for this tutorial, unless CMake build flag ENABLE_OPENCL=TRUE is selected.
   * Click *"Run CMake"* and *"Done"*
   * Compile and run the project by clicking the higher of the green triangles at left bottom, or with *CTRL-R*.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
@@ -147,37 +144,42 @@ Create an empty folder ``~/openvx_tutorial/build-open-source``. The directory st
     - Click *"Run CMake"* and *"Done"*
   * Compile and run the project by clicking the higher of the green triangles at left bottom, or with *CTRL-R*.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
-  
-## 4. Build on Windows PC using Visual Studio 2015 (Free) (OpenVX 1.1)
+
+## 4. Build on Windows PC using Visual Studio
 In order to build these tutorial exercises, you need the following:
   * Laptop with a recent Windows 64-bit OS
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html) and set ``OpenCV_DIR`` environment variable to ``<installed-folder>\opencv\build`` folder.
   * Download and install latest [CMake](https://cmake.org/download/)
-  * Download and install [Visual Studio Community (Free)](https://www.visualstudio.com/downloads/download-visual-studio-vs)
+  * Download and install [Visual Studio 2015 Community (Free) or Visual Studio 2013](https://www.visualstudio.com/downloads/download-visual-studio-vs)
   * Download and install an OpenVX implementation:
     - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD
       * Copy the source code into ``~/openvx_tutorial/tutorial_exercises/amdovx-core`` directory.
-      * *CPU only build will be used for this tutorial*.
+	  * *CPU only build will be used for this tutorial, unless CMake build flag ENABLE_OPENCL=TRUE is selected (see below)*.
     - Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/).
       * Follow the instructions in openvx_sample/README to create pre-built OpenVX libraries
     - See [Khronos OpenVX Resources](https://www.khronos.org/openvx/resources) for available commertial implementations.
   * Download [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) and keep it in ``~/openvx_tutorial/tutorial_videos`` folder. 
 
-### 4.1 Build using open-source OpenVX in Visual Studio 2015
+### 4.1 Build using open-source OpenVX in Visual Studio
   * Run CMake (cmake-gui)
     - Click *Browse Source* button and select ``~/openvx_tutorial/tutorial_exercises``
     - Click *Browse Build* button and select ``~/openvx_tutorial/build-open-source``
-    - Click *Configure* button; you get a window asking for compilers to use: select *"Visual Studio 14 2015 Win64"*
+    - To enable OpenCL code path in amdovx-core, click *Add Entry* button
+      * Set *Name* to ``ENABLE_OPENCL``
+      * Set *Type* to *BOOL*
+      * Select *Value* (i.e., TRUE)
+      * Click *OK*
+    - Click *Configure* button; you get a window asking for compilers to use: select *"Visual Studio 14 2015 Win64"* or *"Visual Studio 12 2013 Win64"*
     - Click *Generate* button
-  * Run Visual Studio 2015 and open solution ``~/openvx_tutorial/build-open-source/tutorial_exercises.sln``
+  * Run Visual Studio and open solution ``~/openvx_tutorial/build-open-source/tutorial_exercises.sln``
   * Set *exercise1* as startup project
   * Build and run the project.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.
   
-### 4.2 Build using pre-built OpenVX library in Visual Studio 2015
+### 4.2 Build using pre-built OpenVX library in Visual Studio
   * Run CMake (cmake-gui)
     - Click *Browse Source* button and select ``~/openvx_tutorial/tutorial_exercises``
-    - Click *Browse Build* button and select ``~/openvx_tutorial/build-open-source``
+    - Click *Browse Build* button and select ``~/openvx_tutorial/build-pre-built``
     - Click *Add Entry* button
       * Set *Name* to ``OpenVX_LIBS_DIR``
       * Set *Type* to *STRING*
@@ -188,9 +190,9 @@ In order to build these tutorial exercises, you need the following:
       * Set *Type* to *STRING*
       * Set *Value* to ``<list-of-openvx-libraries>``
       * Click *OK*
-    - Click *Configure* button; you get a window asking for compilers to use: select *"Visual Studio 14 2015 Win64"*
+    - Click *Configure* button; you get a window asking for compilers to use: select *"Visual Studio 14 2015 Win64"* or *"Visual Studio 12 2013 Win64"*
     - Click *Generate* button
-  * Run Visual Studio 2015 and open solution ``~/openvx_tutorial/build-open-source/tutorial_exercises.sln``
+  * Run Visual Studio and open solution ``~/openvx_tutorial/build-open-source/tutorial_exercises.sln``
   * Set *exercise1* as startup project
   * Build and run the project.
   * You should see video in a window. Press ESCAPE or 'q' to exit the app.

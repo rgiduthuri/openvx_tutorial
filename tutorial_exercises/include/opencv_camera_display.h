@@ -80,7 +80,11 @@ public:
 
     int GetHeight()
     {
+#if 1 // TBD: workaround for reported OpenCV+Windows bug that returns width instead of height
+		return 480;
+#else
         return (int) m_cap.get( CV_CAP_PROP_FRAME_HEIGHT );
+#endif
     }
 
     int GetStride()

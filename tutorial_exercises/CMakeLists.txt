@@ -26,6 +26,7 @@
 #   OpenVX_LIBS         -- list of OpenVX libraries
 #   OpenVX_LIBS_DIR     -- path to OpenVX libraries
 #   OpenVX_INCLUDE_DIRS -- path to non-khronos OpenVX header files (optional)
+#   ENABLE_OPENCL       -- flag to enable OpenCL with OpenVX source build (optional)
 #
 # Here are few examples:
 # * Build exerciese using an open source implementation without using OpenCL
@@ -68,12 +69,18 @@ if( NOT OpenVX_LIBS_DIR )
     else()
       set(SSE4_2_FOUND false CACHE BOOL "SSE4.2 available on host")
     endif()
+  else()
+    set(SSE4_2_FOUND true CACHE BOOL "SSE4.2 available on host")
   endif()
   if( SSE4_2_FOUND )
     set   ( OpenVX_SOURCE_DIR                 amdovx-core/openvx CACHE INTERNAL OpenVX_SOURCE_DIR                 )
     if( EXISTS ${CMAKE_SOURCE_DIR}/${OpenVX_SOURCE_DIR} )
       set ( OpenVX_LIBS                       openvx             CACHE INTERNAL OpenVX_LIBS                       )
-      set ( CMAKE_DISABLE_FIND_PACKAGE_OpenCL TRUE               CACHE INTERNAL CMAKE_DISABLE_FIND_PACKAGE_OpenCL )
+      if( NOT ENABLE_OPENCL )
+        set ( CMAKE_DISABLE_FIND_PACKAGE_OpenCL TRUE             CACHE INTERNAL CMAKE_DISABLE_FIND_PACKAGE_OpenCL )
+      else()
+        set ( CMAKE_DISABLE_FIND_PACKAGE_OpenCL FALSE            CACHE INTERNAL CMAKE_DISABLE_FIND_PACKAGE_OpenCL )
+      endif()
     endif()
   endif( SSE4_2_FOUND )
 endif()
