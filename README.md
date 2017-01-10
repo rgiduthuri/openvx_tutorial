@@ -12,7 +12,7 @@ OpenVX and OpenCV, as well as OpenCL. The tutorial includes hands-on practice
 sessions that get the participants started on solving real computer vision
 problems using OpenVX.
 
-This tutorial material is based on OpenVX 1.0.1 and it can be used on a PC with recent 64-bit OS (Windows, OS X, or Linux).
+This tutorial material is based on OpenVX 1.1 and it can be used on a PC with recent 64-bit OS (Windows, OS X, or Linux).
 Tutorial exercises and build procedures on various platforms are explained in this document.
 An additional section explains tutorial exercises with a VirtualBox VM.
   1. [Tutorial Exercises Overview](#1-tutorial-exercises-overview)
@@ -67,9 +67,9 @@ Here are few helpful instructions:
 We have prepared a VirtualBox VM with this new course material. Make sure to setup your computer before starting the tutorial.
   * Choose a laptop with a recent 64-bit OS.
   * Download and install a recent VirtualBox from https://www.virtualbox.org/wiki/Downloads.
-  * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from https://goo.gl/iH7Rte and extract files into a local folder (~6 GB extracted).
+  * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from https://goo.gl/xAwIZE and extract files into a local folder (~6 GB extracted).
     - This VM image includes all the necessary tools and packages required to run the tutorial, including the following two OpenVX implementations options:
-      * [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core/tree/OpenVX-1.0.1) from AMD (default)
+      * [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD (default)
       * Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/)
   * Run VirtualBox and add "Ubuntu-64-OpenVX" virtual machine [Machine -> Add] from the local folder. 
     - If you cannot install 64-bit VM, even though you have a 64-bit Windows, you need to enable virtualization in the BIOS. 
