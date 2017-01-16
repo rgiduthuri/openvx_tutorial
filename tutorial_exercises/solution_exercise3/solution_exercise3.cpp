@@ -424,7 +424,7 @@ int main( int argc, char * argv[] )
                     // scale convert Q8.7 [-1..1 range] fixed-point format to 0..255 with saturation
                     vx_int16 value = out[x] + 128;
                     value = value > 255 ? 255 : value; // saturation needed
-                    img[x * 3] = value;
+                    img[x * 3] = (vx_uint8)value;
                 }
             }
         }
