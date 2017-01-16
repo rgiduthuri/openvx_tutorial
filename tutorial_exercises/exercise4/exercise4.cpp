@@ -276,8 +276,8 @@ vx_status VX_CALLBACK tensor_cos_opencl_codegen(
 {
     // Get fixed-point position and dimensions of input and output tensors.
     // Note that both input and output tensors have same dimensions.
-    vx_tensor input   = ( vx_tensor ) refs[0];
-    vx_tensor output  = ( vx_tensor ) refs[1];
+    vx_tensor input   = ( vx_tensor ) parameters[0];
+    vx_tensor output  = ( vx_tensor ) parameters[1];
     vx_size num_of_dims;
     vx_size dims[4] = { 1, 1, 1, 1 };
     vx_uint8 input_fixed_point_pos;
