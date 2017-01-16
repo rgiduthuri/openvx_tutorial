@@ -22,8 +22,8 @@
  */
 
 /*!
- * \file    solution_exercise4.cpp
- * \example solution_exercise4
+ * \file    exercise4.cpp
+ * \example exercise4
  * \brief   OpenVX user kernel to implement cosine activation function on tensor objects.
  *          Look for TODO keyword in comments for the code snippets that you need to write.
  * \author  Radhakrishna Giduthuri <radha.giduthuri@ieee.org>
@@ -238,7 +238,7 @@ vx_status VX_CALLBACK tensor_cos_host_side_function( vx_node node, const vx_refe
 ////////
 // The user kernel target support callback is responsible for informing the
 // OpenVX framework whether the implementation is supported CPU and/or GPU.
-// TODO:********
+// TODO STEP 01:********
 //   1. Set the supported_target_affinity to "AGO_TARGET_AFFINITY_CPU | AGO_TARGET_AFFINITY_GPU"
 //! \brief The kernel target support callback.
 vx_status VX_CALLBACK tensor_cos_query_target_support(vx_graph graph, vx_node node,
@@ -246,7 +246,7 @@ vx_status VX_CALLBACK tensor_cos_query_target_support(vx_graph graph, vx_node no
     vx_uint32& supported_target_affinity // [output] must be set to AGO_TARGET_AFFINITY_CPU or AGO_TARGET_AFFINITY_GPU or (AGO_TARGET_AFFINITY_CPU | AGO_TARGET_AFFINITY_GPU)
     )
 {
-    supported_target_affinity = AGO_TARGET_AFFINITY_CPU | AGO_TARGET_AFFINITY_GPU;
+//    supported_target_affinity = AGO_TARGET_AFFINITY_CPU | AGO_TARGET_AFFINITY_GPU;
     return VX_SUCCESS;
 }
 
@@ -255,7 +255,7 @@ vx_status VX_CALLBACK tensor_cos_query_target_support(vx_graph graph, vx_node no
 // OpenCL code specific for the configuration of the node. It can make use of
 // parameter meta data, such as, number of tensor object dimensions, data format,
 // etc. to tune the code for best performance.
-// TODO:********
+// TODO STEP 02:********
 //   1. Query the input/output tensor meta data.
 //   2. Generate the OpenCL code and set kernel function name
 //   3. Set the work_dim and global_work required by clEnqueueNDRangeKernel
@@ -288,46 +288,46 @@ vx_status VX_CALLBACK tensor_cos_opencl_codegen(
     ERROR_CHECK_STATUS( vxQueryTensor( output, VX_TENSOR_FIXED_POINT_POS, &output_fixed_point_pos, sizeof( output_fixed_point_pos ) ) );
 
     // Get input/output stride values for use in OpenCL code generation
-    vx_size input_stride[4], output_stride[4];
-    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_STRIDE_OPENCL, &input_stride, num_of_dims * sizeof( vx_size ) ) );
-    ERROR_CHECK_STATUS( vxQueryTensor( output, VX_TENSOR_STRIDE_OPENCL, &output_stride, num_of_dims * sizeof( vx_size ) ) );
+//    vx_size input_stride[4], output_stride[4];
+//    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_STRIDE_OPENCL, &input_stride, num_of_dims * sizeof( vx_size ) ) );
+//    ERROR_CHECK_STATUS( vxQueryTensor( output, VX_TENSOR_STRIDE_OPENCL, /* Fill in parameters */ ) );
 
     if( num_of_dims == 3 )
     {
         // The OpenCL kernel below uses 3-dimensional global_work and
         // each work item will process 2 consecutive elements in the tensor
-        char item[8192];
-        sprintf(item,
-            "__kernel void tensor_cos(__global uchar * t0_buf, uint t0_offset,\n"
-            "                         __global uchar * t1_buf, uint t1_offset)\n"
-            "{\n"
-            "  uint i0 = get_global_id(0);\n"
-            "  uint i1 = get_global_id(1);\n"
-            "  uint i2 = get_global_id(2);\n"
-            "  t0_buf += t0_offset + i0 * 4 + i1 * %d + i2 * %d;\n" // input_stride[1], input_stride[2]
-            "  t1_buf += t1_offset + i0 * 4 + i1 * %d + i2 * %d;\n" // output_stride[1], output_stride[2]
-            "  short2 ivalue = *(__global short2 *)t0_buf;\n"
-            "  float2 fvalue;\n"
-            "  fvalue.s0 = cos(%16.10f * ivalue.s0) * %16.10f;\n" // 1/(1 << input_fixed_point_pos), 1 << output_fixed_point_pos
-            "  fvalue.s1 = cos(%16.10f * ivalue.s1) * %16.10f;\n" // 1/(1 << input_fixed_point_pos), 1 << output_fixed_point_pos
-            "  short2 ovalue = convert_short2_rte(fvalue);\n"
-            "  *(__global short2 *)t1_buf = ovalue;\n"
-            "}\n"
-            , (vx_uint32)input_stride[1], (vx_uint32)input_stride[2]
-            , (vx_uint32)output_stride[1], (vx_uint32)output_stride[2]
-            , 1.0f/(float)(1 << input_fixed_point_pos), (float)(1 << output_fixed_point_pos)
-            , 1.0f/(float)(1 << input_fixed_point_pos), (float)(1 << output_fixed_point_pos)
-            );
-        opencl_kernel_code = item;
+//        char item[8192];
+//        sprintf(item,
+//            "__kernel void tensor_cos(__global uchar * t0_buf, uint t0_offset,\n"
+//            "                         __global uchar * t1_buf, uint t1_offset)\n"
+//            "{\n"
+//            "  uint i0 = get_global_id(0);\n"
+//            "  uint i1 = get_global_id(1);\n"
+//            "  uint i2 = get_global_id(2);\n"
+//            "  t0_buf += t0_offset + i0 * 4 + i1 * %d + i2 * %d;\n" // input_stride[1], input_stride[2]
+//            "  t1_buf += t1_offset + i0 * 4 + i1 * %d + i2 * %d;\n" // output_stride[1], output_stride[2]
+//            "  short2 ivalue = *(__global short2 *)t0_buf;\n"
+//            "  float2 fvalue;\n"
+//            "  fvalue.s0 = cos(%16.10f * ivalue.s0) * %16.10f;\n" // 1/(1 << input_fixed_point_pos), 1 << output_fixed_point_pos
+//            "  fvalue.s1 = cos(%16.10f * ivalue.s1) * %16.10f;\n" // 1/(1 << input_fixed_point_pos), 1 << output_fixed_point_pos
+//            "  short2 ovalue = convert_short2_rte(fvalue);\n"
+//            "  *(__global short2 *)t1_buf = ovalue;\n"
+//            "}\n"
+//            , (vx_uint32)input_stride[1], (vx_uint32)input_stride[2]
+//            , (vx_uint32)output_stride[1], (vx_uint32)output_stride[2]
+//            , 1.0f/(float)(1 << input_fixed_point_pos), (float)(1 << output_fixed_point_pos)
+//            , 1.0f/(float)(1 << input_fixed_point_pos), (float)(1 << output_fixed_point_pos)
+//            );
+//        opencl_kernel_code = item;
 
         // set kernel function name
-        strcpy(opencl_kernel_function_name, "tensor_cos");
+//        strcpy( opencl_kernel_function_name, /* Fill in the value */ );
 
         // set global work: note that global_work[0] will two elements per work-item
-        opencl_work_dim = 3;
-        opencl_global_work[0] = (dims[0] + 1) >> 1;
-        opencl_global_work[1] =  dims[1];
-        opencl_global_work[2] =  dims[2];
+//        opencl_work_dim = 3;
+//        opencl_global_work[0] = (dims[0] + 1) >> 1;
+//        opencl_global_work[1] =  dims[1];
+//        opencl_global_work[2] =  /* Fill in the value */;
     }
     else
     {
@@ -341,7 +341,7 @@ vx_status VX_CALLBACK tensor_cos_opencl_codegen(
 ////////
 // User kernels needs to be registered with every OpenVX context before use in a graph.
 //
-// TODO:********
+// TODO STEP 03:********
 //   1. Use vxAddUserKernel API to register "app.userkernels.tensor_cos" with
 //      kernel enumeration = USER_KERNEL_TENSOR_COS, numParams = 2, and
 //      all of the user kernel callback functions you implemented above.
@@ -369,12 +369,12 @@ vx_status registerUserKernel( vx_context context )
     ERROR_CHECK_OBJECT( kernel );
 
     // register the extension callbacks for OpenCL
-    amd_kernel_query_target_support_f query_target_support_f = tensor_cos_query_target_support;
-    amd_kernel_opencl_codegen_callback_f opencl_codegen_callback_f = tensor_cos_opencl_codegen;
-    ERROR_CHECK_STATUS( vxSetKernelAttribute( kernel, VX_KERNEL_ATTRIBUTE_AMD_QUERY_TARGET_SUPPORT,
-                                              &query_target_support_f, sizeof( query_target_support_f ) ) );
-    ERROR_CHECK_STATUS( vxSetKernelAttribute( kernel, VX_KERNEL_ATTRIBUTE_AMD_OPENCL_CODEGEN_CALLBACK,
-                                              &opencl_codegen_callback_f, sizeof( opencl_codegen_callback_f ) ) );
+//    amd_kernel_query_target_support_f query_target_support_f = tensor_cos_query_target_support;
+//    amd_kernel_opencl_codegen_callback_f opencl_codegen_callback_f = /* Fill in the codegen function */;
+//    ERROR_CHECK_STATUS( vxSetKernelAttribute( kernel, VX_KERNEL_ATTRIBUTE_AMD_QUERY_TARGET_SUPPORT,
+//                                              &query_target_support_f, sizeof( query_target_support_f ) ) );
+//    ERROR_CHECK_STATUS( vxSetKernelAttribute( kernel, VX_KERNEL_ATTRIBUTE_AMD_OPENCL_CODEGEN_CALLBACK,
+//                                              /* Fill in parameters */ ) );
 
     ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 0, VX_INPUT,  VX_TYPE_TENSOR,  VX_PARAMETER_STATE_REQUIRED ) ); // input
     ERROR_CHECK_STATUS( vxAddParameterToKernel( kernel, 1, VX_OUTPUT, VX_TYPE_TENSOR,  VX_PARAMETER_STATE_REQUIRED ) ); // output
@@ -400,7 +400,7 @@ void VX_CALLBACK log_callback( vx_context    context,
 ////////
 // main() has all the OpenVX application code for this exercise.
 // Command-line usage:
-//   % solution_exercise4 [<video-sequence>|<camera-device-number>]
+//   % exercise4 [<video-sequence>|<camera-device-number>]
 // When neither video sequence nor camera device number is specified,
 // it defaults to the video sequence in "PETS09-S1-L1-View001.avi".
 int main( int argc, char * argv[] )
