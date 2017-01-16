@@ -37,8 +37,9 @@ as the entry point. All the include files are kept in the
 ``tutorial_exercises/include`` directory.
 
 The ``tutorial_exercises`` sub-directory contains four exercises:
-  * ``exercise1``: framework basics, graph concepts, keypoint tracking (exercise1+exercise2)
+  * ``exercise1``: framework basics, graph concepts, keypoint tracking
   * ``exercise2``: user kernels, build a wrapper kernel to OpenCV function
+  * ``exercise3``: intro to tensor object, build a cosine activation user kernel for tensor objects
 
 There are additional folders with full solutions:
   * ``solution_exerciseN``: complete solution of ``exerciseN``. Just for reference.
@@ -119,9 +120,11 @@ Create an empty folder ``~/openvx_tutorial/build-open-source``. The directory st
   │   ├── CMakeLists.txt
   │   ├── exercise1/
   │   ├── exercise2/
+  │   ├── exercise3/
   │   ├── include/
   │   ├── solution_exercise1/
   │   ├── solution_exercise2/
+  │   ├── solution_exercise3/
   └── tutorial_videos/
       └── PETS09-S1-L1-View001.avi
 ```
