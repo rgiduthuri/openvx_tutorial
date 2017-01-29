@@ -1,7 +1,7 @@
 # Khronos OpenVX Tutorial Material
-[OpenVX](https://www.khronos.org/registry/vx/) 
-is a royalty-free open standard API released by the Khronos Group
-in 2014. OpenVX enables performance and power-optimized computer vision
+Khronos [OpenVX](https://www.khronos.org/registry/vx/) 
+is an open, royalty-free standard API for cross platform acceleration of computer
+vision applications. OpenVX enables performance and power-optimized computer vision
 functionality, especially important in embedded and real-time use cases.
 This course covers both the function-based API and the graph API that
 enable OpenVX developers to efficiently run computer vision algorithms
@@ -40,7 +40,7 @@ The ``tutorial_exercises`` sub-directory contains four exercises:
   * ``exercise1``: framework basics, graph concepts, keypoint tracking
   * ``exercise2``: user kernels, build a wrapper kernel to OpenCV function
   * ``exercise3``: intro to tensor object, build a cosine activation user kernel for tensor objects
-  * ``exercise4``: build OpenCL based user kernel for cosine activation and tensor objects
+  * ``exercise4``: build OpenCL based user kernel for neural network cosine activation and tensor objects
 
 There are additional folders with full solutions:
   * ``solution_exerciseN``: complete solution of ``exerciseN``. Just for reference.
