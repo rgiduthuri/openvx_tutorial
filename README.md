@@ -22,13 +22,10 @@ An additional section explains tutorial exercises with a VirtualBox VM.
 
 NOTE: The directory ``~`` in the text below refers to directory containing the ``openvx_tutorial`` sub-directory.
 
+Refer to [Wiki page](https://github.com/rgiduthuri/openvx_tutorial/wiki) for upcomming events and past event archives.
+
 ## 1. Tutorial Exercises Overview
-It is best to start doing these exercises after going through the tutorial presentations below.
-  1. [OpenVX ecosystem overview](https://goo.gl/0udqwF)
-  2. [Hands-on programming session with exercise1](https://goo.gl/vkY2XM)
-  3. [Brief overview of OpenVX 1.1 features and extensions](https://goo.gl/DeFsKr)
-  4. [Efficient IO](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T4_OpenVX_Step3_Efficient_IO.pdf)
-  5. [User Kernels with exercise2](https://www.khronos.org/assets/uploads/developers/library/2016-embedded-vision-summit/T5_OpenVX_Step4_User_Kernels.pdf)
+It is best to start doing these exercises after going through the [tutorial presentations](https://github.com/rgiduthuri/openvx_tutorial/wiki) that discuss OpenVX ecosystem overview and hands-on programming sessions.
 
 All the tutorial exercises are kept in ``~/openvx_tutorial/tutorial_exercises``.
 The ``tutorial_exercises/CMakeLists.txt`` includes all the exercises as separate 
