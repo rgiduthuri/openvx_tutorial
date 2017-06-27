@@ -12,6 +12,8 @@ OpenVX and OpenCV, as well as OpenCL. The tutorial includes hands-on practice
 sessions that get the participants started on solving real computer vision
 problems using OpenVX.
 
+NOTE: The OpenVX Neural Network acceleration tutorials from Embedded Vision Summit 2017 are now available. Refer to [wiki](https://github.com/rgiduthuri/openvx_tutorial/wiki) page for details.
+
 This tutorial material is based on OpenVX 1.1 and it can be used on a PC with recent 64-bit OS (Windows, OS X, or Linux).
 Tutorial exercises and build procedures on various platforms are explained in this document.
 An additional section explains tutorial exercises with a VirtualBox VM.
