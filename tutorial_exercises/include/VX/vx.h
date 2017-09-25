@@ -1,5 +1,5 @@
 /* 
- * Copyright (c) 2012-2016 The Khronos Group Inc.
+ * Copyright (c) 2012-2017 The Khronos Group Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and/or associated documentation files (the
@@ -61,23 +61,27 @@
 #include <VX/vx_api.h>
 #include <VX/vx_nodes.h>
 
-/*! Defines the major version number macro.
+/*! \brief Defines the major version number macro.
  * \ingroup group_basic_features
  */
 #define VX_VERSION_MAJOR(x) ((x & 0xFF) << 8)
 
-/*! Defines the minor version number macro.
+/*! \brief Defines the minor version number macro.
  * \ingroup group_basic_features
  */
 #define VX_VERSION_MINOR(x) ((x & 0xFF) << 0)
 
-/*! \brief Defines the predefined version number for 1.0 and 1.1.
+/*! \brief Defines the predefined version number for 1.0.
  * \ingroup group_basic_features
  */
 #define VX_VERSION_1_0      (VX_VERSION_MAJOR(1) | VX_VERSION_MINOR(0))
+
+/*! \brief Defines the predefined version number for 1.1.
+ * \ingroup group_basic_features
+ */
 #define VX_VERSION_1_1      (VX_VERSION_MAJOR(1) | VX_VERSION_MINOR(1))
 
-/*! Defines the OpenVX Version Number.
+/*! \brief Defines the OpenVX Version Number.
  * \ingroup group_basic_features
  */
 #define VX_VERSION          VX_VERSION_1_1

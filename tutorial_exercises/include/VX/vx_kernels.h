@@ -1,5 +1,5 @@
-/* 
- * Copyright (c) 2012-2016 The Khronos Group Inc.
+/*
+ * Copyright (c) 2012-2017 The Khronos Group Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and/or associated documentation files (the
@@ -38,7 +38,10 @@
 extern "C" {
 #endif
 
-/*! \brief The standard list of available libraries */
+/*!
+ * \brief The standard list of available libraries
+ * \ingroup group_kernel
+ */
 enum vx_library_e {
     /*! \brief The base set of kernels as defined by Khronos. */
     VX_LIBRARY_KHR_BASE = 0x0,
@@ -281,6 +284,8 @@ enum vx_kernel_e {
      * \see group_vision_function_scale_image
      */
     VX_KERNEL_HALFSCALE_GAUSSIAN = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x29,
+    
+    VX_KERNEL_MAX_1_0, /*!< \internal Used for VX1.0 bounds checking in the conformance test. */
 
     /* kernel added in OpenVX 1.1 */
 
@@ -298,9 +303,98 @@ enum vx_kernel_e {
     * \see group_vision_function_nonlinear_filter
     */
     VX_KERNEL_NON_LINEAR_FILTER = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x2C,
+    
+    VX_KERNEL_MAX_1_1, /*!< \internal Used for VX1.1 bounds checking in the conformance test. */
+    
+    /* kernel added in OpenVX 1.2 */
+
+    /*! \brief The Match Template Kernel.
+    * \see group_vision_match_template
+    */
+    VX_KERNEL_MATCH_TEMPLATE = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x2D,
+
+    /*! \brief The LBP Kernel.
+    * \see group_lbp
+    */
+    VX_KERNEL_LBP = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x2E,
+
+    /*! \brief The hough lines probability Kernel.
+    * \see group_vision_hough_lines_p
+    */
+    VX_KERNEL_HOUGH_LINES_P = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x2F,
+
+    /*! \brief The tensor multiply Kernel.
+    * \see group_vision_function_tensor_multiply
+    */
+    VX_KERNEL_TENSOR_MULTIPLY = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x30,
+
+    /*! \brief The tensor add Kernel.
+    * \see group_vision_function_tensor_add
+    */
+    VX_KERNEL_TENSOR_ADD = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x31,
+	
+    /*! \brief The tensor subtract Kernel.
+    * \see group_vision_function_tensor_subtract
+    */
+    VX_KERNEL_TENSOR_SUBTRACT = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x32,
+	
+    /*! \brief The tensor table look up Kernel.
+    * \see group_vision_function_tensor_tablelookup
+    */
+    VX_KERNEL_TENSOR_TABLELOOKUP = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x33,
+	
+    /*! \brief The tensor transpose Kernel.
+    * \see group_vision_function_tensor_transpose
+    */
+    VX_KERNEL_TENSOR_TRANSPOSE = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x34,
+
+    /*! \brief The tensor convert depth Kernel.
+    * \see group_vision_function_tensor_convert_depth
+    */
+    VX_KERNEL_TENSOR_CONVERT_DEPTH = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x35,
+
+    /*! \brief The tensor matrix multiply Kernel.
+    * \see group_vision_function_tensor_matrix_multiply
+    */
+    VX_KERNEL_TENSOR_MATRIX_MULTIPLY = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x36,
+	
+    /*! \brief The data object copy kernel.
+    * \see group_vision_function_copy
+    */
+    VX_KERNEL_COPY = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x37,
+
+    /*! \brief The non-max suppression kernel.
+    * \see group_vision_function_nms
+    */
+    VX_KERNEL_NON_MAX_SUPPRESSION = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x38,
+
+    /*! \brief The scalar operation kernel.
+    * \see group_control_flow
+    */
+    VX_KERNEL_SCALAR_OPERATION = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x39,
+
+    /*! \brief The  HOG features kernel.
+    * \see group_vision_function_hog
+    */
+    VX_KERNEL_HOG_FEATURES = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x3A,
+
+    /*! \brief The HOG Cells kernel.
+    * \see group_vision_function_hog
+    */
+    VX_KERNEL_HOG_CELLS = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x3B,
+
+    /*! \brief The bilateral filter kernel.
+    * \see group_vision_function_bilateral_filter
+    */
+    VX_KERNEL_BILATERAL_FILTER = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x3C,
+
+    /*! \brief The select kernel.
+    * \see group_control_flow
+    */
+    VX_KERNEL_SELECT = VX_KERNEL_BASE(VX_ID_KHRONOS, VX_LIBRARY_KHR_BASE) + 0x3D,
 
     /* insert new kernels here */
-    VX_KERNEL_MAX_1_0, /*!< \internal Used for bounds checking in the conformance test. */
+    VX_KERNEL_MAX_1_2, /*!< \internal Used for VX1.2 bounds checking in the conformance test. */
 };
 
 #ifdef  __cplusplus
