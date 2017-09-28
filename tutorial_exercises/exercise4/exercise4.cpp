@@ -131,7 +131,7 @@ vx_status VX_CALLBACK tensor_cos_validator( vx_node node,
 {
     // parameter #0 -- query dimensions and format
     vx_size num_of_dims;
-    ERROR_CHECK_STATUS( vxQueryTensor( ( vx_tensor )parameters[0], VX_TENSOR_NUM_OF_DIMS, &num_of_dims, sizeof( num_of_dims ) ) );
+    ERROR_CHECK_STATUS( vxQueryTensor( ( vx_tensor )parameters[0], VX_TENSOR_NUMBER_OF_DIMS, &num_of_dims, sizeof( num_of_dims ) ) );
     if( num_of_dims > 4 ) // sanity check to avoid stack corruption with querying VX_TENSOR_DIMS below
     {
         return VX_ERROR_INVALID_DIMENSION;
@@ -149,13 +149,13 @@ vx_status VX_CALLBACK tensor_cos_validator( vx_node node,
 
     // parameter #1 -- query fixed-point position
     vx_uint8 fixed_point_pos;
-    ERROR_CHECK_STATUS( vxQueryTensor( ( vx_tensor )parameters[1], VX_TENSOR_FIXED_POINT_POS, &fixed_point_pos, sizeof( fixed_point_pos ) ) );
+    ERROR_CHECK_STATUS( vxQueryTensor( ( vx_tensor )parameters[1], VX_TENSOR_FIXED_POINT_POSITION, &fixed_point_pos, sizeof( fixed_point_pos ) ) );
 
     // parameter #1 -- set required output tensor meta data
-    ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( metas[1], VX_TENSOR_NUM_OF_DIMS,  &num_of_dims,  sizeof( num_of_dims ) ) );
+    ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( metas[1], VX_TENSOR_NUMBER_OF_DIMS,  &num_of_dims,  sizeof( num_of_dims ) ) );
     ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( metas[1], VX_TENSOR_DIMS, &dims, sizeof( dims ) ) );
     ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( metas[1], VX_TENSOR_DATA_TYPE, &data_type, sizeof( data_type ) ) );
-    ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( metas[1], VX_TENSOR_FIXED_POINT_POS, &fixed_point_pos, sizeof( fixed_point_pos ) ) );
+    ERROR_CHECK_STATUS( vxSetMetaFormatAttribute( metas[1], VX_TENSOR_FIXED_POINT_POSITION, &fixed_point_pos, sizeof( fixed_point_pos ) ) );
 
     return VX_SUCCESS;
 }
@@ -180,10 +180,10 @@ vx_status VX_CALLBACK tensor_cos_host_side_function( vx_node node, const vx_refe
     vx_size dims[4] = { 1, 1, 1, 1 };
     vx_uint8 input_fixed_point_pos;
     vx_uint8 output_fixed_point_pos;
-    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_NUM_OF_DIMS, &num_of_dims, sizeof( num_of_dims ) ) );
+    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_NUMBER_OF_DIMS, &num_of_dims, sizeof( num_of_dims ) ) );
     ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_DIMS, &dims, num_of_dims * sizeof(vx_size) ) );
-    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_FIXED_POINT_POS, &input_fixed_point_pos, sizeof( input_fixed_point_pos ) ) );
-    ERROR_CHECK_STATUS( vxQueryTensor( output, VX_TENSOR_FIXED_POINT_POS, &output_fixed_point_pos, sizeof( output_fixed_point_pos ) ) );
+    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_FIXED_POINT_POSITION, &input_fixed_point_pos, sizeof( input_fixed_point_pos ) ) );
+    ERROR_CHECK_STATUS( vxQueryTensor( output, VX_TENSOR_FIXED_POINT_POSITION, &output_fixed_point_pos, sizeof( output_fixed_point_pos ) ) );
 
     // Access input and output tensor object data using vxMapTensorPatch API.
     vx_size zeros[4] = { 0 };
@@ -282,10 +282,10 @@ vx_status VX_CALLBACK tensor_cos_opencl_codegen(
     vx_size dims[4] = { 1, 1, 1, 1 };
     vx_uint8 input_fixed_point_pos;
     vx_uint8 output_fixed_point_pos;
-    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_NUM_OF_DIMS, &num_of_dims, sizeof( num_of_dims ) ) );
+    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_NUMBER_OF_DIMS, &num_of_dims, sizeof( num_of_dims ) ) );
     ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_DIMS, &dims, num_of_dims * sizeof(vx_size) ) );
-    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_FIXED_POINT_POS, &input_fixed_point_pos, sizeof( input_fixed_point_pos ) ) );
-    ERROR_CHECK_STATUS( vxQueryTensor( output, VX_TENSOR_FIXED_POINT_POS, &output_fixed_point_pos, sizeof( output_fixed_point_pos ) ) );
+    ERROR_CHECK_STATUS( vxQueryTensor( input,  VX_TENSOR_FIXED_POINT_POSITION, &input_fixed_point_pos, sizeof( input_fixed_point_pos ) ) );
+    ERROR_CHECK_STATUS( vxQueryTensor( output, VX_TENSOR_FIXED_POINT_POSITION, &output_fixed_point_pos, sizeof( output_fixed_point_pos ) ) );
 
     // Get input/output stride values for use in OpenCL code generation
 //    vx_size input_stride[4], output_stride[4];
