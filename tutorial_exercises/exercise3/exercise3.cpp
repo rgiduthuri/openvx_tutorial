@@ -420,7 +420,9 @@ int main( int argc, char * argv[] )
 //                }
 //            }
 //        }
+//#if ENABLE_DISPLAY
 //        cv::imshow( "Cosine", bgrMatForOutputDisplay );
+//#endif
 //        ERROR_CHECK_STATUS( vxUnmapTensorPatch( output_tensor, map_id ) );
 
         ////////

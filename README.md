@@ -70,7 +70,7 @@ We have prepared a VirtualBox VM with this new course material. Make sure to set
   * Download and install a recent VirtualBox from https://www.virtualbox.org/wiki/Downloads.
   * Download virtual machine "Ubuntu-64-OpenVX.zip" (2 GB) from https://goo.gl/xAwIZE and extract files into a local folder (~6 GB extracted).
     - This VM image includes all the necessary tools and packages required to run the tutorial, including the following two OpenVX implementations options:
-      * [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD (default)
+      * [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules) from AMD (default)
       * Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/)
   * Run VirtualBox and add "Ubuntu-64-OpenVX" virtual machine [Machine -> Add] from the local folder. 
     - If you cannot install 64-bit VM, even though you have a 64-bit Windows, you need to enable virtualization in the BIOS. 
@@ -99,8 +99,8 @@ In order to build these tutorial exercises, you need the following:
   * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
   * Download and install [Qt Creator](http://www.qt.io/download-open-source/) (optional)
   * Download and install an OpenVX implementation:
-    - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD
-      * Copy the source code into ``~/openvx_tutorial/tutorial_exercises/amdovx-core`` directory.
+    - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules) from AMD
+      * The source code will be in ``~/openvx_tutorial/tutorial_exercises/amdovx-modules`` directory.
       * *CPU only build will be used for this tutorial*.
     - Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/).
       * Follow the instructions in openvx_sample/README to create pre-built OpenVX libraries
@@ -116,7 +116,7 @@ Create an empty folder ``~/openvx_tutorial/build-open-source``. The directory st
   ├── build-open-source/
   ├── scripts/
   ├── tutorial_exercises/
-  │   ├── amdovx-core/
+  │   ├── amdovx-modules/
   │   ├── CMakeLists.txt
   │   ├── exercise1/
   │   ├── exercise2/
@@ -157,8 +157,8 @@ In order to build these tutorial exercises, you need the following:
   * Download and install latest [CMake](https://cmake.org/download/)
   * Download and install [Visual Studio 2015 Community (Free) or Visual Studio 2013](https://www.visualstudio.com/downloads/download-visual-studio-vs)
   * Download and install an OpenVX implementation:
-    - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core) from AMD
-      * Copy the source code into ``~/openvx_tutorial/tutorial_exercises/amdovx-core`` directory.
+    - [Open-source OpenVX on GitHub](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules) from AMD
+      * The source code will be in ``~/openvx_tutorial/tutorial_exercises/amdovx-modules`` directory.
 	  * *CPU only build will be used for this tutorial, unless CMake build flag ENABLE_OPENCL=TRUE is selected (see below)*.
     - Khronos OpenVX sample implementation from [khronos.org/registry/vx](https://www.khronos.org/registry/vx/).
       * Follow the instructions in openvx_sample/README to create pre-built OpenVX libraries

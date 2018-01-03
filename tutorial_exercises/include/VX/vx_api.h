@@ -1,29 +1,18 @@
 /*
+
  * Copyright (c) 2012-2017 The Khronos Group Inc.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and/or associated documentation files (the
- * "Materials"), to deal in the Materials without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Materials, and to
- * permit persons to whom the Materials are furnished to do so, subject to
- * the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Materials.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
- * KHRONOS STANDARDS. THE UNMODIFIED, NORMATIVE VERSIONS OF KHRONOS
- * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT
- *    https://www.khronos.org/registry/
- *
- * THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
- * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
- * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 #ifndef _OPENVX_API_H_
@@ -418,14 +407,16 @@ VX_API_ENTRY vx_status VX_API_CALL vxQueryImage(vx_image image, vx_enum attribut
  */
 VX_API_ENTRY vx_status VX_API_CALL vxSetImageAttribute(vx_image image, vx_enum attribute, const void *ptr, vx_size size);
 
-/*! \brief Initialize an image with constant pixel value.
+/*! \brief Initialize an image with the given pixel value.
  * \param [in] image The reference to the image to initialize.
  * \param [in] pixel_value The pointer to the constant pixel value to initialize all image pixels. See <tt>\ref vx_pixel_value_t</tt>.
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS No errors.
  * \retval VX_ERROR_INVALID_REFERENCE If the image is a uniform image, a virtual image, or not a <tt>\ref vx_image</tt>.
  * \retval VX_ERROR_INVALID_PARAMETERS If any of the other parameters are incorrect.
- * \note All pixels of the entire image are initialized to the indicated pixel value, independently from the valid region. The valid region of the image is unaffected by this function. The image remains mutable after the call to this function, so its pixels and mutable attributes may be changed by subsequent functions.
+ * \note All pixels of the entire image are initialized to the indicated pixel value, independently from the valid region.
+ * The valid region of the image is unaffected by this function. The image remains mutable after the call to this function,
+ * so its pixels and mutable attributes may be changed by subsequent functions.
  * \ingroup group_image
  */
 VX_API_ENTRY vx_status VX_API_CALL vxSetImagePixelValues(vx_image image, const vx_pixel_value_t *pixel_value);
@@ -795,6 +786,12 @@ VX_API_ENTRY vx_status VX_API_CALL vxUnloadKernels(vx_context context, const vx_
 
  * org.khronos.openvx.non_linear_filter
 
+ * org.khronos.openvx.match_template
+
+ * org.khronos.openvx.lbp
+
+ * org.khronos.openvx.hough_lines_p
+
  * org.khronos.openvx.tensor_multiply
  
  * org.khronos.openvx.tensor_add
@@ -807,7 +804,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxUnloadKernels(vx_context context, const vx_
  
  * org.khronos.openvx.tensor_convert_depth
  
- * org.khronos.openvx.matrix_multiply
+ * org.khronos.openvx.tensor_matrix_multiply
  
  * org.khronos.openvx.copy
  
@@ -820,9 +817,13 @@ VX_API_ENTRY vx_status VX_API_CALL vxUnloadKernels(vx_context context, const vx_
  * org.khronos.openvx.hog_cells
  
  * org.khronos.openvx.bilateral_filter
- 
+
  * org.khronos.openvx.select
- 
+
+ * org.khronos.openvx.min
+
+ * org.khronos.openvx.max
+
  * \param [in] context The reference to the implementation context.
  * \param [in] name The string of the name of the kernel to get.
  * \return A kernel reference. Any possible errors preventing a successful
@@ -1444,7 +1445,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxCopyScalar(vx_scalar scalar, void *user_ptr
  * \retval VX_ERROR_INVALID_PARAMETERS An other parameter is incorrect.
  * \ingroup group_scalar
  */
-VX_API_ENTRY vx_status vxCopyScalarWithSize(vx_scalar scalar, vx_size size, void *user_ptr, vx_enum usage, vx_enum user_mem_type);
+VX_API_ENTRY vx_status VX_API_CALL vxCopyScalarWithSize(vx_scalar scalar, vx_size size, void *user_ptr, vx_enum usage, vx_enum user_mem_type);
 
 /*==============================================================================
  REFERENCE
@@ -1562,7 +1563,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxReleaseDelay(vx_delay *delay);
  * \arg \ref VX_TYPE_SCALAR
  * \arg \ref VX_TYPE_THRESHOLD
  * \arg \ref VX_TYPE_TENSOR
- * \param [in] num_slots The number of objects in the delay.
+ * \param [in] num_slots The number of objects in the delay. This value must be greater than zero.
  * \returns A delay reference <tt>\ref vx_delay</tt>. Any possible errors preventing a
  * successful creation should be checked using <tt>\ref vxGetStatus</tt>.
  * \ingroup group_delay
@@ -1930,19 +1931,19 @@ VX_API_ENTRY vx_status VX_API_CALL vxUnmapDistribution(vx_distribution distribut
  * pixels channels should be 0, and the default 'true' value should be non-zero.
  * For standard image formats, default output pixel values are defined as
  * following:
- *  \arg \ref VX_DF_IMAGE_RGB: false={0, 0, 0}, true={255,255,255}
- *  \arg \ref VX_DF_IMAGE_RGBX: false={0, 0, 0, 0}, true={255,255,255,255}
- *  \arg \ref VX_DF_IMAGE_NV12: false={0, 0, 0}, true={255,255,255}
- *  \arg \ref VX_DF_IMAGE_NV21: false={0, 0, 0}, true={255,255,255}
- *  \arg \ref VX_DF_IMAGE_UYVY: false={0, 0, 0}, true={255,255,255}
- *  \arg \ref VX_DF_IMAGE_YUYV: false={0, 0, 0}, true={255,255,255}
- *  \arg \ref VX_DF_IMAGE_IYUV: false={0, 0, 0}, true={255,255,255}
- *  \arg \ref VX_DF_IMAGE_YUV4: false={0, 0, 0}, true={255,255,255}
- *  \arg \ref VX_DF_IMAGE_U8: false=0, true=0xFF
- *  \arg \ref VX_DF_IMAGE_S16: false=0, true=-1
- *  \arg \ref VX_DF_IMAGE_U16: false=0, true=0xFFFF
- *  \arg \ref VX_DF_IMAGE_S32: false=0, true=-1
- *  \arg \ref VX_DF_IMAGE_U32: false=0, true=0xFFFFFFFF
+ *  \arg \ref VX_DF_IMAGE_RGB : false={0, 0, 0}, true={255,255,255}
+ *  \arg \ref VX_DF_IMAGE_RGBX : false={0, 0, 0, 0}, true={255,255,255,255}
+ *  \arg \ref VX_DF_IMAGE_NV12 : false={0, 0, 0}, true={255,255,255}
+ *  \arg \ref VX_DF_IMAGE_NV21 : false={0, 0, 0}, true={255,255,255}
+ *  \arg \ref VX_DF_IMAGE_UYVY : false={0, 0, 0}, true={255,255,255}
+ *  \arg \ref VX_DF_IMAGE_YUYV : false={0, 0, 0}, true={255,255,255}
+ *  \arg \ref VX_DF_IMAGE_IYUV : false={0, 0, 0}, true={255,255,255}
+ *  \arg \ref VX_DF_IMAGE_YUV4 : false={0, 0, 0}, true={255,255,255}
+ *  \arg \ref VX_DF_IMAGE_U8 : false=0, true=0xFF
+ *  \arg \ref VX_DF_IMAGE_S16 : false=0, true=-1
+ *  \arg \ref VX_DF_IMAGE_U16 : false=0, true=0xFFFF
+ *  \arg \ref VX_DF_IMAGE_S32 : false=0, true=-1
+ *  \arg \ref VX_DF_IMAGE_U32 : false=0, true=0xFFFFFFFF
  * \param [in] context The reference to the context in which the object is
  * created.
  * \param [in] thresh_type The type of thresholding operation.
@@ -2202,13 +2203,12 @@ VX_API_ENTRY vx_status VX_API_CALL vxQueryMatrix(vx_matrix mat, vx_enum attribut
 VX_API_ENTRY vx_status VX_API_CALL vxCopyMatrix(vx_matrix matrix, void *user_ptr, vx_enum usage, vx_enum user_mem_type);
 
 /*! \brief Creates a reference to a matrix object from a boolean pattern.
- * \see <tt>\ref vxCreateMatrixFromPatternAndOrigin</tt> for a description of the matrix pattern.
+ * \see <tt>\ref vxCreateMatrixFromPatternAndOrigin</tt> for a description of the matrix patterns.
  * \param [in] context The reference to the overall context.
  * \param [in] pattern The pattern of the matrix. See <tt>\ref VX_MATRIX_PATTERN</tt>.
  * \param [in] columns The first dimensionality.
  * \param [in] rows The second dimensionality.
- * \see <tt>\ref vxCreateMatrixFromPatternAndOrigin</tt>.
- * \returns A matrix reference <tt>\ref vx_matrix</tt> of type <tt>\ref vx_uint8</tt>. Any possible errors preventing a
+ * \returns A matrix reference <tt>\ref vx_matrix</tt> of type <tt>\ref VX_TYPE_UINT8</tt>. Any possible errors preventing a
  * successful creation should be checked using <tt>\ref vxGetStatus</tt>.
  * \ingroup group_matrix
  */
@@ -2216,20 +2216,18 @@ VX_API_ENTRY vx_matrix VX_API_CALL vxCreateMatrixFromPattern(vx_context context,
 
 /*! \brief Creates a reference to a matrix object from a boolean pattern, with a user-specified origin.
  *
- * The matrix created by this function is of type <tt>\ref vx_uint8</tt>, with the value 0 representing False,
- * and the value 255 representing True. It supports patterns described below. See <tt>\ref vx_pattern_e</tt>.
+ * The matrix created by this function is of type <tt>\ref VX_TYPE_UINT8</tt>, with the value 0 representing False,
+ * and the value 255 representing True. It supports the patterns as described below:
  * - VX_PATTERN_BOX is a matrix with dimensions equal to the given number of rows and columns, and all cells equal to 255.
  *   Dimensions of 3x3 and 5x5 must be supported.
  * - VX_PATTERN_CROSS is a matrix with dimensions equal to the given number of rows and columns, which both must be odd numbers.
  *   All cells in the center row and center column are equal to 255, and the rest are equal to zero.
  *   Dimensions of 3x3 and 5x5 must be supported.
- * - VX_PATTERN_DISK is an RxC matrix, where R and C are odd and cell (c, r) is 255 if: \n
+ * - VX_PATTERN_DISK is a matrix with dimensions equal to the given number of rows (R) and columns (C),
+ *   where R and C are odd and cell (c, r) is 255 if: \n
  *   (r-R/2 + 0.5)^2 / (R/2)^2 + (c-C/2 + 0.5)^2/(C/2)^2 is less than or equal to 1,\n and 0 otherwise.
- * - VX_PATTERN_OTHER is any other pattern than the above (matrix created is still binary, with a value of 0 or 255).
  *
- * If the matrix was created via <tt>\ref vxCreateMatrixFromPattern</tt>, this attribute must be set to the
- * appropriate pattern enum. Otherwise the attribute must be set to VX_PATTERN_OTHER.
- * The vx_matrix objects returned by this function are read-only. The behavior when attempting to modify such a matrix is undefined.
+ * A matrix created from pattern is read-only. The behavior when attempting to modify such a matrix is undefined.
  *
  * \param [in] context The reference to the overall context.
  * \param [in] pattern The pattern of the matrix. See <tt>\ref VX_MATRIX_PATTERN</tt>.
@@ -2237,7 +2235,7 @@ VX_API_ENTRY vx_matrix VX_API_CALL vxCreateMatrixFromPattern(vx_context context,
  * \param [in] rows The second dimensionality.
  * \param [in] origin_col The origin (first dimensionality).
  * \param [in] origin_row The origin (second dimensionality).
- * \returns A matrix reference <tt>\ref vx_matrix</tt> of type <tt>\ref vx_uint8</tt>. Any possible errors
+ * \returns A matrix reference <tt>\ref vx_matrix</tt> of type <tt>\ref VX_TYPE_UINT8</tt>. Any possible errors
  * preventing a successful creation should be checked using <tt>\ref vxGetStatus</tt>.
  * \ingroup group_matrix
  */
@@ -2473,9 +2471,9 @@ VX_API_ENTRY vx_status VX_API_CALL vxReleaseRemap(vx_remap *table);
  *
  * The patch is specified within the destination dimensions and its
  * data provide the corresponding coordinate within the source dimensions.
- * The patch is mapped as a 2D array of elements of type <ELEMENT_TYPE>,
- * <ELEMENT_TYPE> being the type associated with the \p coordinate_type parameter
- * (i.e., <tt>\ref vx_coordinates2df_t</tt> for <tt>\ref VX_TYPE_COORDINATES2DF</tt>).
+ * The patch is mapped as a 2D array of elements of the type associated
+ * with the \p coordinate_type parameter (i.e., <tt>\ref vx_coordinates2df_t</tt>
+ * for <tt>\ref VX_TYPE_COORDINATES2DF</tt>).
  * The memory layout of the mapped 2D array follows a row-major order where rows are
  * compact (without any gap between elements), and where the potential
  * padding after each lines is determined by (* \p stride_y).
@@ -2569,10 +2567,9 @@ VX_API_ENTRY vx_status VX_API_CALL vxUnmapRemapPatch(vx_remap remap, vx_map_id m
  *
  * The patch is specified within the destination dimensions and its
  * data provide the corresponding coordinate within the source dimensions.
- * The patch in user memory is a 2D array of elements of type
- * <ELEMENT_TYPE>, <ELEMENT_TYPE> being the type associated with the
- * \p coordinate_type parameter
- * (i.e., <tt>\ref vx_coordinates2df_t</tt> for <tt>\ref VX_TYPE_COORDINATES2DF</tt>).
+ * The patch in user memory is a 2D array of elements of the type associated with the
+ * \p coordinate_type parameter (i.e., <tt>\ref vx_coordinates2df_t</tt> for
+ * <tt>\ref VX_TYPE_COORDINATES2DF</tt>).
  * The memory layout of this array follows a row-major order where rows are
  * compact (without any gap between elements), and where the potential padding
  * after each line is determined by the \p user_stride_y parameter.
@@ -2655,7 +2652,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxQueryRemap(vx_remap table, vx_enum attribut
  * \param [in] item_type The type of data to hold. Must be greater than
  * <tt>\ref VX_TYPE_INVALID</tt> and less than or equal to <tt>\ref VX_TYPE_VENDOR_STRUCT_END</tt>.
  * Or must be a <tt>\ref vx_enum</tt> returned from <tt>\ref vxRegisterUserStruct</tt>.
- * \param [in] capacity     The maximal number of items that the array can hold.
+ * \param [in] capacity     The maximal number of items that the array can hold. This value must be greater than zero.
  *
  * \returns An array reference <tt>\ref vx_array</tt>. Any possible errors preventing a
  * successful creation should be checked using <tt>\ref vxGetStatus</tt>.
@@ -2905,7 +2902,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxUnmapArrayRange(vx_array array, vx_map_id m
  *
  * \param [in] context      The reference to the overall Context.
  * \param [in] exemplar     The exemplar object that defines the metadata of the created objects in the ObjectArray.
- * \param [in] count        Number of Objects to create in the ObjectArray.
+ * \param [in] count        Number of Objects to create in the ObjectArray. This value must be greater than zero.
  *
  * \returns An ObjectArray reference <tt>\ref vx_object_array</tt>. Any possible errors preventing a
  * successful creation should be checked using <tt>\ref vxGetStatus</tt>. Data objects are not initialized by this function.
@@ -2996,7 +2993,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxQueryObjectArray(vx_object_array arr, vx_en
  * - \ref vx_distribution : \ref VX_DISTRIBUTION_BINS, \ref VX_DISTRIBUTION_OFFSET, \ref VX_DISTRIBUTION_RANGE
  * - \ref vx_remap : \ref VX_REMAP_SOURCE_WIDTH, \ref VX_REMAP_SOURCE_HEIGHT, \ref VX_REMAP_DESTINATION_WIDTH, \ref VX_REMAP_DESTINATION_HEIGHT
  * - \ref vx_lut : \ref VX_LUT_TYPE, \ref VX_LUT_COUNT
- * - \ref vx_threshold : \ref VX_THRESHOLD_TYPE, \ref VX_THRESHOLD_DATA_TYPE
+ * - \ref vx_threshold : \ref VX_THRESHOLD_TYPE, \ref VX_THRESHOLD_INPUT_FORMAT, \ref VX_THRESHOLD_INPUT_FORMAT
  * - \ref vx_object_array : \ref VX_OBJECT_ARRAY_NUMITEMS, \ref VX_OBJECT_ARRAY_ITEMTYPE
  * - \ref vx_tensor : \ref VX_TENSOR_NUMBER_OF_DIMS, \ref VX_TENSOR_DIMS, \ref VX_TENSOR_DATA_TYPE, \ref VX_TENSOR_FIXED_POINT_POSITION
  * - \ref VX_VALID_RECT_CALLBACK
@@ -3038,9 +3035,9 @@ VX_API_ENTRY vx_status VX_API_CALL vxSetMetaFormatFromReference(vx_meta_format m
  * That layout is not mandatory. It is done specifically to explain the functions and not to mandate layout. Different implementation may have different layout.
  * Therefore the layout description is logical and not physical. It refers to the order of dimensions given in this function.
  * \param [in] context The reference to the implementation context.
- * \param [in] number_of_dimensions The number of dimensions.
- * \param [in] dimensions Dimensions sizes in elements.
- * \param [in] data_type The <tt>\ref vx_type_t</tt> that represents the data type of the tensor data elements. 
+ * \param [in] number_of_dims The number of dimensions.
+ * \param [in] dims Dimensions sizes in elements.
+ * \param [in] data_type The <tt>\ref vx_type_e</tt> that represents the data type of the tensor data elements. 
  * \param [in] fixed_point_position Specifies the fixed point position when the input element type is integer. if 0, calculations are performed in integer math.
  * \return A tensor data reference. Any possible errors preventing a
  * successful creation should be checked using <tt>\ref vxGetStatus</tt>.
@@ -3056,7 +3053,7 @@ VX_API_ENTRY vx_tensor VX_API_CALL vxCreateTensor(vx_context context, vx_size nu
  * \param [in] tensor The tensor data from which to extract the images. Has to be a 3d tensor.
  * \param [in] rect Image coordinates within tensor data.
  * \param [in] array_size Number of images to extract.
- * \param [in] stride Delta between two images in the array.
+ * \param [in] jump Delta between two images in the array.
  * \param [in] image_format The requested image format. Should match the tensor data's data type.
  * \return An array of images pointing to the tensor data's data.
  * \ingroup group_object_tensor
@@ -3068,7 +3065,7 @@ VX_API_ENTRY vx_object_array VX_API_CALL vxCreateImageObjectArrayFromTensor(vx_t
  * updates the parent tensor data. The view must be defined within the dimensions
  * of the parent tensor data.
  * \param [in] tensor The reference to the parent tensor data.
- * \param [in] number_of_dimensions Number of dimensions in the view. Error return if 0 or greater than number of
+ * \param [in] number_of_dims Number of dimensions in the view. Error return if 0 or greater than number of
  * tensor dimensions. If smaller than number of tensor dimensions, the lower dimensions are assumed.
  * \param [in] view_start View start coordinates
  * \param [in] view_end View end coordinates
@@ -3092,22 +3089,22 @@ VX_API_ENTRY vx_tensor VX_API_CALL vxCreateTensorFromView(vx_tensor tensor, vx_s
  * That layout is not mandated. It is done specifically to explain the functions and not to mandate layout. Different implementation may have different layout.
  * Therfore the layout description is logical and not physical. It refers to the order of dimensions given in <tt>\ref vxCreateTensor</tt> and <tt>\ref vxCreateVirtualTensor</tt>.
  * \param [in] graph The reference to the parent graph.
- * \param [in] number_of_dimensions The number of dimensions.
- * \param [in] dimensions Dimensions sizes in elements.
- * \param [in] data_type The <tt>\ref vx_type_t</tt> that represents the data type of the tensor data elements.
+ * \param [in] number_of_dims The number of dimensions.
+ * \param [in] dims Dimensions sizes in elements.
+ * \param [in] data_type The <tt>\ref vx_type_e</tt> that represents the data type of the tensor data elements.
  * \param [in] fixed_point_position Specifies the fixed point position when the input element type is integer. If 0, calculations are performed in integer math.
  * \return A tensor data reference.Any possible errors preventing a
  * successful creation should be checked using <tt>\ref vxGetStatus</tt>.
  * \note Passing this reference to <tt>\ref vxCopyTensorPatch</tt> will return an error.
  * \ingroup group_object_tensor
  */
-VX_API_ENTRY vx_tensor VX_API_CALL vxCreateVirtualTensor(vx_graph graph, vx_size number_of_dims, vx_size *dims, vx_enum data_type, vx_int8 fixed_point_position);
+VX_API_ENTRY vx_tensor VX_API_CALL vxCreateVirtualTensor(vx_graph graph, vx_size number_of_dims, const vx_size *dims, vx_enum data_type, vx_int8 fixed_point_position);
 
 
 /*! \brief Allows the application to copy a view patch from/into an tensor object .
  * \param [in] tensor The reference to the tensor object that is the source or the
  * destination of the copy.
- * \param [in] number_of_dimensions Number of patch dimension. Error return if 0 or greater than number of
+ * \param [in] number_of_dims Number of patch dimension. Error return if 0 or greater than number of
  * tensor dimensions. If smaller than number of tensor dimensions, the lower dimensions are assumed.
  * \param [in] view_start Array of patch start points in each dimension
  * \param [in] view_end Array of patch end points in each dimension
@@ -3116,7 +3113,7 @@ VX_API_ENTRY vx_tensor VX_API_CALL vxCreateVirtualTensor(vx_graph graph, vx_size
  * if the copy was requested in read mode, or from where to get the data to store into the tensor
  * object if the copy was requested in write mode. The accessible memory must be large enough
  * to contain the specified patch with the specified layout:\n
- * accessible memory in bytes >= (end[last_dimension] - start[last_dimension]) * stride[last_dimension].\m
+ * accessible memory in bytes >= (end[last_dimension] - start[last_dimension]) * stride[last_dimension].\n
  * The layout of the user memory must follow a row major order.
  * \param [in] usage This declares the effect of the copy with regard to the tensor object
  * using the <tt>\ref vx_accessor_e</tt> enumeration. Only <tt>\ref VX_READ_ONLY</tt> and <tt>\ref VX_WRITE_ONLY</tt> are supported:
@@ -3125,10 +3122,10 @@ VX_API_ENTRY vx_tensor VX_API_CALL vxCreateVirtualTensor(vx_graph graph, vx_size
  * \param [in] user_memory_type A <tt>\ref vx_memory_type_e</tt> enumeration that specifies
  * the memory type of the memory referenced by the user_addr.
  * \return A <tt>\ref vx_status_e</tt> enumeration.
- * \retval <tt>\ref VX_ERROR_OPTIMIZED_AWAY</tt> This is a reference to a virtual tensor that cannot be
+ * \retval VX_ERROR_OPTIMIZED_AWAY This is a reference to a virtual tensor that cannot be
  * accessed by the application.
- * \retval <tt>\ref VX_ERROR_INVALID_REFERENCE</tt> The tensor reference is not actually an tensor reference.
- * \retval <tt>\ref VX_ERROR_INVALID_PARAMETERS</tt> An other parameter is incorrect.
+ * \retval VX_ERROR_INVALID_REFERENCE The tensor reference is not actually an tensor reference.
+ * \retval VX_ERROR_INVALID_PARAMETERS An other parameter is incorrect.
  * \ingroup group_object_tensor
  */
 VX_API_ENTRY vx_status VX_API_CALL vxCopyTensorPatch(vx_tensor tensor, vx_size number_of_dims, const vx_size * view_start, const vx_size * view_end,
@@ -3140,9 +3137,9 @@ VX_API_ENTRY vx_status VX_API_CALL vxCopyTensorPatch(vx_tensor tensor, vx_size n
  * \param [out] ptr The location at which to store the resulting value.
  * \param [in] size The size of the container to which \a ptr points.
  * \return A <tt>\ref vx_status_e</tt> enumeration.
- * \retval <tt>\ref VX_SUCCESS</tt> No errors.
- * \retval <tt>\ref VX_ERROR_INVALID_REFERENCE</tt> If data is not a <tt>\ref vx_tensor</tt>.
- * \retval <tt>\ref VX_ERROR_INVALID_PARAMETERS</tt> If any of the other parameters are incorrect.
+ * \retval VX_SUCCESS No errors.
+ * \retval VX_ERROR_INVALID_REFERENCE If data is not a <tt>\ref vx_tensor</tt>.
+ * \retval VX_ERROR_INVALID_PARAMETERS If any of the other parameters are incorrect.
  * \ingroup group_object_tensor
  */
 VX_API_ENTRY vx_status VX_API_CALL vxQueryTensor(vx_tensor tensor, vx_enum attribute, void *ptr, vx_size size);
@@ -3152,8 +3149,8 @@ VX_API_ENTRY vx_status VX_API_CALL vxQueryTensor(vx_tensor tensor, vx_enum attri
  * \param [in] tensor The pointer to the tensor data to release.
  * \post After returning from this function the reference is zeroed.
  * \return A <tt>\ref vx_status_e</tt> enumeration.
- * \retval <tt>\ref VX_SUCCESS</tt> No errors; all other values indicate failure
- * \retval * An error occurred. See <tt\ref >vx_status_e</tt>.
+ * \retval VX_SUCCESS No errors; all other values indicate failure
+ * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  * \ingroup group_object_tensor
  */
 VX_API_ENTRY vx_status VX_API_CALL vxReleaseTensor(vx_tensor *tensor);

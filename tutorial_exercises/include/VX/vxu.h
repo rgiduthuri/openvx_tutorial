@@ -1,29 +1,18 @@
 /*
+
  * Copyright (c) 2012-2017 The Khronos Group Inc.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and/or associated documentation files (the
- * "Materials"), to deal in the Materials without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Materials, and to
- * permit persons to whom the Materials are furnished to do so, subject to
- * the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Materials.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
- * KHRONOS STANDARDS. THE UNMODIFIED, NORMATIVE VERSIONS OF KHRONOS
- * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT
- *    https://www.khronos.org/registry/
- *
- * THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
- * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
- * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 #ifndef _OPENVX_UTILITY_H_
@@ -126,7 +115,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuScaleImage(vx_context context, vx_image sr
 /*! \brief [Immediate] Processes the image through the LUT.
  * \param [in] context The reference to the overall context.
  * \param [in] input The input image in <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt>.
- * \param [in] lut The LUT which is of type <tt>\ref VX_TYPE_UINT8</tt> or <tt>\ref VX_TYPE_INT16</tt>.
+ * \param [in] lut The LUT which is of type <tt>\ref VX_TYPE_UINT8</tt> if input image is <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_TYPE_INT16</tt> if input image is <tt>\ref VX_DF_IMAGE_S16</tt>.
  * \param [out] output The output image of the same type as the input image.
  * \ingroup group_vision_function_lut
  * \return A <tt>\ref vx_status_e</tt> enumeration.
@@ -173,7 +162,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuAbsDiff(vx_context context, vx_image in1, 
  * \param [in] context The reference to the overall context.
  * \param [in] input The input image. <tt>\ref VX_DF_IMAGE_U8</tt> is supported.
  * \param [out] mean The average pixel value.
- * \param [out] stddev [optional]The standard deviation of the pixel values.
+ * \param [out] stddev [optional] The standard deviation of the pixel values.
  * \ingroup group_vision_function_meanstddev
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
@@ -186,7 +175,8 @@ VX_API_ENTRY vx_status VX_API_CALL vxuMeanStdDev(vx_context context, vx_image in
  * \param [in] input The input image. Only images with format <tt>\ref VX_DF_IMAGE_U8</tt>
  * and <tt>\ref VX_DF_IMAGE_S16</tt> are supported.
  * \param [in] thresh The thresholding object that defines the parameters of
- * the operation: thresholding value(s) and true/false output values.
+ * the operation. The <tt>\ref VX_THRESHOLD_INPUT_FORMAT</tt> must be the same as the input image format and
+ * the <tt>\ref VX_THRESHOLD_OUTPUT_FORMAT</tt> must be the same as the output image format.
  * \param [out] output The output image, that will contain as pixel value
  * true and false values defined by \p thresh. Only images with format
  * <tt>\ref VX_DF_IMAGE_U8</tt> are supported.
@@ -401,7 +391,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuMinMaxLoc(vx_context context, vx_image inp
  * \param [in] in1 The first input image. Must be of type <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt>.
  * \param [in] in2 The second input image. Must be of type <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt>.
  * \param [out] out The output image which will hold the result of min.
- * \ingroup group_vision_function_min.
+ * \ingroup group_vision_function_min
  * \return  A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
@@ -436,11 +426,10 @@ VX_API_ENTRY vx_status VX_API_CALL vxuConvertDepth(vx_context context, vx_image 
 /*! \brief [Immediate] Computes Canny Edges on the input image into the output image.
  * \param [in] context The reference to the overall context.
  * \param [in] input The input <tt>\ref VX_DF_IMAGE_U8</tt> image.
- * \param [in] hyst The double threshold for hysteresis. The threshold data_type shall be either <tt>\ref VX_TYPE_UINT8</tt>
- * or <tt>\ref VX_TYPE_INT16</tt>. The <tt>\ref VX_THRESHOLD_TRUE_VALUE</tt> and <tt>\ref VX_THRESHOLD_FALSE_VALUE</tt>
- * of <tt>\ref vx_threshold</tt> are ignored.
+ * \param [in] hyst The double threshold for hysteresis. The <tt>\ref VX_THRESHOLD_INPUT_FORMAT</tt> shall be either 
+ * <tt>\ref VX_DF_IMAGE_U8</tt> or <tt>\ref VX_DF_IMAGE_S16</tt>. The <tt>\ref VX_THRESHOLD_OUTPUT_FORMAT</tt> is ignored.
  * \param [in] gradient_size The size of the Sobel filter window, must support at least 3, 5 and 7.
- * \param [in] norm_type A flag indicating the norm used to compute the gradient, VX_NORM_L1 or VX_NORM_L2.
+ * \param [in] norm_type A flag indicating the norm used to compute the gradient, <tt>\ref VX_NORM_L1</tt> or <tt>\ref VX_NORM_L2</tt>.
  * \param [out] output The output image in <tt>\ref VX_DF_IMAGE_U8</tt> format with values either 0 or 255.
  * \ingroup group_vision_function_canny
  * \return A <tt>\ref vx_status_e</tt> enumeration.
@@ -659,7 +648,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuOpticalFlowPyrLK(vx_context context,
                               vx_scalar use_initial_estimate,
                               vx_size window_dimension);
 							  
-/*! \brief [Immediate]  The Node Compares an image template against overlapped image regions.
+/*! \brief [Immediate]  The function compares an image template against overlapped image regions.
  * \details The detailed equation to the matching can be found in <tt>\ref vx_comp_metric_e</tt>.
  * The output of the template matching node is a comparison map as described in <tt>\ref vx_comp_metric_e</tt>.
  * The Node have a limitation on the template image size (width*height). It should not be larger then 65535.
@@ -667,16 +656,16 @@ VX_API_ENTRY vx_status VX_API_CALL vxuOpticalFlowPyrLK(vx_context context,
  * \param [in] context The reference to the overall context.
  * \param [in] src The input image of type <tt>\ref VX_DF_IMAGE_U8</tt>.
  * \param [in] templateImage Searched template of type <tt>\ref VX_DF_IMAGE_U8</tt>.
- * \param [in] matchingMethod attribute specifying the comparison method <tt>\ref vx_comp_metric_e</tt>. This function support only <tt>\ref VX_COMPARE_CCORR_NORM</tt> and <tt>\refVX_COMPARE_L2</tt>.
- * \param [out] output Map of comparison results. The output is an image of type VX_DF_IMAGE_S16
+ * \param [in] matchingMethod attribute specifying the comparison method <tt>\ref vx_comp_metric_e</tt>. This function support only <tt>\ref VX_COMPARE_CCORR_NORM</tt> and <tt>\ref VX_COMPARE_L2</tt>.
+ * \param [out] output Map of comparison results. The output is an image of type <tt>\ref VX_DF_IMAGE_S16</tt>
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  * \ingroup group_vision_function_match_template
  */
- VX_API_ENTRY vx_status VX_API_CALL vxuMatchTemplateNode(vx_context context, vx_image src, vx_image templateImage, vx_enum matchingMethod, vx_image output);
+ VX_API_ENTRY vx_status VX_API_CALL vxuMatchTemplate(vx_context context, vx_image src, vx_image templateImage, vx_enum matchingMethod, vx_image output);
 
- /*! \brief [Immediate] Creates a node that extracts LBP image from an input image
+ /*! \brief [Immediate] The function extracts LBP image from an input image
  * \param [in] context The reference to the overall context.
  * \param [in] in		An input image in <tt>vx_image</tt>. Or \f$ SrcImg\f$ in the equations. the image is of type <tt>\ref VX_DF_IMAGE_U8</tt>
  * \param [in] format	A variation of LBP like original LBP and mLBP. see <tt> \ref vx_lbp_format_e </tt>
@@ -687,71 +676,96 @@ VX_API_ENTRY vx_status VX_API_CALL vxuOpticalFlowPyrLK(vx_context context,
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  * \ingroup group_vision_function_lbp
  */
-VX_API_ENTRY vx_status VX_API_CALL vxuLBPNode(vx_context context,
+VX_API_ENTRY vx_status VX_API_CALL vxuLBP(vx_context context,
 	vx_image in, vx_enum format, vx_int8 kernel_size, vx_image out);
 					  							  
-/*! \brief [Immediate] Computes Histogram of Oriented Gradients features for the W1xW2 window in a sliding window fashion over the whole input image.
- * \details To account for changes in illumination and contrast, the gradient strengths must be locally normalized, which requires grouping the cells together into larger, spatially connected blocks. 
- * The HOG descriptor is then the concatenated vector of the components of the normalized cell histograms from all of the block regions. 
- * These blocks typically overlap, meaning that each cell contributes more than once to the final descriptor.
- * Blocks are square grids, represented by three parameters: the number of cells per block, the number of pixels per cell, and the number of channels per cell histogram.
- * The W1xW2 window starting position is at coordinates 0x0.
- * If the input image has dimensions that are not an integer multiple of W1xW2 blocks with the specified stride, then the last positions that contain only a partial W1xW2 window
- * will be calculated with the remaining part of the W1xW2 window padded with zeroes.
- * The Window W1xW2 must also have a size so that it contains an integer number of cells, otherwise the HOG node is not well-defined.
- * The descriptor calculation follows the details outlined in:\n
- * N. Dalal and B. Triggs. Histograms of Oriented Gradients for Human Detection.
- * INRIA, 2005.  https://lear.inrialpes.fr/people/triggs/pubs/Dalal-cvpr05.pdf\n
- * The output features tensor have 3 dimensions, given by:\n
- * \f[ (floor((image_{widt}h-window_{width})/window_{stride}) + 1)\f]
- * \f[ (floor((image_{height}-window_{height})/window_{stride}) + 1)\f]
- * \f[ floor((window_{width} - block_{width})/block_{stride} + 1) * floor((window_{height} - block_{height})/block_{stride} + 1) * num_{bins}] \f]
- * \param [in] context The reference to the overall context.
- * \param [in] input The input image of type <tt>\ref VX_DF_IMAGE_U8</tt>.
- * \param [in] magnitudes The gradient magnitudes of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_FLOAT32</tt> interpolated between adjacent bins. It is the output of <tt>\ref vxHOGCellsNode</tt>.
- * \param [in] bins       The gradient angle bins of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_INT8</tt> for the adjacent bins. It is the output of <tt>\ref vxHOGCellsNode</tt>.
- * \param [in] params The parameters of type <tt>\ref vx_hog_t</tt>.
- * \param [in] hog_param_size Size of <tt>\ref vx_hog_t</tt> in bytes.
- * \param [out] features The output HOG features of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_FLOAT32</tt>.
+/*! \brief [Immediate] Performs cell calculations for the average gradient magnitude and gradient orientation histograms.
+ * \details Firstly, the gradient magnitude and gradient orientation are computed for each pixel in the input image.
+ * Two 1-D centred, point discrete derivative masks are applied to the input image in the horizontal and vertical directions.
+ * \f[ M_h = [-1, 0, 1] \f] and \f[ M_v = [-1, 0, 1]^T \f]
+ * \f$G_v\f$ is the result of applying mask \f$M_v\f$ to the input image, and \f$G_h\f$ is the result of applying mask \f$M_h\f$ to the input image.
+ * The border mode used for the gradient calculation is implementation dependent. Its behavior should be similar to <tt>\ref VX_BORDER_UNDEFINED</tt>.
+ * The gradient magnitudes and gradient orientations for each pixel are then calculated in the following manner.
+ * \f[ G(x,y) = \sqrt{G_v(x,y)^2 + G_h(x,y)^2} \f]
+ * \f[ \theta(x,y) = arctan(G_v(x,y), G_h(x,y)) \f]
+ * where \f$arctan(v, h)\f$
+ * is \f$ tan^{-1}(v/h)\f$ when \f$h!=0\f$,
  *
- * \ingroup group_vision_function_hog
- * \return A <tt>\ref vx_status_e</tt> enumeration.
- * \retval VX_SUCCESS Success
- * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
- */
- 
- 
-VX_API_ENTRY vx_status VX_API_CALL vxuHOGFeatures(vx_context context, vx_image input, vx_tensor magnitudes, vx_tensor bins, const vx_hog_t *params, vx_size hog_param_size, vx_tensor features);
-
-/*! \brief [Immediate] Performs cell calculations for magnitude and histogram bins for Histogram of Oriented Gradients.
- * \details The first step of calculation is the computation of the gradient values. 
- * We apply a 1-D centred, point discrete derivative mask both of the horizontal and vertical directions. 
- * \f[ G_x = [-1, 0, 1] \f] and \f[ G_y = [-1, 0, 1]^T \f]
- * The second step of calculation is creating the cell histograms. 
- * Each pixel within the cell casts a weighted vote for an orientation-based histogram channel based on the values found in the gradient computation. 
- * The cells themselves are rectangular in shape, and the histogram channels are evenly spread over 0 to 360 degrees.
- * The magnitudes are calculated by the following formula:
- * \f[ magnitude = \sqrt{G_x^2 + G_y^2} \f]
- * Tensor size of output of magnitudes is \f[ [floor(image_{width}/cell_{width}) ,floor(image_{height}/cell_{height}) ] \f]
- * Tensor size of output of bins is \f[ [floor(image_{width}/cell_{width}) ,floor(image_{height}/cell_{height}) ,num_{bins}] \f]
+ * \f$ -pi/2 \f$ if \f$v<0\f$ and \f$h==0\f$,
+ *
+ * \f$  pi/2  \f$ if \f$v>0\f$ and \f$h==0\f$
+ *
+ * and \f$     0  \f$ if \f$v==0\f$ and \f$h==0\f$
+ *
+ * Secondly, the gradient magnitudes and orientations are used to compute the bins output tensor and optional magnitudes output tensor.
+ * These tensors are computed on a cell level where the cells are rectangular in shape.
+ * The magnitudes tensor contains the average gradient magnitude for each cell.
+ * \f[magnitudes(c) = \frac{1}{(cell\_width * cell\_height)}\sum\limits_{w=0}^{cell\_width} \sum\limits_{h=0}^{cell\_height} G_c(w,h)\f]
+ * where \f$G_c\f$ is the gradient magnitudes related to cell \f$c\f$.
+ * The bins tensor contains histograms of gradient orientations for each cell.
+ * The gradient orientations at each pixel range from 0 to 360 degrees.  These are quantised into a set of histogram bins based on the num_bins parameter.
+ * Each pixel votes for a specific cell histogram bin based on its gradient orientation.  The vote itself is the pixel's gradient magnitude.
+ * \f[bins(c, n) = \sum\limits_{w=0}^{cell\_width} \sum\limits_{h=0}^{cell\_height} G_c(w,h) * 1[B_c(w, h, num\_bins) == n]\f]
+ * where \f$B_c\f$ produces the histogram bin number based on the gradient orientation of the pixel at location (\f$w\f$, \f$h\f$) in cell \f$c\f$ based on
+ * the \f$num\_bins\f$ and \f[1[B_c(w, h, num\_bins) == n]\f] is a delta-function with value 1 when \f$B_c(w, h, num\_bins) == n\f$ or 0 otherwise. 
  * \param [in] context The reference to the overall context.
  * \param [in] input The input image of type <tt>\ref VX_DF_IMAGE_U8</tt>.
  * \param [in] cell_width The histogram cell width of type <tt>\ref VX_TYPE_INT32</tt>.
  * \param [in] cell_height The histogram cell height of type <tt>\ref VX_TYPE_INT32</tt>.
  * \param [in] num_bins  The histogram size of type <tt>\ref VX_TYPE_INT32</tt>.
- * \param [out] magnitudes The output gradient magnitudes of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_FLOAT32</tt> interpolated between adjacent bins.
- * \param [out] bins       The output gradient angle bins of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_INT8</tt> for the adjacent bins.
+ * \param [out] magnitudes The output average gradient magnitudes per cell of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_INT16</tt> of size \f$ [floor(image_{width}/cell_{width}) ,floor(image_{height}/cell_{height}) ] \f$.
+ * \param [out] bins       The output gradient orientation histograms per cell of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_INT16</tt> of size \f$ [floor(image_{width}/cell_{width}) ,floor(image_{height}/cell_{height}), num_{bins}] \f$.
  *
  * \ingroup group_vision_function_hog
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  */
-VX_API_ENTRY vx_status VX_API_CALL vxuHOGCells(vx_context context, vx_image input, vx_int32 cell_size, vx_int32 num_bins, vx_tensor magnitudes, vx_tensor bins);
+VX_API_ENTRY vx_status VX_API_CALL vxuHOGCells(vx_context context, vx_image input, vx_int32 cell_width, vx_int32 cell_height, vx_int32 num_bins, vx_tensor magnitudes, vx_tensor bins);
+
+/*! \brief [Immediate]  Computes Histogram of Oriented Gradients features for the W1xW2 window in a sliding window fashion over the whole input image.
+ * \details Firstly if a magnitudes tensor is provided the cell histograms in the bins tensor are normalised by the average cell gradient magnitudes.
+ \f[bins(c,n) = \frac{bins(c,n)}{magnitudes(c)}\f]
+ * To account for changes in illumination and contrast the cell histograms must be locally normalized which requires grouping the cell histograms together into larger spatially connected blocks.
+ * Blocks are rectangular grids represented by three parameters: the number of cells per block, the number of pixels per cell, and the number of bins per cell histogram.
+ * These blocks typically overlap, meaning that each cell histogram contributes more than once to the final descriptor.
+ * To normalize a block its cell histograms \f$h\f$ are grouped together to form a vector \f$v = [h_1, h_2, h_3, ... , h_n]\f$.
+ * This vector is normalised using L2-Hys which means performing L2-norm on this vector; clipping the result (by limiting the maximum values of v to be threshold) and renormalizing again. If the threshold is equal to zero then L2-Hys normalization is not performed.
+ * \f[L2norm(v) = \frac{v}{\sqrt{\|v\|_2^2 + \epsilon^2}}\f]
+ * where \f$ \|v\|_k \f$ be its k-norm for k=1, 2, and \f$ \epsilon \f$ be a small constant.
+ * For a specific window its HOG descriptor is then the concatenated vector of the components of the normalized cell histograms from all of the block regions contained in the window.
+ * The W1xW2 window starting position is at coordinates 0x0.
+ * If the input image has dimensions that are not an integer multiple of W1xW2 blocks with the specified stride, then the last positions that contain only a partial W1xW2 window
+ * will be calculated with the remaining part of the W1xW2 window padded with zeroes.
+ * The Window W1xW2 must also have a size so that it contains an integer number of cells, otherwise the node is not well-defined.
+ * The final output tensor will contain HOG descriptors equal to the number of windows in the input image.
+ * The output features tensor has 3 dimensions, given by:\n
+ * \f[[ (floor((image_{width}-window_{width})/window_{stride}) + 1),\f]
+ * \f[ (floor((image_{height}-window_{height})/window_{stride}) + 1),\f]
+ * \f[ floor((window_{width} - block_{width})/block_{stride} + 1) * floor((window_{height} - block_{height})/block_{stride} + 1) *\f]
+*  \f[ (((block_{width} * block_{height}) / (cell_{width} * cell_{height})) * num_{bins})] \f]
+ * See <tt>\ref vxCreateTensor</tt> and <tt>\ref vxCreateVirtualTensor</tt>.
+ * The output tensor from this function may be very large.  For this reason, is it not recommended that this "immediate mode" version of the function be used.
+ * The preferred method to perform this function is as graph node with a virtual tensor as the output.
+ * \param [in] context The reference to the overall context.
+ * \param [in] input The input image of type <tt>\ref VX_DF_IMAGE_U8</tt>.
+ * \param [in] magnitudes The averge gradient magnitudes per cell of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_INT16</tt>. It is the output of <tt>\ref vxuHOGCells</tt>.
+ * \param [in] bins       The gradient orientation histogram per cell of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_INT16</tt>. It is the output of <tt>\ref vxuHOGCells</tt>.
+ * \param [in] params The parameters of type <tt>\ref vx_hog_t</tt>.
+ * \param [in] hog_param_size Size of <tt>\ref vx_hog_t</tt> in bytes.
+ * \param [out] features The output HOG features of <tt>\ref vx_tensor</tt> of type <tt>\ref VX_TYPE_INT16</tt>.
+ *
+ * \ingroup group_vision_function_hog
+ * \return A <tt>\ref vx_status_e</tt> enumeration.
+ * \retval VX_SUCCESS Success
+ * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
+ */
+ 
+VX_API_ENTRY vx_status VX_API_CALL vxuHOGFeatures(vx_context context, vx_image input, vx_tensor magnitudes, vx_tensor bins, const vx_hog_t *params, vx_size hog_param_size, vx_tensor features);
 
 /*! \brief [Immediate] Finds the Probabilistic Hough Lines detected in the input binary image, each line is stored in the output array as a set of points (x1, y1, x2, y2) .
-  * \details The algorithm contain randomness. Therefore in safety critical implementation.
- * it should be isolated and run in a lock step system. Were processing is done in redundancy mode outside a main processing system.
+ * \details Some implementations of the algorithm may have a random or non-deterministic element. If the target application is in a safety-critical environment this 
+ * should be borne in mind and steps taken in the implementation, the application or both to achieve the level of determinism required by the system design.
  * \param [in] context The reference to the overall context.
  * \param [in] input 8 bit, single channel binary source image
  * \param [in] params parameters of the struct <tt>\ref vx_hough_lines_p_t</tt>
@@ -762,7 +776,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuHOGCells(vx_context context, vx_image inpu
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  * \ingroup group_vision_function_hough_lines_p
   */
-VX_API_ENTRY vx_status VX_API_CALL vxuHoughLinesPNode(vx_context context, vx_image input, const vx_hough_lines_p_t *params, vx_array lines_array, vx_scalar num_lines);
+VX_API_ENTRY vx_status VX_API_CALL vxuHoughLinesP(vx_context context, vx_image input, const vx_hough_lines_p_t *params, vx_array lines_array, vx_scalar num_lines);
 
 /*! \brief [Immediate] Remaps an output image from an input image.
  * \param [in] context The reference to the overall context.
@@ -855,7 +869,7 @@ VX_API_ENTRY vx_status VX_API_CALL vxuTensorSubtract(vx_context context, vx_tens
 /*! \brief [Immediate] Performs LUT on element values in the input tensor data.
  * \param [in] context The reference to the overall context.
  * \param [in] input1 Input tensor data. Implementations must support input tensor data type <tt>\ref VX_TYPE_INT16</tt> with fixed_point_position 8, 
- * and tensor data types <tt>\ref VX_TYPE_UINT8</tt> and <tt>\ref VX_TYPE_INT8</tt>, with fixed_point_position 0. 
+ * and tensor data types <tt>\ref VX_TYPE_UINT8</tt>, with fixed_point_position 0. 
  * \param [in] lut The look-up table to use, of type <tt>\ref vx_lut</tt>.
  * The elements of input1 are treated as unsigned integers to determine an index into the look-up table.
  * The data type of the items in the look-up table must match that of the output tensor.
@@ -903,15 +917,15 @@ VX_API_ENTRY vx_status VX_API_CALL vxuTensorConvertDepth(vx_context context, vx_
  * \param [in] input1 The first input 2D tensor of type <tt>\ref VX_TYPE_INT16</tt> with fixed_point_pos 8, or tensor data types <tt>\ref VX_TYPE_UINT8</tt> or <tt>\ref VX_TYPE_INT8</tt>, with fixed_point_pos 0.
  * \param [in] input2 The second 2D tensor. Must be in the same data type as input1.
  * \param [in] input3 The third 2D tensor. Must be in the same data type as input1. [optional].
- * \param [in] matrix_multiply_params Matrix multiply parameters, see <tt>\ref vx_matrix_multiply_params_t </tt>.
+ * \param [in] matrix_multiply_params Matrix multiply parameters, see <tt>\ref vx_tensor_matrix_multiply_params_t </tt>.
  * \param [out] output The output 2D tensor. Must be in the same data type as input1. Output dimension must agree the formula in the description.
  * \ingroup group_vision_function_tensor_matrix_multiply
  * \return A <tt>\ref vx_status_e</tt> enumeration.
  * \retval VX_SUCCESS Success
  * \retval * An error occurred. See <tt>\ref vx_status_e</tt>.
  */
-VX_API_ENTRY vx_status VX_API_CALL vxuMatrixMultiply(vx_context context, vx_tensor input1, vx_tensor input2, vx_tensor input3,
-    const vx_matrix_multiply_params_t *matrix_multiply_params, vx_tensor output);
+VX_API_ENTRY vx_status VX_API_CALL vxuTensorMatrixMultiply(vx_context context, vx_tensor input1, vx_tensor input2, vx_tensor input3,
+    const vx_tensor_matrix_multiply_params_t *matrix_multiply_params, vx_tensor output);
 					  
 
 /*! \brief [Immediate] Copy data from one object to another.
