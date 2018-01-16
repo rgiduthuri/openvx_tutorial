@@ -42,6 +42,10 @@
 #define DEFAULT_WAITKEY_DELAY  1  /* waitKey delay time in milliseconds after each frame processing */
 #endif
 
+#ifndef ENABLE_DISPLAY
+#define ENABLE_DISPLAY         1  /* display results using OpenCV GUI */
+#endif
+
 class CGuiModule
 {
 public:
@@ -56,7 +60,9 @@ public:
             exit( 1 );
         }
         printf( "OK: FILE %s %dx%d\n", captureFile, GetWidth(), GetHeight());
+#if ENABLE_DISPLAY
         cv::namedWindow(m_windowName);
+#endif
     }
 
     CGuiModule( int captureDevice )
@@ -70,7 +76,9 @@ public:
             exit( 1 );
         }
         printf( "OK: CAMERA#%d %dx%d\n", captureDevice, GetWidth(), GetHeight());
+#if ENABLE_DISPLAY
         cv::namedWindow(m_windowName);
+#endif
     }
 
     int GetWidth()
@@ -112,6 +120,9 @@ public:
     {
         cv::putText( m_imgBGR, text, cv::Point( x, y ),
                      cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar( 128, 0, 0 ), 1, CV_AA );
+#if !ENABLE_DISPLAY
+        printf("text: %s\n", text);
+#endif
     }
 
     void DrawPoint( int x, int y )
@@ -136,7 +147,9 @@ public:
 
     void Show()
     {
+#if ENABLE_DISPLAY
         cv::imshow( m_windowName, m_imgBGR );
+#endif
     }
 
     bool AbortRequested()
@@ -155,7 +168,9 @@ public:
 
     void WaitForKey()
     {
+#if ENABLE_DISPLAY
         cv::waitKey( 0 );
+#endif
     }
 
 protected:

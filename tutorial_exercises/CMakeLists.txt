@@ -27,13 +27,15 @@
 #   OpenVX_LIBS_DIR     -- path to OpenVX libraries
 #   OpenVX_INCLUDE_DIRS -- path to non-khronos OpenVX header files (optional)
 #   ENABLE_OPENCL       -- flag to enable OpenCL with OpenVX source build (optional)
+#   ENABLE_NN_AMD       -- flag to enable Neural Network extension with AMD ROCm (optional)
+#   DISABLE_DISPLAY     -- flag to display OpenCV windows
 #
 # Here are few examples:
+# * Build exerciese using an open source implementation with using OpenCL and NN
+#     % cmake -DENABLE_NN_AMD=TRUE \
+#             .../openvx_tutorial/tutorial_exercises
 # * Build exerciese using an open source implementation without using OpenCL
-#     % pushd .../openvx_tutorial/tutorial_exercises
-#     % git clone https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-core
-#     % popd
-#     % cmake -DOpenVX_SOURCE_DIR=amdovx-core/openvx \
+#     % cmake -DOpenVX_SOURCE_DIR=amdovx-modules/deps/amdovx-core/openvx \
 #             -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL=TRUE \
 #             .../openvx_tutorial/tutorial_exercises
 # * Build exerciese using a 3rd-party OpenVX library
@@ -54,7 +56,10 @@ else()
 endif()
 
 # by default, use open-source OpenVX without OpenCL
-if( NOT OpenVX_LIBS_DIR )
+if( ENABLE_NN_AMD )
+  set  ( OpenVX_LIBS openvx vx_nn CACHE INTERNAL OpenVX_LIBS                   )
+  set  ( OpenVX_LIBS_DIR /opt/rocm/lib CACHE INTERNAL OpenVX_LIBS_DIR          )
+elseif( NOT OpenVX_LIBS_DIR )
   if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
     EXEC_PROGRAM(cat ARGS "/proc/cpuinfo" OUTPUT_VARIABLE CPUINFO)
     if( ${CPUINFO} MATCHES "sse4_2" )
@@ -73,7 +78,7 @@ if( NOT OpenVX_LIBS_DIR )
     set(SSE4_2_FOUND true CACHE BOOL "SSE4.2 available on host")
   endif()
   if( SSE4_2_FOUND )
-    set   ( OpenVX_SOURCE_DIR                 amdovx-core/openvx CACHE INTERNAL OpenVX_SOURCE_DIR                 )
+    set   ( OpenVX_SOURCE_DIR amdovx-modules/deps/amdovx-core/openvx CACHE INTERNAL OpenVX_SOURCE_DIR             )
     if( EXISTS ${CMAKE_SOURCE_DIR}/${OpenVX_SOURCE_DIR} )
       set ( OpenVX_LIBS                       openvx             CACHE INTERNAL OpenVX_LIBS                       )
       if( NOT ENABLE_OPENCL )
@@ -86,15 +91,8 @@ if( NOT OpenVX_LIBS_DIR )
 endif()
 
 if( OpenVX_SOURCE_DIR AND EXISTS ${CMAKE_SOURCE_DIR}/${OpenVX_SOURCE_DIR} )
-  add_subdirectory     ( ${OpenVX_SOURCE_DIR} )
   if( NOT OpenVX_LIBS )
     set   ( OpenVX_LIBS openvx CACHE INTERNAL OpenVX_LIBS                              )
-  endif()
-  add_subdirectory     ( exercise3            )
-  add_subdirectory     ( solution_exercise3   )
-  if( ENABLE_OPENCL )
-    add_subdirectory   ( exercise4            )
-    add_subdirectory   ( solution_exercise4   )
   endif()
 elseif( NOT OpenVX_LIBS_DIR )
   set     ( OpenVX_SAMPLE /home/openvx/openvx_sample/install/Linux/x64                 )
@@ -106,7 +104,31 @@ elseif( NOT OpenVX_LIBS_DIR )
   endif( CMAKE_BUILD_TYPE MATCHES ".*Deb.*" )
 endif()
 
+if( ENABLE_OPENCL OR ENABLE_NN_AMD )
+  list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+  find_package(OpenCL REQUIRED)
+endif()
+
+if( OpenVX_SOURCE_DIR AND EXISTS ${CMAKE_SOURCE_DIR}/${OpenVX_SOURCE_DIR} )
+  add_subdirectory     ( ${OpenVX_SOURCE_DIR} )
+endif()
+if( DISABLE_DISPLAY )
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DENABLE_DISPLAY=0")
+endif()
 add_subdirectory       ( exercise1            )
-add_subdirectory       ( exercise2            )
 add_subdirectory       ( solution_exercise1   )
+add_subdirectory       ( exercise2            )
 add_subdirectory       ( solution_exercise2   )
+if( ENABLE_NN_AMD )
+  add_subdirectory     ( exercise3            )
+  add_subdirectory     ( solution_exercise3   )
+  add_subdirectory     ( exercise4            )
+  add_subdirectory     ( solution_exercise4   )
+elseif( OpenVX_SOURCE_DIR AND EXISTS ${CMAKE_SOURCE_DIR}/${OpenVX_SOURCE_DIR} )
+  add_subdirectory     ( exercise3            )
+  add_subdirectory     ( solution_exercise3   )
+  if( ENABLE_OPENCL )
+    add_subdirectory   ( exercise4            )
+    add_subdirectory   ( solution_exercise4   )
+  endif()
+endif()

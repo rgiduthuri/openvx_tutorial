@@ -1,29 +1,18 @@
 /*
+
  * Copyright (c) 2012-2017 The Khronos Group Inc.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and/or associated documentation files (the
- * "Materials"), to deal in the Materials without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Materials, and to
- * permit persons to whom the Materials are furnished to do so, subject to
- * the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Materials.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
- * KHRONOS STANDARDS. THE UNMODIFIED, NORMATIVE VERSIONS OF KHRONOS
- * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT
- *    https://www.khronos.org/registry/
- *
- * THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
- * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
- * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 #ifndef VX_1_0_1_NAMING_COMPATIBILITY
@@ -43,6 +32,10 @@
 #define VX_BORDER_MODE_REPLICATE    VX_BORDER_REPLICATE
 #define VX_BORDER_MODE_UNSUPPORTED_POLICY_DEFAULT_TO_UNDEFINED  VX_BORDER_POLICY_DEFAULT_TO_UNDEFINED
 #define VX_BORDER_MODE_UNSUPPORTED_POLICY_RETURN_ERROR          VX_BORDER_POLICY_RETURN_ERROR
+
+#define VX_REF_ATTRIBUTE_COUNT VX_REFERENCE_COUNT
+#define VX_REF_ATTRIBUTE_TYPE  VX_REFERENCE_TYPE
+#define VX_REF_ATTRIBUTE_NAME  VX_REFERENCE_NAME
 
 #define VX_CONTEXT_ATTRIBUTE_VENDOR_ID                          VX_CONTEXT_VENDOR_ID
 #define VX_CONTEXT_ATTRIBUTE_VERSION                            VX_CONTEXT_VERSION

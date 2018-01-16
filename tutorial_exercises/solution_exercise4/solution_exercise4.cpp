@@ -298,8 +298,8 @@ vx_status VX_CALLBACK tensor_cos_opencl_codegen(
         // each work item will process 2 consecutive elements in the tensor
         char item[8192];
         sprintf(item,
-            "__kernel void tensor_cos(__global uchar * t0_buf, uint t0_offset,\n"
-            "                         __global uchar * t1_buf, uint t1_offset)\n"
+            "__kernel void tensor_cos(__global uchar * t0_buf, uint t0_offset, uint4 t0_stride,\n"
+            "                         __global uchar * t1_buf, uint t1_offset, uint4 t1_stride)\n"
             "{\n"
             "  uint i0 = get_global_id(0);\n"
             "  uint i1 = get_global_id(1);\n"
@@ -308,8 +308,8 @@ vx_status VX_CALLBACK tensor_cos_opencl_codegen(
             "  t1_buf += t1_offset + i0 * 4 + i1 * %d + i2 * %d;\n" // output_stride[1], output_stride[2]
             "  short2 ivalue = *(__global short2 *)t0_buf;\n"
             "  float2 fvalue;\n"
-            "  fvalue.s0 = cos(%16.10f * ivalue.s0) * %16.10f;\n" // 1/(1 << input_fixed_point_pos), 1 << output_fixed_point_pos
-            "  fvalue.s1 = cos(%16.10f * ivalue.s1) * %16.10f;\n" // 1/(1 << input_fixed_point_pos), 1 << output_fixed_point_pos
+            "  fvalue.s0 = native_cos(%16.10ff * ivalue.s0) * %16.10ff;\n" // 1/(1 << input_fixed_point_pos), 1 << output_fixed_point_pos
+            "  fvalue.s1 = native_cos(%16.10ff * ivalue.s1) * %16.10ff;\n" // 1/(1 << input_fixed_point_pos), 1 << output_fixed_point_pos
             "  short2 ovalue = convert_short2_rte(fvalue);\n"
             "  *(__global short2 *)t1_buf = ovalue;\n"
             "}\n"
@@ -543,7 +543,9 @@ int main( int argc, char * argv[] )
                 }
             }
         }
+#if ENABLE_DISPLAY
         cv::imshow( "Cosine", bgrMatForOutputDisplay );
+#endif
         ERROR_CHECK_STATUS( vxUnmapTensorPatch( output_tensor, map_id ) );
 
         ////////

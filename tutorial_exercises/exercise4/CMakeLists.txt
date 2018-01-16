@@ -29,7 +29,7 @@ find_package            ( OpenCV REQUIRED                                       
 include_directories     ( ${OpenCV_INCLUDE_DIRS}                                   )
 include_directories     ( ${OpenVX_INCLUDE_DIRS}                                   )
 include_directories     ( ${CMAKE_SOURCE_DIR}/include                              )
-include_directories     ( ${CMAKE_SOURCE_DIR}/amdovx-core/openvx/include           )
+include_directories     ( ${CMAKE_SOURCE_DIR}/amdovx-modules/deps/amdovx-core/openvx/include )
 link_directories        ( ${OpenVX_LIBS_DIR}                                       )
 if( POLICY CMP0054 )
   cmake_policy( SET CMP0054 OLD )

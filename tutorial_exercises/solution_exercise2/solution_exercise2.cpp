@@ -383,7 +383,9 @@ int main( int argc, char * argv[] )
         ERROR_CHECK_STATUS( vxMapImagePatch( output_filtered_image, &rect, 0, &map_id, &addr, &ptr,
                                              VX_READ_ONLY, VX_MEMORY_TYPE_HOST, VX_NOGAP_X ) );
         cv::Mat mat( height, width, CV_8U, ptr, addr.stride_y );
+#if ENABLE_DISPLAY
         cv::imshow( "MedianBlur", mat );
+#endif
         ERROR_CHECK_STATUS( vxUnmapImagePatch( output_filtered_image, map_id ) );
 
         ////////
