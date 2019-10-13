@@ -1,0 +1,25 @@
+This is a collection of code samples for using the OpenVX API. The samples are
+reviewed in detail by the OpenVX Programming Guide [1]. The data for running
+the code samples is available from
+https://www.dropbox.com/sh/urzzs64a85tqf3d/AADxdIEer_tjHFGzBifZWhsLa.
+
+Prerequisites
+- C and C++ compilers
+- CMake 2.8.9 or higher
+- OpenCV is required for building some of the samples (*.cpp)
+- vxa library is required for the most of the OpenVX samples. It can be
+downloaded from https://github.com/relrotciv/vxa.
+- OpenVX (the most of the samples have been tested against the OpenVX sample
+implementation that can be downloaded from
+https://github.com/KhronosGroup/OpenVX-sample-impl)
+- LAPACK is required for building the birdsEyeView.c sample
+
+BUILDING SAMPLES
+
+In order to build the samples for Linux please follow the following steps:
+$ mkdir build
+$ cd build
+$ cmake -G "Unix Makefiles" ../
+$ make
+
+[1] Frank Brill, Victor Erukhimov, Radhakrishna Giduthuri, Steve Ramm, OpenVX programming guide, TBD
