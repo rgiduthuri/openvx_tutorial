@@ -115,7 +115,7 @@ static vx_status readHeader(FILE *fp, int *psz, vx_uint32 *width, vx_uint32 *hei
                     n += sscanf(line, "%d", &maxval);
             }
         }
-        if (n < 4 || 0 == fmt || maxval > 255 && *psz == 3)
+        if (n < 4 || 0 == fmt || (maxval > 255 && *psz == 3))
         {
             /* Report an error because the file is not of a recognised format */
             status = VX_ERROR_NOT_SUPPORTED;
@@ -161,8 +161,8 @@ vx_status readImage(vx_image image, const char * filename, enum read_image_crop 
             if (VX_SUCCESS == status)
             {
                 /* Now check formats and sizes */
-                if (READ_IMAGE_USE_NONE == crop && (width > image_width || height > image_height) ||
-                    READ_IMAGE_PLACE_NONE == place && (width < image_width || height < image_height))
+                if ((READ_IMAGE_USE_NONE == crop && (width > image_width || height > image_height)) ||
+                    (READ_IMAGE_PLACE_NONE == place && (width < image_width || height < image_height)))
                 {
                     /* Report an error because the dimension of the file image does not match the dimensions of the
                        vx_imge and caller has specified no cropping or positioning */
@@ -174,10 +174,10 @@ vx_status readImage(vx_image image, const char * filename, enum read_image_crop 
                     /* Report an error becuase the vx_image is in a format that is not supported */
                     status = VX_ERROR_NOT_SUPPORTED;
                 }
-                else if (image_format == VX_DF_IMAGE_U8 && psz != 1 ||
-                       image_format == VX_DF_IMAGE_U16 && psz != 2 ||
-                       image_format == VX_DF_IMAGE_RGB && psz != 3 ||
-                       image_format == VX_DF_IMAGE_RGBX && psz != 3)
+                else if ((image_format == VX_DF_IMAGE_U8 && psz != 1) ||
+                         (image_format == VX_DF_IMAGE_U16 && psz != 2) ||
+                         (image_format == VX_DF_IMAGE_RGB && psz != 3) ||
+                         (image_format == VX_DF_IMAGE_RGBX && psz != 3))
                 {
                     /* Report an error because the image file format does not match the vx_image */
                     status = VX_ERROR_INVALID_FORMAT;
