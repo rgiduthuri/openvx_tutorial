@@ -1,4 +1,6 @@
 # 
+#  Copyright (c) 2019 Radhakrishna Giduthuri
+# 
 #  Permission is hereby granted, free of charge, to any person obtaining a
 #  copy of this software and/or associated documentation files (the
 #  "Materials"), to deal in the Materials without restriction, including
