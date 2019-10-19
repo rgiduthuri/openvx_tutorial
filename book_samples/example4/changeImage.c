@@ -61,7 +61,7 @@ vx_graph makeTestGraph(vx_context context, vx_image image, vx_image output)
     return graph;
 }
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     if (argc != 3)
     {
