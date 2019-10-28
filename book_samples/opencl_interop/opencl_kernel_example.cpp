@@ -20,8 +20,8 @@
  */
 
 /*!
- * \file    opencl_example.c
- * \example opencl_example
+ * \file    opencl_kernel_example.c
+ * \example opencl_kernel_example
  * \brief   This example gives a brief overview of OpenCL using
  *          16-bit fixed-point hard_sigmoid activation function
  * \author  Radhakrishna Giduthuri <radhakrishna.giduthuri@ieee.org>

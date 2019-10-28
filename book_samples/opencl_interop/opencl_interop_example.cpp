@@ -20,8 +20,8 @@
  */
 
 /*!
- * \file    interop_example.c
- * \example interop_example
+ * \file    opencl_interop_example.c
+ * \example opencl_interop_example
  * \brief   This example gives a brief overview of OpenVX OpenCL interop
  *          using custom user kernel implementation. This example makes
  *          use of my_vx_tensor_map_impl.cpp/h for vxMapTensorPatch and
@@ -35,6 +35,14 @@
 #include "my_vx_tensor_map_impl.h"
 #include "common.h"
 
+////////
+// local constants
+//
+#define MAX_TENSOR_DIMS   6
+
+////////
+// structure to keep hard_sigmoid node information
+//
 struct hard_sigmoid_local_data {
     cl_command_queue opencl_cmdq;
     cl_kernel opencl_kernel;
@@ -77,7 +85,7 @@ vx_status VX_CALLBACK hard_sigmoid_opencl_function(vx_node node,
     //
     cl_mem x_mem;
     vx_map_id x_map_id;
-    vx_size x_stride[VX_CONTEXT_MAX_TENSOR_DIMS];
+    vx_size x_stride[MAX_TENSOR_DIMS];
     ERROR_CHECK_STATUS( vxMapTensorPatch(tensor_x_obj, data->number_of_dims, NULL, NULL,
                             &x_map_id, x_stride, (void **)&x_mem,
                             VX_READ_ONLY, VX_MEMORY_TYPE_OPENCL_BUFFER) );
@@ -88,7 +96,7 @@ vx_status VX_CALLBACK hard_sigmoid_opencl_function(vx_node node,
     //
     cl_mem y_mem;
     vx_map_id y_map_id;
-    vx_size y_stride[VX_CONTEXT_MAX_TENSOR_DIMS];
+    vx_size y_stride[MAX_TENSOR_DIMS];
     ERROR_CHECK_STATUS( vxMapTensorPatch(tensor_y_obj, data->number_of_dims, NULL, NULL,
                             &y_map_id, y_stride, (void **)&y_mem,
                             VX_WRITE_ONLY, VX_MEMORY_TYPE_OPENCL_BUFFER) );
@@ -139,31 +147,30 @@ vx_status VX_CALLBACK hard_sigmoid_validator(vx_node node,
         return VX_ERROR_INVALID_PARAMETERS;
     }
     ERROR_CHECK_STATUS( vxQueryTensor((vx_tensor)arg[2], VX_TENSOR_DATA_TYPE, &data_type, sizeof(vx_enum)) );
-    if(data_type != VX_TYPE_FLOAT32) {
-        return VX_ERROR_INVALID_PARAMETERS;
-    }
-    ERROR_CHECK_STATUS( vxQueryTensor((vx_tensor)arg[3], VX_TENSOR_DATA_TYPE, &data_type, sizeof(vx_enum)) );
-    if(data_type != VX_TYPE_FLOAT32) {
+    if(data_type != VX_TYPE_INT16) {
         return VX_ERROR_INVALID_PARAMETERS;
     }
 
     ////
-    // check tensor dimensions
+    // get input tensor attributes
     //
-    vx_size num_dims_x, num_dims_y;
+    vx_int8 fixed_pos;
+    ERROR_CHECK_STATUS( vxQueryTensor((vx_tensor)arg[2], VX_TENSOR_FIXED_POINT_POSITION, &fixed_pos, sizeof(vx_int8)) );
+    vx_size num_dims_x;
     ERROR_CHECK_STATUS( vxQueryTensor((vx_tensor)arg[2], VX_TENSOR_NUMBER_OF_DIMS, &num_dims_x, sizeof(vx_size)) );
-    ERROR_CHECK_STATUS( vxQueryTensor((vx_tensor)arg[3], VX_TENSOR_NUMBER_OF_DIMS, &num_dims_y, sizeof(vx_size)) );
-    if(num_dims_x != num_dims_y) {
+    if(num_dims_x > MAX_TENSOR_DIMS) {
         return VX_ERROR_INVALID_PARAMETERS;
     }
-    vx_size dims_x[VX_CONTEXT_MAX_TENSOR_DIMS], dims_y[VX_CONTEXT_MAX_TENSOR_DIMS];
+    vx_size dims_x[MAX_TENSOR_DIMS];
     ERROR_CHECK_STATUS( vxQueryTensor((vx_tensor)arg[2], VX_TENSOR_DIMS, dims_x, sizeof(vx_size)*num_dims_x) );
-    ERROR_CHECK_STATUS( vxQueryTensor((vx_tensor)arg[3], VX_TENSOR_DIMS, dims_y, sizeof(vx_size)*num_dims_y) );
-    for(size_t dim = 0; dim < num_dims_x; dim++) {
-        if(dims_x[dim] != dims_y[dim]) {
-            return VX_ERROR_INVALID_PARAMETERS;
-        }
-    }
+
+    ////
+    // set output tensor attributes
+    //
+    ERROR_CHECK_STATUS( vxSetMetaFormatAttribute(metas[3], VX_TENSOR_DATA_TYPE, &data_type, sizeof(vx_enum)) );
+    ERROR_CHECK_STATUS( vxSetMetaFormatAttribute(metas[3], VX_TENSOR_FIXED_POINT_POSITION, &fixed_pos, sizeof(vx_int8)) );
+    ERROR_CHECK_STATUS( vxSetMetaFormatAttribute(metas[3], VX_TENSOR_NUMBER_OF_DIMS, &num_dims_x, sizeof(vx_size)) );
+    ERROR_CHECK_STATUS( vxSetMetaFormatAttribute(metas[3], VX_TENSOR_DIMS, dims_x, sizeof(vx_size)*num_dims_x) );
 
     return VX_SUCCESS;
 }
@@ -189,15 +196,15 @@ vx_status VX_CALLBACK hard_sigmoid_init(vx_node node,
     //   in this example, each thread is working on a single element,
     //   so total number of work items is number of elements in the tensor
     //
-    vx_size number_of_dims, dims[VX_CONTEXT_MAX_TENSOR_DIMS];
+    vx_size number_of_dims, dims[MAX_TENSOR_DIMS];
     vx_tensor tensor_y_obj = (vx_tensor)arg[3];
     ERROR_CHECK_STATUS( vxQueryTensor(tensor_y_obj, VX_TENSOR_NUMBER_OF_DIMS, &number_of_dims, sizeof(vx_size)) );
     ERROR_CHECK_STATUS( vxQueryTensor(tensor_y_obj, VX_TENSOR_DIMS, dims, sizeof(vx_size)*number_of_dims) );
-    size_t num_tensor_elements = 1;
-    for(auto dim : dims)
-        num_tensor_elements *= dim;
-    data->global_work_size = num_tensor_elements;
     data->number_of_dims = number_of_dims;
+    size_t num_tensor_elements = 1;
+    for(vx_size i = 0; i < number_of_dims; i++)
+        num_tensor_elements *= dims[i];
+    data->global_work_size = num_tensor_elements;
 
     ////
     // get OpenCL command-queue from the node and corresponding OpenCL device
@@ -340,6 +347,15 @@ vx_kernel register_hard_sigmoid_kernel(vx_context openvx_ctx)
     return user_kernel;
 }
 
+////////
+// log_callback function implements a mechanism to print log messages from OpenVX
+//
+void VX_CALLBACK log_callback(vx_context context, vx_reference ref,
+                   vx_status status, const vx_char string[] )
+{
+    printf("LOG: [status:%d] %s\n", status, string);
+}
+
 int main()
 {
     ////
@@ -365,7 +381,6 @@ int main()
         // convert x & y from float to Q7.8
         x_input[i] = (short)(x * 256.0f);
         y_output_ref[i] = (short)(y * 256.0f);
-
     }
 
     ////
@@ -402,6 +417,7 @@ int main()
     //
     vx_context openvx_ctx = vxCreateContextFromCL(opencl_ctx, opencl_cmdq);
     ERROR_CHECK_STATUS( vxGetStatus((vx_reference)openvx_ctx) );
+    vxRegisterLogCallback(openvx_ctx, log_callback, vx_false_e);
     printf("OK: created OpenVX context with OpenCL interoperability\n");
 
     ////
@@ -490,8 +506,7 @@ int main()
     //
     delete[] x_input;
     delete[] y_output_ref;
-    ERROR_CHECK_STATUS( vxReleaseContext(&openvx_ctx) );
-    printf("OK: release all OpenVX resources\n");
+    //ERROR_CHECK_STATUS( vxReleaseContext(&openvx_ctx) );
 
     return 0;
 }
