@@ -32,13 +32,18 @@
 #include "common.h"
 
 ////
+// constants
+//
+#define MAX_TENSOR_DIMS   6
+
+////
 // local data structure to pass data between vxMapTensorPatch & vxUnmapTensorPatch
 //
 struct my_vx_tensor_map_id {
     vx_size number_of_dims;
-    vx_size view_start[VX_CONTEXT_MAX_TENSOR_DIMS];
-    vx_size view_end[VX_CONTEXT_MAX_TENSOR_DIMS];
-    vx_size stride[VX_CONTEXT_MAX_TENSOR_DIMS];
+    vx_size view_start[MAX_TENSOR_DIMS];
+    vx_size view_end[MAX_TENSOR_DIMS];
+    vx_size stride[MAX_TENSOR_DIMS];
     void * ptr;
     vx_enum usage;
     vx_enum mem_type;
@@ -64,7 +69,7 @@ vx_status myVxMapTensorPatch(
     // calculate output stride values
     //
     vx_enum data_type;
-    vx_size dims[VX_CONTEXT_MAX_TENSOR_DIMS];
+    vx_size dims[MAX_TENSOR_DIMS];
     ERROR_CHECK_STATUS( vxQueryTensor(tensor, VX_TENSOR_DATA_TYPE, &data_type, sizeof(vx_enum)) );
     ERROR_CHECK_STATUS( vxQueryTensor(tensor, VX_TENSOR_DIMS, &dims, sizeof(vx_size)*number_of_dims) );
     switch(data_type) {
@@ -152,7 +157,7 @@ vx_status myVxUnmapTensorPatch(
     {
         vx_status status = vxCopyTensorPatch(tensor, id->number_of_dims,
                     id->view_start, id->view_end, id->stride, id->ptr,
-                    VX_READ_ONLY, id->mem_type);
+                    VX_WRITE_ONLY, id->mem_type);
         if(status != VX_SUCCESS) {
             // release resources in case or error
             if(id->mem_type == VX_MEMORY_TYPE_OPENCL_BUFFER) {
