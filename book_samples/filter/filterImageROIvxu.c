@@ -9,9 +9,14 @@ Read and write an image.
 #include "readImage.h"
 #include "writeImage.h"
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-    printf("Started\n");
+    if (argc != 3)
+    {
+        printf("Filter an image\n"
+               "%s <input> <output>\n", (char *)argv[0]);
+        return(1);
+    }
     struct read_image_attributes attr;
     vx_context context = vxCreateContext();
 
@@ -19,18 +24,20 @@ void main(int argc, char **argv)
     border_mode.mode = VX_BORDER_REPLICATE;
     vxSetContextAttribute(context, VX_CONTEXT_IMMEDIATE_BORDER, &border_mode, sizeof(border_mode));
 
-    vx_image input = createImageFromFile(context, "cup.ppm", &attr);
+    vx_image input = createImageFromFile(context, (const char*)argv[1], &attr);
     printf("input image created\n");
-    if(vxGetStatus(input) != VX_SUCCESS)
+    if(vxGetStatus((vx_reference)input) != VX_SUCCESS)
     {
-        printf("Status error: %d", vxGetStatus(input));
+        printf("Status error: %d", vxGetStatus((vx_reference)input));
     }
 
     vx_rectangle_t rect;
-    rect.start_x = 48;
-    rect.start_y = 98;
-    rect.end_x = 258;
-    rect.end_y = 202;
+    rect.start_x = 204;
+    rect.start_y = 179;
+    int rect_width = 178;
+    int rect_height = 190;
+    rect.end_x = rect.start_x + rect_width;
+    rect.end_y = rect.start_y + rect_height;
     vx_image roi = vxCreateImageFromROI(input, &rect);
 
     int width = rect.end_x - rect.start_x;
@@ -49,7 +56,7 @@ void main(int argc, char **argv)
     /* create a threshold object */
     vx_threshold threshold = vxCreateThresholdForImage(context,
       VX_THRESHOLD_TYPE_RANGE, VX_DF_IMAGE_U8, VX_DF_IMAGE_U8);
-    if(vxGetStatus(threshold) != VX_SUCCESS)
+    if(vxGetStatus((vx_reference)threshold) != VX_SUCCESS)
     {
       printf("Threshold creation failed\n");
     }
@@ -81,10 +88,12 @@ void main(int argc, char **argv)
     vxReleaseImage(&edges_inv);
     vxReleaseThreshold(&threshold);
 
-    if(writeImage(input, "cup_roi.ppm"))
+    if(writeImage(input, (const char*)argv[2]))
         printf("Problem writing the output image\n");
 
     vxReleaseImage(&roi);
     vxReleaseImage(&input);
     vxReleaseContext(&context);
+
+    return(0);
 }
