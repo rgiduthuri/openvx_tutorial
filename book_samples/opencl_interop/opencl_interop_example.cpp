@@ -51,14 +51,12 @@ struct hard_sigmoid_params {
 // structure to keep hard_sigmoid node information
 //   - created and initialized during the hard_sigmoid node initialization
 //   - accessed during hard_sigmoid execution within the OpenVX graph
-//       * opencl_cmdq: to enqueue OpenCL jobs
 //       * opencl_kernel: pre-compiled OpenCL program for hard_sigmoid
 //       * params: arguments to OpenCL kernel
 //       * global_work_size: work size for opencl_kernel
 //   - detstoyed during the hard_sigmoid node uninitialize call
 //
 struct hard_sigmoid_local_data {
-    cl_command_queue opencl_cmdq;
     cl_kernel opencl_kernel;
     hard_sigmoid_params params;
     size_t global_work_size[3];
@@ -130,12 +128,15 @@ vx_status VX_CALLBACK hard_sigmoid_opencl_function(vx_node node,
     ERROR_CHECK_STATUS( clSetKernelArg(data->opencl_kernel, 2, sizeof(cl_mem), (void *)&y_mem) );
 
     ////
-    // queue the "hard_sigmoid" kernel for execution in the OpenVX internal command-queue
-    //   for optimal performance the OpenVX will queue up other OpenCL kernel in the graph
-    //   so that the device can execute several OpenCL kernels until there is a data dependency
-    //   for processing/data-access outside the device (like host).
+    // enqueue the "hard_sigmoid" kernel for execution using the OpenVX internal command-queue:
+    //   for optimal performance the OpenVX will enqueue other OpenCL kernel in the graph
+    //   using the same command-queue, so that the device can execute several OpenCL kernels
+    //   until there is a data dependency for processing/data-access outside the device (like host)
     //
-    ERROR_CHECK_STATUS( clEnqueueNDRangeKernel(data->opencl_cmdq, data->opencl_kernel,
+    cl_command_queue opencl_cmdq;
+    ERROR_CHECK_STATUS( vxQueryNode(node, VX_NODE_CL_COMMAND_QUEUE,
+                            &opencl_cmdq, sizeof(cl_command_queue)) );
+    ERROR_CHECK_STATUS( clEnqueueNDRangeKernel(opencl_cmdq, data->opencl_kernel,
             3, NULL, data->global_work_size, NULL, 0, NULL, NULL) );
 
     ////
@@ -259,11 +260,12 @@ vx_status VX_CALLBACK hard_sigmoid_init(vx_node node,
     //
     cl_context opencl_ctx;
     cl_device_id opencl_device;
+    cl_command_queue opencl_cmdq;
     ERROR_CHECK_STATUS( vxQueryNode(node, VX_NODE_CL_COMMAND_QUEUE,
-                            &data->opencl_cmdq, sizeof(cl_command_queue)) );
-    ERROR_CHECK_STATUS( clGetCommandQueueInfo(data->opencl_cmdq, CL_QUEUE_CONTEXT,
+                            &opencl_cmdq, sizeof(cl_command_queue)) );
+    ERROR_CHECK_STATUS( clGetCommandQueueInfo(opencl_cmdq, CL_QUEUE_CONTEXT,
                             sizeof(cl_context), &opencl_ctx, NULL) );
-    ERROR_CHECK_STATUS( clGetCommandQueueInfo(data->opencl_cmdq, CL_QUEUE_DEVICE,
+    ERROR_CHECK_STATUS( clGetCommandQueueInfo(opencl_cmdq, CL_QUEUE_DEVICE,
                             sizeof(cl_device_id), &opencl_device, NULL) );
 
     ////
