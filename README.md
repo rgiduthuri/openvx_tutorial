@@ -213,7 +213,7 @@ In order to build these tutorial exercises, you need the following:
       * Set **Type** to **STRING**
       * Set **Value** to `<list-of-openvx-libraries>`
       * Click **OK**
-    - Click **Configure** button; you get a window asking for compilers to use: select *"Visual Studio 14 2015 Win64"* or *"Visual Studio 12 2013 Win64"*
+    - Click **Configure** button; you get a window asking for compilers to use: select **"Visual Studio 14 2015 Win64"** or **"Visual Studio 12 2013 Win64"**
     - Click **Generate** button
   + Run Visual Studio and open solution `~/openvx_tutorial/build-open-source/tutorial_exercises.sln`
   + Set ***exercise1** as startup project
