@@ -36,7 +36,7 @@ Refer to [Wiki page](https://github.com/rgiduthuri/openvx_tutorial/wiki) for upc
 
 It is best to start doing these exercises after going through the [tutorial presentations](https://github.com/rgiduthuri/openvx_tutorial/wiki) that discuss OpenVX ecosystem overview and hands-on programming sessions.
 
-All the tutorial exercises are kept in `~/openvx_tutorial/tutorial_exercises`.
+All the tutorial exercises are kept in `~/openvx_tutorial/tutorial_exercises` .
 The `tutorial_exercises/CMakeLists.txt` includes all the exercises as separate 
 projects. All of the exercise folders contain only one .cpp file with main() 
 as the entry point. All the include files are kept in the 
@@ -44,41 +44,26 @@ as the entry point. All the include files are kept in the
 
 The `tutorial_exercises` sub-directory contains four exercises:
 
-  + `exercise1`: framework basics, graph concepts, keypoint tracking
-  + `exercise2`: user kernels, build a wrapper kernel to OpenCV function
-  + `exercise3`: intro to tensor object, build a cosine activation user kernel for tensor objects
-  + `exercise4`: build OpenCL based user kernel for neural network cosine activation and tensor objects
+  + `exercise1` : framework basics, graph concepts, keypoint tracking
+  + `exercise2` : user kernels, build a wrapper kernel to OpenCV function
+  + `exercise3` : intro to tensor object, build a cosine activation user kernel for tensor objects
+  + `exercise4` : build OpenCL based user kernel for neural network cosine activation and tensor objects
 
 There are additional folders with full solutions:
 
-  + `solution_exerciseN`: complete solution of `exerciseN`. Just for reference.
+  + `solution_exerciseN` : complete solution of `exerciseN` . Just for reference.
 
 Each exercise requires you to modify `exerciseN/exerciseN.cpp` file.
 Here are few helpful instructions:
 
-  + Look for `TODO` keyword in `exerciseN/exerciseN.cpp` comments for instructions
-
-    for code snippets that you need to create.
-
+  + Look for `TODO` keyword in `exerciseN/exerciseN.cpp` comments for instructions for code snippets that you need to create.
   + The steps are numbered, do them in that order.
-  + All header files are kept in `tutorial_exercises/include`.
-
-    To open a header file, move the cursor to corresponding `#include` statement
-    in `exerciseN/exerciseN.cpp` and press *F2*.
-
-    - The `"opencv_camera_display.h"` is a wrapper that imports media and
-
-      displays results using OpenCV library.
-
+  + All header files are kept in `tutorial_exercises/include` .
+    To open a header file, move the cursor to corresponding `#include` statement in `exerciseN/exerciseN.cpp` and press *F2*.
+    - The `"opencv_camera_display.h"` is a wrapper that imports media and displays results using OpenCV library.
       * `#define DEFAULT_WAITKEY_DELAY 1` is used to specify wait time in milliseconds after each frame processing; to slowdown use larger numbers; or use 0 to wait for a key after each frame.
-    - The `"VX/vx.h"` & `"VX/vxu.h"` files are part of OpenVX header files
-
-      downloaded from https://www.khronos.org/registry/vx/
-
-  + To view the definition of any OpenVX API or data type, simply move the
-
-    cursor to the name and press *F2*.
-
+    - The `"VX/vx.h"` & `"VX/vxu.h"` files are part of OpenVX header files downloaded from https://www.khronos.org/registry/vx/
+  + To view the definition of any OpenVX API or data type, simply move the cursor to the name and press *F2*.
   + The video sequence [PETS09-S1-L1-View001.avi](http://ewh.ieee.org/r6/scv/sps/openvx-material/PETS09-S1-L1-View001.avi) will be in `~/openvx_tutorial/tutorial_videos` folder. 
     - All the exercises in this tutorial use this video sequence as input.
     - Optionally, you can also specify you own video sequence on command-line as an argument to exercises.
@@ -133,9 +118,9 @@ In order to build these tutorial exercises, you need the following:
 
 ### 3.1 Build using open-source OpenVX
 
-Create an empty folder `~/openvx_tutorial/build-open-source`. The directory structure should be like:
+Create an empty folder `~/openvx_tutorial/build-open-source` . The directory structure should be like:
 
-```
+``` 
 ~/openvx_tutorial/
   ├── LICENSE
   ├── README.md
@@ -161,22 +146,18 @@ Create an empty folder `~/openvx_tutorial/build-open-source`. The directory stru
   + To build and run an example: `% cd ~/openvx_tutorial/build-open-source/exercise1; make; ./exercise1`
     - You should see video in a window. Press ESCAPE or 'q' to exit the app.
 
-  
-
 ### 3.2 Build using open-source OpenVX in Qt Creator
 
-  + Open Project `~/openvx_tutorial/tutorial_exercises/CMakeLists.txt`.
+  + Open Project `~/openvx_tutorial/tutorial_exercises/CMakeLists.txt` .
   + Click *"Configure Project"* to open CMake Wizard
   + CPU only build will be used for this tutorial, unless CMake build flag ENABLE_OPENCL=TRUE is selected.
   + Click *"Run CMake"* and *"Done"*
   + Compile and run the project by clicking the higher of the green triangles at left bottom, or with *CTRL-R*.
   + You should see video in a window. Press ESCAPE or 'q' to exit the app.
 
-  
-
 ### 3.3 Build using pre-built OpenVX library in Qt Creator
 
-  + Open Project `~/openvx_tutorial/tutorial_exercises/CMakeLists.txt`.
+  + Open Project `~/openvx_tutorial/tutorial_exercises/CMakeLists.txt` .
   + Click *"Configure Project"* to open CMake Wizard
     - Specify arguments: `-DOpenVX_LIBS_DIR=<path-to-openvx-libraries> -DOpenVX_LIBS=<list-of-openvx-libraries>`
     - Click *"Run CMake"* and *"Done"*
@@ -216,8 +197,6 @@ In order to build these tutorial exercises, you need the following:
   + Set *exercise1* as startup project
   + Build and run the project.
   + You should see video in a window. Press ESCAPE or 'q' to exit the app.
-
-  
 
 ### 4.2 Build using pre-built OpenVX library in Visual Studio
 
