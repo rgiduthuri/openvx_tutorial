@@ -83,7 +83,7 @@ public:
 
     int GetWidth()
     {
-        return (int) m_cap.get( CV_CAP_PROP_FRAME_WIDTH );
+        return (int) m_cap.get( cv::CAP_PROP_FRAME_WIDTH );
     }
 
     int GetHeight()
@@ -91,7 +91,7 @@ public:
 #if 1 // TBD: workaround for reported OpenCV+Windows bug that returns width instead of height
 		return 480;
 #else
-        return (int) m_cap.get( CV_CAP_PROP_FRAME_HEIGHT );
+        return (int) m_cap.get( cv::CAP_PROP_FRAME_HEIGHT );
 #endif
     }
 
@@ -119,7 +119,7 @@ public:
     void DrawText( int x, int y, const char * text )
     {
         cv::putText( m_imgBGR, text, cv::Point( x, y ),
-                     cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar( 128, 0, 0 ), 1, CV_AA );
+                     cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar( 128, 0, 0 ), 1, cv::LineTypes::LINE_AA );
 #if !ENABLE_DISPLAY
         printf("text: %s\n", text);
 #endif

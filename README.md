@@ -96,7 +96,7 @@ Please note that the VirtualBox VM might not have the latest version of tutorial
 ## 3. Build on Mac or Linux PC
 In order to build these tutorial exercises, you need the following:
   * Laptop with a recent 64-bit OS (OS X or Linux)
-  * Download and install [OpenCV 3.1](http://opencv.org/downloads.html)
+  * Download and install [OpenVINO](https://software.intel.com/content/www/us/en/develop/tools/openvino-toolkit/choose-download.html) or [OpenCV](https://opencv.org/releases/)
   * Download and install [Qt Creator](http://www.qt.io/download-open-source/) (optional)
   * Download and install an OpenVX implementation:
     - [Open-source OpenVX on GitHub](https://github.com/rgiduthuri/amdovx-modules) from AMD

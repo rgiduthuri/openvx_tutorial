@@ -52,6 +52,7 @@ endif()
 if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" )
   set ( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} )
 else()
+  set ( CMAKE_CXX_STANDARD 11                                                  )
   set ( CMAKE_MACOSX_RPATH ON                                                  )
 endif()
 
