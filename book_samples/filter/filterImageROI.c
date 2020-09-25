@@ -59,19 +59,26 @@ vx_graph makeFilterGraph(vx_context context, vx_image input,
     return graph;
 }
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
+    if (argc != 3)
+    {
+        printf("Filter an image\n"
+               "%s <input> <output>\n", (char *)argv[0]);
+        return(1);
+    }
+
     struct read_image_attributes attr;
     vx_context context = vxCreateContext();
-    vx_image image = createImageFromFile(context, "cup.ppm", &attr);
+    vx_image image = createImageFromFile(context, (const char*) argv[1], &attr);
 
     vx_rectangle_t rect;
-    rect.start_x = 48;
-    rect.start_y = 98;
-    rect.end_x = 258;
-    rect.end_y = 202;
-    int width = rect.end_x - rect.start_x;
-    int height = rect.end_y - rect.start_y;
+    rect.start_x = 204;
+    rect.start_y = 179;
+    int width = 178;
+    int height = 190;
+    rect.end_x = rect.start_x + width;
+    rect.end_y = rect.start_y + height;
 
     vx_image output = vxCreateImage(context, width, height, VX_DF_IMAGE_RGB);
     vx_graph graph = makeFilterGraph(context, image, &rect, output);
@@ -79,7 +86,9 @@ void main(int argc, char **argv)
         printf("Could not create input image\n");
     else if (vxProcessGraph(graph))
         printf("Error processing graph\n");
-    else if (writeImage(output, "cup_scharr_roi.ppm"))
+    else if (writeImage(output, (const char*)argv[2]))
         printf("Problem writing the output image\n");
     vxReleaseContext(&context);
+
+    return(0);
 }
