@@ -23,12 +23,12 @@ cmake_minimum_required(VERSION 2.8.9)
 
 find_package(OpenCL REQUIRED)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -DCL_USE_DEPRECATED_OPENCL_1_2_APIS")
 
 # opencl_example
-add_executable(opencl_example opencl_example.cpp)
-target_link_libraries(opencl_example ${OpenCL_LIBRARIES})
+add_executable(opencl_kernel_example opencl_kernel_example.cpp)
+target_link_libraries(opencl_kernel_example ${OpenCL_LIBRARIES})
 
 # interop_example
-add_executable(interop_example interop_example.cpp my_vx_tensor_map_impl.cpp)
-target_link_libraries(interop_example ${OPENVX} ${OpenCL_LIBRARIES})
+add_executable(opencl_interop_example opencl_interop_example.cpp my_vx_tensor_map_impl.cpp)
+target_link_libraries(opencl_interop_example openvx ${OpenCL_LIBRARIES})

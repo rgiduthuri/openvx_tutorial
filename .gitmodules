@@ -1,4 +1,4 @@
 [submodule "tutorial_exercises/amdovx-modules"]
 	path = tutorial_exercises/amdovx-modules
-	url = https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules.git
-	branch = develop
+	url = https://github.com/rgiduthuri/amdovx-modules.git
+	branch = last

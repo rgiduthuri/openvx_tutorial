@@ -20,8 +20,8 @@
  */
 
 /*!
- * \file    opencl_example.c
- * \example opencl_example
+ * \file    opencl_kernel_example.c
+ * \example opencl_kernel_example
  * \brief   This example gives a brief overview of OpenCL using
  *          16-bit fixed-point hard_sigmoid activation function
  * \author  Radhakrishna Giduthuri <radhakrishna.giduthuri@ieee.org>
@@ -54,8 +54,8 @@ int main()
     //   3. create test input values and output reference values in
     //      16-bit fixed-point Q7.8 representation
     //
-    float alpha = 0.9f;
-    float beta = 0.1f;
+    float alpha = 0.2f;
+    float beta = 0.5f;
     size_t num_tensor_elements = 1000;
     short * x_input = new short[num_tensor_elements];
     short * y_output_ref = new short[num_tensor_elements];
